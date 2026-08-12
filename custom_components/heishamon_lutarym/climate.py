@@ -37,7 +37,7 @@ class HeishamonClimate(CoordinatorEntity, ClimateEntity):
         self._host = host
         
         self._attr_unique_id = f"heishamon_{host}_climate_{zone.lower()}"
-        self._attr_name = f"{zone}-Climate"
+        self._attr_name = f"Zone {zone} Klima"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, host)},
             name=f"Heishamon {host}",

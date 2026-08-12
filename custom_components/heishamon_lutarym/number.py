@@ -9,6 +9,7 @@ from homeassistant.helpers.entity import DeviceInfo
 from .const import DOMAIN, HEISHAMON_TOPICS
 from .api import HeishamonAPI
 
+TOPIC_NAMES_DE = {'TOP9': 'Warmwasser Solltemperatur', 'TOP25': 'Warmwasser Urlaubsmodus Versatz', 'TOP27': 'Zone 1 Heiz Solltemperatur', 'TOP28': 'Zone 1 Kühl Solltemperatur', 'TOP34': 'Zone 2 Heiz Solltemperatur', 'TOP35': 'Zone 2 Kühl Solltemperatur', 'TOP45': 'Raum Urlaubsmodus Versatz', 'TOP77': 'Heizung Aus Außentemp', 'TOP78': 'Heizer Ein Außentemp', 'TOP79': 'Heiz zu Kühl Temperatur', 'TOP80': 'Kühl zu Heiz Temperatur'}
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up number entities."""
@@ -38,7 +39,10 @@ class HeishamonNumber(CoordinatorEntity, NumberEntity):
         self._host = host
         
         self._attr_unique_id = f"heishamon_{host}_{topic_id.lower()}_set"
-        self._attr_name = f"{topic_id}-{topic_info['name']}"
+        
+        name_de = TOPIC_NAMES_DE.get(topic_id, topic_info['name'])
+        self._attr_name = f"{topic_id} {name_de}"
+        
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, host)},
             name=f"Heishamon {host}",

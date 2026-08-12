@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Heishamon Konfiguration",
-        "description": "Heishamon Wärmepumpen-Integration einrichten",
+        "description": "Konfiguriere die Heishamon Wärmepumpen-Integration",
         "data": {
           "host": "Heishamon IP-Adresse",
           "username": "Benutzername (optional)",
@@ -15,6 +15,47 @@
     },
     "error": {
       "cannot_connect": "Verbindung zu Heishamon fehlgeschlagen"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "top0_heatpump_state": {
+        "name": "Wärmepumpe Status"
+      },
+      "top5_main_inlet_temp": {
+        "name": "Rücklauftemperatur Wärmeerzeuger"
+      },
+      "top6_main_outlet_temp": {
+        "name": "Vorlauftemperatur Wärmeerzeuger"
+      },
+      "top10_dhw_temp": {
+        "name": "Warmwasser Ist-Temperatur"
+      },
+      "top14_outside_temp": {
+        "name": "Außentemperatur"
+      },
+      "top15_heat_power_production": {
+        "name": "Heiz-Leistung Wärmeerzeuger"
+      },
+      "top16_heat_power_consumption": {
+        "name": "Heiz-Stromverbrauch"
+      }
+    },
+    "number": {
+      "top9_dhw_target_temp": {
+        "name": "Warmwasser Solltemperatur"
+      },
+      "top27_z1_heat_request_temp": {
+        "name": "Zone 1 Heiz-Solltemperatur"
+      }
+    },
+    "switch": {
+      "setheatpump": {
+        "name": "Wärmepumpe"
+      },
+      "setforcedwh": {
+        "name": "Warmwasser erzwingen"
+      }
     }
   }
 }

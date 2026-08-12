@@ -9,6 +9,18 @@ from homeassistant.helpers.entity import DeviceInfo
 from .const import DOMAIN, SET_COMMANDS
 from .api import HeishamonAPI
 
+SET_NAMES_DE = {
+    "SetOperationMode": "Betriebsmodus",
+    "SetQuietMode": "Ruhe Modus",
+    "SetPowerfulMode": "Power Modus",
+}
+
+OPTIONS_DE = {
+    "SetOperationMode": ["Nur Heizen", "Nur Kühlen", "Auto", "Nur Warmwasser", "Heizen+Warmwasser", "Kühlen+Warmwasser", "Auto+Warmwasser", "Auto (Kühlen)", "Auto (Kühlen)+Warmwasser"],
+    "SetQuietMode": ["Aus", "Weniger Power", "Noch weniger Power", "Minimum Power"],
+    "SetPowerfulMode": ["Aus", "30 min", "60 min", "90 min"],
+}
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up selects."""
@@ -33,7 +45,8 @@ class HeishamonSelect(CoordinatorEntity, SelectEntity):
         self._host = host
         
         self._attr_unique_id = f"heishamon_{host}_{set_command.lower()}"
-        self._attr_name = f"SET-{set_command}"
+        name_de = SET_NAMES_DE.get(set_command, set_command)
+        self._attr_name = f"{set_command} ({name_de})"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, host)},
             name=f"Heishamon {host}",
@@ -41,7 +54,9 @@ class HeishamonSelect(CoordinatorEntity, SelectEntity):
             model="Aquarea Heat Pump",
         )
         self._attr_icon = info.get("icon")
-        self._attr_options = info.get("options", [])
+        
+        # Nutze deutsche Optionen wenn verfügbar
+        self._attr_options = OPTIONS_DE.get(set_command, info.get("options", []))
 
     @property
     def current_option(self) -> str:

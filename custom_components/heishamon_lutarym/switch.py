@@ -9,6 +9,26 @@ from homeassistant.helpers.entity import DeviceInfo
 from .const import DOMAIN, SET_COMMANDS
 from .api import HeishamonAPI
 
+SET_NAMES_DE = {
+    "SetHeatpump": "Wärmepumpe",
+    "SetHolidayMode": "Urlaubsmodus",
+    "SetForceDHW": "Warmwasser erzwingen",
+    "SetForceDefrost": "Abtauen erzwingen",
+    "SetForceSterilization": "Sterilisation erzwingen",
+    "SetPump": "Pumpe",
+    "SetMainSchedule": "Hauptzeitplan",
+    "SetAltExternalSensor": "Alternative Außentemperatursensor",
+    "SetBuffer": "Pufferspeicher",
+    "SetExternalControl": "Externe Steuerung",
+    "SetExternalError": "Externes Fehlersignal",
+    "SetExternalCompressorControl": "Externe Verdichter Steuerung",
+    "SetBivalentControl": "Bivalent Steuerung",
+    "SetForceHeater": "Heizer erzwingen",
+    "SetReset": "Zurücksetzen",
+    "SetDHWHeaterState": "Warmwasser Heizer",
+    "SetRoomHeaterState": "Raum Heizer",
+}
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up switches."""
@@ -33,7 +53,8 @@ class HeishamonSwitch(CoordinatorEntity, SwitchEntity):
         self._host = host
         
         self._attr_unique_id = f"heishamon_{host}_{set_command.lower()}"
-        self._attr_name = f"SET-{set_command}"
+        name_de = SET_NAMES_DE.get(set_command, set_command)
+        self._attr_name = f"{set_command} ({name_de})"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, host)},
             name=f"Heishamon {host}",

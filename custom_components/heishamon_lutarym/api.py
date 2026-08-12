@@ -17,9 +17,10 @@ class HeishamonAPI:
     ):
         """Initialize API client."""
         self.host = host
-        self.username = username if username else None
-        self.password = password if password else None
+        self.username = username
+        self.password = password
         self.base_url = f"http://{host}"
+        _LOGGER.debug(f"HeishamonAPI initialized for {self.base_url}")
 
     async def async_get_data(self) -> Dict[str, Any]:
         """Fetch data from Heishamon /json endpoint."""
@@ -30,14 +31,21 @@ class HeishamonAPI:
                 if self.username and self.password:
                     auth = aiohttp.BasicAuth(self.username, self.password)
 
+                _LOGGER.debug(f"Fetching from {url}")
                 async with session.get(
-                    url, auth=auth, timeout=aiohttp.ClientTimeout(total=10)
+                    url, auth=auth, timeout=aiohttp.ClientTimeout(total=15)
                 ) as response:
                     if response.status == 200:
                         data = await response.json()
+                        _LOGGER.debug(f"Got data from Heishamon: {len(data)} keys")
                         return data
                     else:
-                        raise Exception(f"HTTP {response.status}")
+                        error_text = await response.text()
+                        _LOGGER.error(f"HTTP {response.status}: {error_text}")
+                        raise Exception(f"HTTP {response.status}: {error_text}")
+        except aiohttp.ClientError as e:
+            _LOGGER.error(f"Connection error to {self.base_url}: {e}")
+            raise
         except Exception as e:
             _LOGGER.error(f"Heishamon API error: {e}")
             raise
@@ -52,10 +60,16 @@ class HeishamonAPI:
                 if self.username and self.password:
                     auth = aiohttp.BasicAuth(self.username, self.password)
 
+                _LOGGER.debug(f"Setting {key}={value} on {url}")
                 async with session.get(
-                    url, params=params, auth=auth, timeout=aiohttp.ClientTimeout(total=10)
+                    url, params=params, auth=auth, timeout=aiohttp.ClientTimeout(total=15)
                 ) as response:
-                    return response.status == 200
+                    success = response.status == 200
+                    if success:
+                        _LOGGER.debug(f"Successfully set {key}={value}")
+                    else:
+                        _LOGGER.error(f"Failed to set {key}: HTTP {response.status}")
+                    return success
         except Exception as e:
             _LOGGER.error(f"Error setting {key}: {e}")
             return False
@@ -63,7 +77,10 @@ class HeishamonAPI:
     async def test_connection(self) -> bool:
         """Test connection to Heishamon."""
         try:
+            _LOGGER.debug(f"Testing connection to {self.base_url}")
             await self.async_get_data()
+            _LOGGER.debug(f"Connection test successful")
             return True
-        except Exception:
+        except Exception as e:
+            _LOGGER.error(f"Connection test failed: {e}")
             return False

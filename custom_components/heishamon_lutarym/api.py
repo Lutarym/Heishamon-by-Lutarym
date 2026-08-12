@@ -5,12 +5,20 @@ from typing import Any, Dict, Optional
 
 _LOGGER = logging.getLogger(__name__)
 
+
 class HeishamonAPI:
     """Heishamon HTTP API Client."""
-    def __init__(self, host: str, username: Optional[str] = None, password: Optional[str] = None):
+
+    def __init__(
+        self,
+        host: str,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
+    ):
+        """Initialize API client."""
         self.host = host
-        self.username = username
-        self.password = password
+        self.username = username if username else None
+        self.password = password if password else None
         self.base_url = f"http://{host}"
 
     async def async_get_data(self) -> Dict[str, Any]:
@@ -21,9 +29,13 @@ class HeishamonAPI:
                 auth = None
                 if self.username and self.password:
                     auth = aiohttp.BasicAuth(self.username, self.password)
-                async with session.get(url, auth=auth, timeout=aiohttp.ClientTimeout(total=10)) as response:
+
+                async with session.get(
+                    url, auth=auth, timeout=aiohttp.ClientTimeout(total=10)
+                ) as response:
                     if response.status == 200:
-                        return await response.json()
+                        data = await response.json()
+                        return data
                     else:
                         raise Exception(f"HTTP {response.status}")
         except Exception as e:
@@ -39,7 +51,10 @@ class HeishamonAPI:
                 auth = None
                 if self.username and self.password:
                     auth = aiohttp.BasicAuth(self.username, self.password)
-                async with session.get(url, params=params, auth=auth, timeout=aiohttp.ClientTimeout(total=10)) as response:
+
+                async with session.get(
+                    url, params=params, auth=auth, timeout=aiohttp.ClientTimeout(total=10)
+                ) as response:
                     return response.status == 200
         except Exception as e:
             _LOGGER.error(f"Error setting {key}: {e}")
@@ -50,5 +65,5 @@ class HeishamonAPI:
         try:
             await self.async_get_data()
             return True
-        except:
+        except Exception:
             return False

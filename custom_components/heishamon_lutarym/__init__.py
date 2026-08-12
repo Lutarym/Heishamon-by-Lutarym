@@ -65,7 +65,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     device_registry = DeviceRegistry(hass)
     device = device_registry.get_or_create_device(
         config_entry_id=entry.entry_id,
-        connections={(("network", host)},
+        connections={("network", host)},
         name=f"Heishamon {host}",
         manufacturer="Panasonic",
         model="Aquarea Heat Pump",

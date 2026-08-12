@@ -9,12 +9,12 @@
           "username": "Gebruikersnaam (optioneel)",
           "password": "Wachtwoord (optioneel)",
           "update_interval": "Update-interval (seconden)",
-          "listening_only": "Alleen luisteren (geen bediening)"
+          "listening_only": "Alleen luisteren (alleen-lezen)"
         }
       }
     },
     "error": {
-      "cannot_connect": "Verbinding met Heishamon mislukt. Controleer IP-adres en inloggegevens."
+      "cannot_connect": "Verbinding met Heishamon mislukt"
     }
   }
 }

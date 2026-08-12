@@ -3,18 +3,18 @@
     "step": {
       "user": {
         "title": "Heishamon Konfiguration",
-        "description": "Richte die Heishamon Wärmepumpen-Integration ein",
+        "description": "Heishamon Wärmepumpen-Integration einrichten",
         "data": {
           "host": "Heishamon IP-Adresse",
           "username": "Benutzername (optional)",
           "password": "Passwort (optional)",
           "update_interval": "Update-Intervall (Sekunden)",
-          "listening_only": "Nur Abhören (keine Steuerung)"
+          "listening_only": "Nur Abhören (Lesezugriff)"
         }
       }
     },
     "error": {
-      "cannot_connect": "Verbindung zu Heishamon fehlgeschlagen. Überprüfe IP-Adresse und Anmeldedaten."
+      "cannot_connect": "Verbindung zu Heishamon fehlgeschlagen"
     }
   }
 }

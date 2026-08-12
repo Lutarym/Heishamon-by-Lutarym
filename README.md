@@ -1,31 +1,36 @@
-# Heishamon by Lutarym
+# Heishamon by Lutarym - Home Assistant Integration
 
-Home Assistant Integration für Panasonic Aquarea Wärmepumpen über Heishamon (HTTP API, kein MQTT nötig).
+**Vollständige Home Assistant Integration für Panasonic Aquarea Wärmepumpen über Heishamon (HTTP API - kein MQTT nötig)**
+
+Version: 0.1.0
 
 ## Features
 
-- **Vollständige Unterstützung**: Alle 143 Heishamon Topics
-- **Direkter HTTP Zugang**: Keine externen Broker nötig
-- **Flexible Modi**: Listen-Only oder Vollsteuerung wählbar
-- **Mehrsprachig**: Deutsch, Englisch, Französisch, Niederländisch, Italienisch
-- **Native Entities**: Sensoren, Nummern, Schalter, Auswahl, Klima
+✅ **Alle 143 Heishamon Topics** als native Home Assistant Entities
+✅ **Direkte HTTP API** - keine externe Broker nötig
+✅ **Device + Entities** mit korrektem Device Registry
+✅ **Entity-IDs mit TOP-Nummern** (z.B. `sensor.heishamon_top5_main_inlet_temp`)
+✅ **Flexible Modi**: Listening-Only oder Vollsteuerung
+✅ **5 Sprachen**: Deutsch, Englisch, Französisch, Niederländisch, Italienisch
+✅ **Vollständige Steuerung**: 25+ SET Commands
+✅ **Climate Integration**: Zone 1 & Zone 2 Steuerung
 
 ## Installation
 
-### 1. Manuell (für Entwicklung)
+### Option 1: Manuell (für Entwicklung)
 
-Kopiere den `heishamon_lutarym` Ordner in:
-```
-~/.homeassistant/custom_components/
-```
+1. Lade die ZIP herunter und extrahiere sie
+2. Kopiere `heishamon_lutarym` nach:
+   ```
+   ~/.homeassistant/custom_components/
+   ```
+3. Starte Home Assistant neu
 
-Starte Home Assistant neu.
-
-### 2. Über HACS (später verfügbar)
+### Option 2: HACS (später verfügbar)
 
 1. Öffne HACS
 2. Suche nach "Heishamon by Lutarym"
-3. Klick auf "Install"
+3. Installiere die Integration
 4. Starte Home Assistant neu
 
 ## Konfiguration
@@ -33,45 +38,98 @@ Starte Home Assistant neu.
 1. Gehe zu **Einstellungen > Geräte und Dienste > Integrationen**
 2. Klick auf **Neue Integration erstellen**
 3. Suche nach **Heishamon by Lutarym**
-4. Gib ein:
-   - **Host**: IP-Adresse deines Heishamon (z.B. 192.168.1.100)
-   - **Username**: (optional) Falls aktiviert
-   - **Password**: (optional) Falls aktiviert
+4. Trage ein:
+   - **Heishamon IP**: z.B. `192.168.1.100`
+   - **Username**: (optional, falls aktiviert)
+   - **Password**: (optional, falls aktiviert)
    - **Update-Intervall**: Sekunden (Standard: 30)
-   - **Listening Only**: Nur Sensor-Daten (keine Steuerung) oder Vollzugriff
+   - **Listening Only**: 
+     - ✓ aktiviert = nur Sensoren (read-only)
+     - ✗ deaktiviert = Sensoren + Steuerung
 
-## Sensoren
+## Entity-Struktur
 
-Die Integration erstellt automatisch Entities für alle 143 Heishamon Topics:
+### Sensors (alle 143 Topics als Sensoren)
 
-- **Temperaturen**: Main_Inlet_Temp, Main_Outlet_Temp, DHW_Temp, etc.
-- **Leistung**: Heat_Power_Production, Cool_Power_Production, etc.
-- **Zustände**: Heatpump_State, Operating_Mode, Defrosting_State, etc.
-- **Steuerung** (nur bei Vollzugriff): SetHeatpump, SetDHWTemp, SetOperationMode, etc.
+Die Entities haben folgende Namenskonvention:
+```
+sensor.heishamon_TOP5_main_inlet_temp
+sensor.heishamon_TOP6_main_outlet_temp
+sensor.heishamon_TOP10_dhw_temp
+...
+```
 
-## Steuerung
+**Wichtige Sensoren**:
+- `TOP5`: Rücklauftemperatur Wärmeerzeuger
+- `TOP6`: Vorlauftemperatur Wärmeerzeuger
+- `TOP10`: Warmwasser Ist-Temperatur
+- `TOP14`: Außentemperatur
+- `TOP15/TOP16`: Heiz-Leistung (Watt)
 
-Bei **Listening Only = false** werden zusätzlich verfügbar:
+### Number Entities (bei Vollsteuerung)
 
-- **Switches**: Wärmepumpe an/aus, Defrost, DHW, etc.
-- **Numbers**: DHW-Temperatur, Heiz-/Kühlkurven, etc.
-- **Select**: Betriebsmodus, Ruhe-Level, Power-Modus
-- **Climate**: Zone 1 & Zone 2 mit Temperatursteuerung
+Temperatur- und Einstellungs-Kontrolle:
+- `number.heishamon_TOP9_dhw_target_temp` - Warmwasser Solltemperatur
+- `number.heishamon_TOP27_z1_heat_request_temp` - Zone 1 Heiz-Solltemp
+- `number.heishamon_TOP77_heating_off_outdoor_temp` - Heizung-Abschalt-Temp
 
-## Problembehebung
+### Switches (bei Vollsteuerung)
 
-### Verbindung fehlgeschlagen
-- Prüfe, dass Heishamon unter dieser IP erreichbar ist
-- `ping 192.168.x.x`
-- Öffne im Browser: `http://192.168.x.x/json`
+Schalter für Steuerungen:
+- `switch.heishamon_setheatpump` - Wärmepumpe An/Aus
+- `switch.heishamon_setforcedwh` - Warmwasser erzwingen
+- `switch.heishamon_setforcedefrost` - Abtauen erzwingen
 
-### Entities werden nicht angezeigt
-- Überprüfe das Update-Intervall (nicht zu kurz)
-- Prüfe Home Assistant Logs: **Einstellungen > Systeminformation > Logs**
+### Select Entities (bei Vollsteuerung)
 
-### Steuerung funktioniert nicht
-- Stelle sicher, dass "Listening Only" NICHT aktiviert ist
-- Prüfe Heishamon Credentials (Username/Password)
+Betriebsmodi und Einstellungen:
+- `select.heishamon_setoperationmode` - Heat/Cool/Auto/DHW
+- `select.heishamon_setquietmode` - Ruhe-Level (0-3)
+- `select.heishamon_setpowerfulmode` - Power-Modus (0/30/60/90 min)
+
+### Climate (bei Vollsteuerung)
+
+Klima-Steuerung für beide Zonen:
+- `climate.heishamon_z1_climate` - Zone 1
+- `climate.heishamon_z2_climate` - Zone 2
+
+## Troubleshooting
+
+### Verbindung fehlgeschlagen?
+
+```bash
+# Test ob Heishamon erreichbar ist:
+curl http://192.168.x.x/json
+
+# Bei Auth:
+curl -u username:password http://192.168.x.x/json
+```
+
+### Entities werden nicht angezeigt?
+
+1. Prüfe Home Assistant Logs: **Einstellungen > Systeminformation > Logs**
+2. Suche nach "heishamon"
+3. Überprüfe Update-Intervall (nicht zu kurz)
+
+### Steuerung funktioniert nicht?
+
+- Stelle sicher, dass "Listening Only" **NICHT** aktiviert ist
+- Prüfe Username/Password in Heishamon Einstellungen
+- Teste direkt: `curl -X GET "http://192.168.x.x/command?SetHeatpump=1"`
+
+## All 143 Topics
+
+Die Integration unterstützt alle Topics von TOP0 bis TOP143:
+
+| TOP | Name | Typ | Einheit |
+|-----|------|-----|---------|
+| TOP5 | Main_Inlet_Temp | sensor | °C |
+| TOP6 | Main_Outlet_Temp | sensor | °C |
+| TOP10 | DHW_Temp | sensor | °C |
+| TOP15 | Heat_Power_Production | sensor | W |
+| ... | ... | ... | ... |
+
+Siehe `const.py` für die komplette Liste.
 
 ## GitHub
 
@@ -81,4 +139,10 @@ Issues: https://github.com/Lutarym/heishamon-homeassistant-lutarym/issues
 
 ## Lizenz
 
-MIT License
+MIT License 2026 Lutarym
+
+## Credits
+
+- **Heishamon**: https://github.com/heishamon/HeishaMon
+- **Panasonic Aquarea**: https://www.panasonic.com/
+- **Home Assistant**: https://www.home-assistant.io/

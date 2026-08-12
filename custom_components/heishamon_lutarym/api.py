@@ -1,23 +1,13 @@
 """Heishamon API Client."""
-
 import aiohttp
-import json
 import logging
 from typing import Any, Dict, Optional
 
 _LOGGER = logging.getLogger(__name__)
 
-
 class HeishamonAPI:
     """Heishamon HTTP API Client."""
-
-    def __init__(
-        self,
-        host: str,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-    ):
-        """Initialize API client."""
+    def __init__(self, host: str, username: Optional[str] = None, password: Optional[str] = None):
         self.host = host
         self.username = username
         self.password = password
@@ -31,22 +21,13 @@ class HeishamonAPI:
                 auth = None
                 if self.username and self.password:
                     auth = aiohttp.BasicAuth(self.username, self.password)
-
                 async with session.get(url, auth=auth, timeout=aiohttp.ClientTimeout(total=10)) as response:
                     if response.status == 200:
-                        data = await response.json()
-                        return data
+                        return await response.json()
                     else:
-                        raise Exception(f"HTTP {response.status}: {await response.text()}")
-
-        except aiohttp.ClientError as e:
-            _LOGGER.error(f"Connection error to Heishamon: {e}")
-            raise
-        except json.JSONDecodeError as e:
-            _LOGGER.error(f"JSON decode error: {e}")
-            raise
+                        raise Exception(f"HTTP {response.status}")
         except Exception as e:
-            _LOGGER.error(f"Unexpected error: {e}")
+            _LOGGER.error(f"Heishamon API error: {e}")
             raise
 
     async def async_set_value(self, key: str, value: Any) -> bool:
@@ -58,17 +39,8 @@ class HeishamonAPI:
                 auth = None
                 if self.username and self.password:
                     auth = aiohttp.BasicAuth(self.username, self.password)
-
-                async with session.get(
-                    url, params=params, auth=auth, timeout=aiohttp.ClientTimeout(total=10)
-                ) as response:
-                    if response.status == 200:
-                        _LOGGER.debug(f"Set {key}={value} on Heishamon")
-                        return True
-                    else:
-                        _LOGGER.error(f"HTTP {response.status} setting {key}: {await response.text()}")
-                        return False
-
+                async with session.get(url, params=params, auth=auth, timeout=aiohttp.ClientTimeout(total=10)) as response:
+                    return response.status == 200
         except Exception as e:
             _LOGGER.error(f"Error setting {key}: {e}")
             return False
@@ -78,5 +50,5 @@ class HeishamonAPI:
         try:
             await self.async_get_data()
             return True
-        except Exception:
+        except:
             return False

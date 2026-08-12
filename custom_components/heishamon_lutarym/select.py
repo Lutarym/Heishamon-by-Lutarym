@@ -1,77 +1,46 @@
-"""Select platform for Heishamon by Lutarym."""
-
+"""Select platform for Heishamon."""
 from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-
-from .const import DOMAIN
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, CoordinatorEntity
+from .const import DOMAIN, SET_COMMANDS
 from .api import HeishamonAPI
 
-async def async_setup_entry(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
-) -> None:
-    """Set up select entities."""
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
+    """Set up selects."""
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     api = hass.data[DOMAIN][entry.entry_id]["api"]
-    listening_only = entry.data.get("listening_only", True)
+    device = hass.data[DOMAIN][entry.entry_id]["device"]
+    listening_only = hass.data[DOMAIN][entry.entry_id]["listening_only"]
     
     if not listening_only:
-        selects = [
-            HeishamonSelect(
-                coordinator, api, "SetOperationMode", "Operating Mode", "TOP4",
-                ["Heat only", "Cool only", "Auto", "DHW only", "Heat+DHW", "Cool+DHW", "Auto+DHW", "Auto(Cool)", "Auto(Cool)+DHW"]
-            ),
-            HeishamonSelect(
-                coordinator, api, "SetQuietMode", "Quiet Mode", "TOP18",
-                ["Off", "Less Power", "Even Less Power", "Least Power"]
-            ),
-            HeishamonSelect(
-                coordinator, api, "SetPowerfulMode", "Powerful Mode", "TOP17",
-                ["Off", "30 min", "60 min", "90 min"]
-            ),
-        ]
+        selects = [HeishamonSelect(coordinator, api, device, cmd, info) for cmd, info in SET_COMMANDS.items() if info["type"] == "select"]
         async_add_entities(selects)
 
-
-class HeishamonSelect(SelectEntity):
+class HeishamonSelect(CoordinatorEntity, SelectEntity):
     """Heishamon select entity."""
-
-    def __init__(self, coordinator: DataUpdateCoordinator, api: HeishamonAPI, set_command: str, name: str, topic_id: str, options: list):
-        """Initialize select."""
-        self.coordinator = coordinator
+    
+    def __init__(self, coordinator: DataUpdateCoordinator, api: HeishamonAPI, device, set_command: str, info: dict):
+        """Initialize."""
+        super().__init__(coordinator)
         self.api = api
         self.set_command = set_command
-        self.topic_id = topic_id
-        self._attr_unique_id = f"heishamon_{set_command.lower()}"
-        self._attr_name = name
-        self._attr_options = options
-        self._attr_icon = "mdi:cog"
-
-    @property
-    def available(self) -> bool:
-        """Return availability."""
-        return self.coordinator.last_update_success
+        
+        self._attr_unique_id = f"{coordinator.data.get('model', 'heishamon')}_{set_command.lower()}"
+        self._attr_name = f"SET-{set_command}"
+        self._attr_device_name = device.name
+        self._attr_device_info = {"identifiers": {(device.domain, device.id)} if device else None}
+        self._attr_icon = info.get("icon")
+        self._attr_options = info.get("options", [])
 
     @property
     def current_option(self) -> str:
         """Return current option."""
-        if self.coordinator.data:
-            value = self.coordinator.data.get(self.topic_id, {}).get("value")
-            if value is not None and value < len(self._attr_options):
-                return self._attr_options[int(value)]
         return None
 
     async def async_select_option(self, option: str) -> None:
         """Select option."""
         value = self._attr_options.index(option)
-        success = await self.api.async_set_value(self.set_command, value)
-        if success:
+        if await self.api.async_set_value(self.set_command, value):
             await self.coordinator.async_request_refresh()
-
-    async def async_added_to_hass(self) -> None:
-        """Subscribe to coordinator updates."""
-        self.async_on_remove(self.coordinator.async_add_listener(self.async_write_ha_state))

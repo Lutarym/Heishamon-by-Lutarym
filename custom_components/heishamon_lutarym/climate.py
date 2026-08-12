@@ -4,37 +4,47 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, CoordinatorEntity
+from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.const import UnitOfTemperature
+
 from .const import DOMAIN
 from .api import HeishamonAPI
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up climate."""
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     api = hass.data[DOMAIN][entry.entry_id]["api"]
-    device = hass.data[DOMAIN][entry.entry_id]["device"]
+    host = hass.data[DOMAIN][entry.entry_id]["host"]
     listening_only = hass.data[DOMAIN][entry.entry_id]["listening_only"]
     
     climates = [
-        HeishamonClimate(coordinator, api, device, "Z1", listening_only),
-        HeishamonClimate(coordinator, api, device, "Z2", listening_only),
+        HeishamonClimate(coordinator, api, host, "Z1", listening_only),
+        HeishamonClimate(coordinator, api, host, "Z2", listening_only),
     ]
     async_add_entities(climates)
+
 
 class HeishamonClimate(CoordinatorEntity, ClimateEntity):
     """Heishamon climate entity."""
     
-    def __init__(self, coordinator: DataUpdateCoordinator, api: HeishamonAPI, device, zone: str, listening_only: bool):
+    def __init__(self, coordinator: DataUpdateCoordinator, api: HeishamonAPI, host: str, zone: str, listening_only: bool):
         """Initialize."""
         super().__init__(coordinator)
         self.api = api
         self.zone = zone
         self.listening_only = listening_only
+        self._host = host
         
-        self._attr_unique_id = f"{coordinator.data.get('model', 'heishamon')}_climate_{zone.lower()}"
+        self._attr_unique_id = f"heishamon_{host}_climate_{zone.lower()}"
         self._attr_name = f"{zone}-Climate"
-        self._attr_device_name = device.name
-        self._attr_device_info = {"identifiers": {(device.domain, device.id)} if device else None}
-        self._attr_temperature_unit = "°C"
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, host)},
+            name=f"Heishamon {host}",
+            manufacturer="Panasonic",
+            model="Aquarea Heat Pump",
+        )
+        self._attr_temperature_unit = UnitOfTemperature.CELSIUS
         self._attr_hvac_modes = [HVACMode.HEAT, HVACMode.COOL, HVACMode.AUTO]
         self._attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE
         if not listening_only:

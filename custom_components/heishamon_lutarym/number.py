@@ -4,38 +4,47 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, CoordinatorEntity
+from homeassistant.helpers.entity import DeviceInfo
+
 from .const import DOMAIN, HEISHAMON_TOPICS
 from .api import HeishamonAPI
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up number entities."""
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     api = hass.data[DOMAIN][entry.entry_id]["api"]
-    device = hass.data[DOMAIN][entry.entry_id]["device"]
+    host = hass.data[DOMAIN][entry.entry_id]["host"]
     listening_only = hass.data[DOMAIN][entry.entry_id]["listening_only"]
     
     numbers = []
     for topic_id, topic_info in HEISHAMON_TOPICS.items():
         if topic_info["type"] == "number":
-            numbers.append(HeishamonNumber(coordinator, api, device, topic_id, topic_info, listening_only))
+            numbers.append(HeishamonNumber(coordinator, api, host, topic_id, topic_info, listening_only))
     
     async_add_entities(numbers)
+
 
 class HeishamonNumber(CoordinatorEntity, NumberEntity):
     """Heishamon number entity."""
     
-    def __init__(self, coordinator: DataUpdateCoordinator, api: HeishamonAPI, device, topic_id: str, topic_info: dict, listening_only: bool):
+    def __init__(self, coordinator: DataUpdateCoordinator, api: HeishamonAPI, host: str, topic_id: str, topic_info: dict, listening_only: bool):
         """Initialize."""
         super().__init__(coordinator)
         self.api = api
         self.topic_id = topic_id
         self.topic_info = topic_info
         self.listening_only = listening_only
+        self._host = host
         
-        self._attr_unique_id = f"{coordinator.data.get('model', 'heishamon')}_{topic_id.lower()}_set"
+        self._attr_unique_id = f"heishamon_{host}_{topic_id.lower()}_set"
         self._attr_name = f"{topic_id}-{topic_info['name']}"
-        self._attr_device_name = device.name
-        self._attr_device_info = {"identifiers": {(device.domain, device.id)} if device else None}
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, host)},
+            name=f"Heishamon {host}",
+            manufacturer="Panasonic",
+            model="Aquarea Heat Pump",
+        )
         
         if topic_info["unit"]:
             self._attr_native_unit_of_measurement = topic_info["unit"]

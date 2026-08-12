@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Heishamon configuratie",
+        "description": "Configureer de Heishamon warmtepomp-integratie",
+        "data": {
+          "host": "Heishamon IP-adres",
+          "username": "Gebruikersnaam (optioneel)",
+          "password": "Wachtwoord (optioneel)",
+          "update_interval": "Update-interval (seconden)",
+          "listening_only": "Alleen luisteren (geen bediening)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbinding met Heishamon mislukt. Controleer IP-adres en inloggegevens."
+    }
+  }
+}

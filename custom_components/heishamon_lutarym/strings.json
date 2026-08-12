@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Heishamon Configuration",
+        "description": "Set up Heishamon Heat Pump Integration",
+        "data": {
+          "host": "Heishamon IP Address",
+          "username": "Username (optional)",
+          "password": "Password (optional)",
+          "update_interval": "Update interval (seconds)",
+          "listening_only": "Listening Only Mode (no control)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to Heishamon. Check IP address and credentials."
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurazione Heishamon",
+        "description": "Configura l'integrazione pompa di calore Heishamon",
+        "data": {
+          "host": "Indirizzo IP Heishamon",
+          "username": "Nome utente (facoltativo)",
+          "password": "Password (facoltativa)",
+          "update_interval": "Intervallo di aggiornamento (secondi)",
+          "listening_only": "Modalità solo ascolto (nessun controllo)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossibile connettersi a Heishamon. Controlla l'indirizzo IP e le credenziali."
+    }
+  }
+}

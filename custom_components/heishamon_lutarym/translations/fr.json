@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuration Heishamon",
+        "description": "Configurer l'intégration Heishamon",
+        "data": {
+          "host": "Adresse IP Heishamon",
+          "username": "Nom d'utilisateur (optionnel)",
+          "password": "Mot de passe (optionnel)",
+          "update_interval": "Intervalle de mise à jour (secondes)",
+          "listening_only": "Mode écoute uniquement (pas de contrôle)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossible de se connecter à Heishamon. Vérifiez l'adresse IP et les identifiants."
+    }
+  }
+}

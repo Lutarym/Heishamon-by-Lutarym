@@ -1,97 +1,75 @@
-"""Sensor platform for Heishamon - all 143 topics."""
+"""Sensoren fuer alle HeishaMon-Topics."""
+from __future__ import annotations
+
 from homeassistant.components.sensor import SensorEntity, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, CoordinatorEntity
-from homeassistant.helpers.entity import DeviceInfo
 
 from .const import DOMAIN, HEISHAMON_TOPICS
-
-# Deutsche Übersetzungen
-TOPIC_NAMES_DE = {
-    "TOP0": "Wärmepumpe Status",
-    "TOP1": "Pumpen Durchfluss",
-    "TOP2": "Warmwasser erzwingen Status",
-    "TOP3": "Ruhe Modus Plan",
-    "TOP4": "Betriebsmodus Status",
-    "TOP5": "Rücklauftemperatur Wärmeerzeuger",
-    "TOP6": "Vorlauftemperatur Wärmeerzeuger",
-    "TOP7": "Soll Temperatur Wärmeerzeuger",
-    "TOP8": "Verdichter Frequenz",
-    "TOP9": "Warmwasser Solltemperatur",
-    "TOP10": "Warmwasser Ist Temperatur",
-    "TOP14": "Außentemperatur",
-    "TOP15": "Heiz Leistung Wärmeerzeuger",
-    "TOP16": "Heiz Stromverbrauch",
-    "TOP27": "Zone 1 Heiz Solltemperatur",
-    "TOP28": "Zone 1 Kühl Solltemperatur",
-    "TOP34": "Zone 2 Heiz Solltemperatur",
-    "TOP35": "Zone 2 Kühl Solltemperatur",
-    "TOP36": "Zone 1 Wasser Temperatur",
-    "TOP37": "Zone 2 Wasser Temperatur",
-    "TOP40": "Warmwasser Leistung Wärmeerzeuger",
-    "TOP41": "Warmwasser Stromverbrauch",
-    "TOP42": "Zone 1 Wasser Solltemperatur",
-    "TOP43": "Zone 2 Wasser Solltemperatur",
-    "TOP46": "Pufferspeicher Temperatur",
-    "TOP47": "Solarkollektor Temperatur",
-    "TOP48": "Pool Temperatur",
-    "TOP50": "Verdichter Ausgangstemperatur",
-    "TOP56": "Zone 1 Temperatur",
-    "TOP57": "Zone 2 Temperatur",
-    "TOP58": "Warmwasser Heizer Status",
-    "TOP77": "Heizung Aus Außentemp",
-    "TOP78": "Heizer Ein Außentemp",
-}
+from .entity import HeishamonEntity
+from .names_de import TOPIC_NAMES_DE
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
-    """Set up sensor entities for all 143 topics."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
-    host = hass.data[DOMAIN][entry.entry_id]["host"]
-    
-    sensors = []
-    for topic_id, topic_info in HEISHAMON_TOPICS.items():
-        if topic_info["type"] == "sensor":
-            sensors.append(HeishamonSensor(coordinator, host, topic_id, topic_info))
-    
-    async_add_entities(sensors)
+async def async_setup_entry(
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
+    """Legt fuer jedes Topic einen Sensor an."""
+    data = hass.data[DOMAIN][entry.entry_id]
+    coordinator = data["coordinator"]
+    host = data["host"]
+
+    async_add_entities(
+        HeishamonSensor(coordinator, host, topic_id, info)
+        for topic_id, info in HEISHAMON_TOPICS.items()
+        if info["type"] == "sensor"
+    )
 
 
-class HeishamonSensor(CoordinatorEntity, SensorEntity):
-    """Heishamon sensor entity."""
-    
-    def __init__(self, coordinator: DataUpdateCoordinator, host: str, topic_id: str, topic_info: dict):
-        """Initialize."""
-        super().__init__(coordinator)
-        self.topic_id = topic_id
-        self.topic_info = topic_info
-        self._host = host
-        
+class HeishamonSensor(HeishamonEntity, SensorEntity):
+    """Ein einzelnes HeishaMon-Topic."""
+
+    def __init__(self, coordinator, host: str, topic_id: str, info: dict) -> None:
+        super().__init__(coordinator, host)
+        self._topic_id = topic_id
+        self._info = info
+
         self._attr_unique_id = f"heishamon_{host}_{topic_id.lower()}"
-        
-        # Nutze deutsche Namen wenn verfügbar
-        name_de = TOPIC_NAMES_DE.get(topic_id, topic_info['name'])
-        self._attr_name = f"{topic_id} {name_de}"
-        
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, host)},
-            name=f"Heishamon {host}",
-            manufacturer="Panasonic",
-            model="Aquarea Heat Pump",
-        )
-        
-        if topic_info["unit"]:
-            self._attr_native_unit_of_measurement = topic_info["unit"]
-        if topic_info.get("device_class"):
-            self._attr_device_class = topic_info["device_class"]
-        self._attr_icon = topic_info.get("icon")
-        self._attr_state_class = SensorStateClass.MEASUREMENT
+        self.entity_id = f"sensor.heishamon_{topic_id.lower()}"
+        self._attr_name = f"{topic_id} {TOPIC_NAMES_DE.get(topic_id, info['name'])}"
+        self._attr_icon = info.get("icon")
+
+        if info["numeric"]:
+            if info.get("unit"):
+                self._attr_native_unit_of_measurement = info["unit"]
+            if info.get("device_class"):
+                self._attr_device_class = info["device_class"]
+            # State-Class nur bei echten Messgroessen, sonst meckert der Recorder.
+            if info.get("unit"):
+                self._attr_state_class = SensorStateClass.MEASUREMENT
 
     @property
     def native_value(self):
-        """Return sensor value."""
-        if self.coordinator.data:
-            return self.coordinator.data.get(self.topic_id)
-        return None
+        """Aktueller Wert des Topics."""
+        if not self.coordinator.data:
+            return None
+        return self.coordinator.data.get(self._topic_id)
+
+    @property
+    def extra_state_attributes(self):
+        """Klartext-Beschreibung, die HeishaMon mitliefert."""
+        if not self.coordinator.data:
+            return None
+        description = self.coordinator.data.get(f"{self._topic_id}_desc")
+        if description is None:
+            return None
+        return {"beschreibung": description, "topic": self._topic_id}
+
+    @property
+    def available(self) -> bool:
+        """Nicht verfuegbar, wenn das Topic fehlt."""
+        return (
+            super().available
+            and self.coordinator.data is not None
+            and self._topic_id in self.coordinator.data
+        )

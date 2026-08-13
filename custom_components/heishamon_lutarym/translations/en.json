@@ -1,0 +1,19 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Heishamon",
+        "description": "Enter the IP address of your HeishaMon board.",
+        "data": {
+          "host": "IP address",
+          "username": "Username (optional)",
+          "password": "Password (optional)",
+          "update_interval": "Update interval in seconds",
+          "listening_only": "Read only (no control entities)"
+        }
+      }
+    },
+    "error": { "cannot_connect": "No data received from HeishaMon at this address." },
+    "abort": { "already_configured": "This HeishaMon is already set up." }
+  }
+}

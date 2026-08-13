@@ -2,60 +2,18 @@
   "config": {
     "step": {
       "user": {
-        "title": "Heishamon Konfiguration",
-        "description": "Konfiguriere die Heishamon Wärmepumpen-Integration",
+        "title": "Heishamon",
+        "description": "IP-Adresse deiner HeishaMon-Platine eingeben.",
         "data": {
-          "host": "Heishamon IP-Adresse",
+          "host": "IP-Adresse",
           "username": "Benutzername (optional)",
           "password": "Passwort (optional)",
-          "update_interval": "Update-Intervall (Sekunden)",
-          "listening_only": "Nur Abhören (Lesezugriff)"
+          "update_interval": "Aktualisierung in Sekunden",
+          "listening_only": "Nur lesen (keine Steuerung anlegen)"
         }
       }
     },
-    "error": {
-      "cannot_connect": "Verbindung zu Heishamon fehlgeschlagen"
-    }
-  },
-  "entity": {
-    "sensor": {
-      "top0_heatpump_state": {
-        "name": "Wärmepumpe Status"
-      },
-      "top5_main_inlet_temp": {
-        "name": "Rücklauftemperatur Wärmeerzeuger"
-      },
-      "top6_main_outlet_temp": {
-        "name": "Vorlauftemperatur Wärmeerzeuger"
-      },
-      "top10_dhw_temp": {
-        "name": "Warmwasser Ist-Temperatur"
-      },
-      "top14_outside_temp": {
-        "name": "Außentemperatur"
-      },
-      "top15_heat_power_production": {
-        "name": "Heiz-Leistung Wärmeerzeuger"
-      },
-      "top16_heat_power_consumption": {
-        "name": "Heiz-Stromverbrauch"
-      }
-    },
-    "number": {
-      "top9_dhw_target_temp": {
-        "name": "Warmwasser Solltemperatur"
-      },
-      "top27_z1_heat_request_temp": {
-        "name": "Zone 1 Heiz-Solltemperatur"
-      }
-    },
-    "switch": {
-      "setheatpump": {
-        "name": "Wärmepumpe"
-      },
-      "setforcedwh": {
-        "name": "Warmwasser erzwingen"
-      }
-    }
+    "error": { "cannot_connect": "Von dieser Adresse kamen keine HeishaMon-Daten." },
+    "abort": { "already_configured": "Dieser HeishaMon ist bereits eingerichtet." }
   }
 }

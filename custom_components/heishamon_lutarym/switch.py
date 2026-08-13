@@ -1,79 +1,84 @@
-"""Switch platform for Heishamon."""
+"""Schalter fuer HeishaMon-Kommandos."""
+from __future__ import annotations
+
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, CoordinatorEntity
-from homeassistant.helpers.entity import DeviceInfo
 
-from .const import DOMAIN, SET_COMMANDS
-from .api import HeishamonAPI
+from .const import DOMAIN, SWITCH_COMMANDS
+from .entity import HeishamonEntity
+from .names_de import COMMAND_NAMES_DE
 
-SET_NAMES_DE = {
-    "SetHeatpump": "Wärmepumpe",
-    "SetHolidayMode": "Urlaubsmodus",
-    "SetForceDHW": "Warmwasser erzwingen",
-    "SetForceDefrost": "Abtauen erzwingen",
-    "SetForceSterilization": "Sterilisation erzwingen",
-    "SetPump": "Pumpe",
-    "SetMainSchedule": "Hauptzeitplan",
-    "SetAltExternalSensor": "Alternative Außentemperatursensor",
-    "SetBuffer": "Pufferspeicher",
-    "SetExternalControl": "Externe Steuerung",
-    "SetExternalError": "Externes Fehlersignal",
-    "SetExternalCompressorControl": "Externe Verdichter Steuerung",
-    "SetBivalentControl": "Bivalent Steuerung",
-    "SetForceHeater": "Heizer erzwingen",
-    "SetReset": "Zurücksetzen",
-    "SetDHWHeaterState": "Warmwasser Heizer",
-    "SetRoomHeaterState": "Raum Heizer",
+# Kommando -> Topic, das den Zustand zurueckmeldet.
+STATE_TOPICS = {
+    "SetHeatpump": "TOP0",
+    "SetForceDHW": "TOP2",
+    "SetHolidayMode": "TOP19",
+    "SetMainSchedule": "TOP13",
+    "SetForceDefrost": "TOP26",
+    "SetForceSterilization": "TOP69",
+    "SetForceHeater": "TOP68",
+    "SetAltExternalSensor": "TOP108",
+    "SetBuffer": "TOP99",
+    "SetExternalControl": "TOP119",
+    "SetExternalError": "TOP121",
+    "SetExternalCompressorControl": "TOP122",
+    "SetBivalentControl": "TOP129",
+    "SetDHWHeaterState": "TOP58",
+    "SetRoomHeaterState": "TOP59",
 }
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
-    """Set up switches."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
-    api = hass.data[DOMAIN][entry.entry_id]["api"]
-    host = hass.data[DOMAIN][entry.entry_id]["host"]
-    listening_only = hass.data[DOMAIN][entry.entry_id]["listening_only"]
-    
-    if not listening_only:
-        switches = [HeishamonSwitch(coordinator, api, host, cmd, info) for cmd, info in SET_COMMANDS.items() if info["type"] == "switch"]
-        async_add_entities(switches)
+async def async_setup_entry(
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
+    """Legt Schalter an, wenn Steuerung erlaubt ist."""
+    data = hass.data[DOMAIN][entry.entry_id]
+    if data["listening_only"]:
+        return
+
+    async_add_entities(
+        HeishamonSwitch(data["coordinator"], data["api"], data["host"], cmd, info)
+        for cmd, info in SWITCH_COMMANDS.items()
+    )
 
 
-class HeishamonSwitch(CoordinatorEntity, SwitchEntity):
-    """Heishamon switch entity."""
-    
-    def __init__(self, coordinator: DataUpdateCoordinator, api: HeishamonAPI, host: str, set_command: str, info: dict):
-        """Initialize."""
-        super().__init__(coordinator)
-        self.api = api
-        self.set_command = set_command
-        self._host = host
-        
-        self._attr_unique_id = f"heishamon_{host}_{set_command.lower()}"
-        name_de = SET_NAMES_DE.get(set_command, set_command)
-        self._attr_name = f"{set_command} ({name_de})"
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, host)},
-            name=f"Heishamon {host}",
-            manufacturer="Panasonic",
-            model="Aquarea Heat Pump",
-        )
+class HeishamonSwitch(HeishamonEntity, SwitchEntity):
+    """Ein Ein-Aus-Kommando."""
+
+    def __init__(self, coordinator, api, host: str, command: str, info: dict) -> None:
+        super().__init__(coordinator, host)
+        self._api = api
+        self._command = command
+        self._state_topic = STATE_TOPICS.get(command)
+
+        self._attr_unique_id = f"heishamon_{host}_{command.lower()}"
+        self.entity_id = f"switch.heishamon_{command.lower()}"
+        self._attr_name = COMMAND_NAMES_DE.get(command, command)
         self._attr_icon = info.get("icon")
 
     @property
-    def is_on(self) -> bool:
-        """Return state."""
-        return False
+    def is_on(self) -> bool | None:
+        """Zustand aus dem zugehoerigen Topic, sonst unbekannt."""
+        if self._state_topic is None or not self.coordinator.data:
+            return None
+        value = self.coordinator.data.get(self._state_topic)
+        if value is None:
+            return None
+        try:
+            return int(value) > 0
+        except (TypeError, ValueError):
+            return None
+
+    async def _async_send(self, value: int) -> None:
+        if await self._api.async_set_value(self._command, value):
+            await self.coordinator.async_request_refresh()
 
     async def async_turn_on(self, **kwargs) -> None:
-        """Turn on."""
-        if await self.api.async_set_value(self.set_command, 1):
-            await self.coordinator.async_request_refresh()
+        """Schaltet ein."""
+        await self._async_send(1)
 
     async def async_turn_off(self, **kwargs) -> None:
-        """Turn off."""
-        if await self.api.async_set_value(self.set_command, 0):
-            await self.coordinator.async_request_refresh()
+        """Schaltet aus."""
+        await self._async_send(0)

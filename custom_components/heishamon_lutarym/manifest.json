@@ -4,13 +4,9 @@
   "codeowners": ["@Lutarym"],
   "config_flow": true,
   "documentation": "https://github.com/Lutarym/heishamon-homeassistant-lutarym",
-  "homeassistant": {
-    "brand": "Panasonic",
-    "min_version": "2024.1.0"
-  },
   "integration_type": "hub",
+  "iot_class": "local_polling",
   "issue_tracker": "https://github.com/Lutarym/heishamon-homeassistant-lutarym/issues",
   "requirements": [],
-  "version": "0.1.0",
-  "documentation": "https://github.com/Lutarym/heishamon-homeassistant-lutarym"
+  "version": "0.2.0"
 }

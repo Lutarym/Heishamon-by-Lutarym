@@ -8,7 +8,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, SWITCH_COMMANDS
 from .entity import HeishamonEntity
-from .names_de import COMMAND_NAMES_DE
 
 # Kommando -> Topic, das den Zustand zurueckmeldet.
 STATE_TOPICS = {
@@ -55,7 +54,7 @@ class HeishamonSwitch(HeishamonEntity, SwitchEntity):
 
         self._attr_unique_id = f"heishamon_{host}_{command.lower()}"
         self.entity_id = f"switch.heishamon_{command.lower()}"
-        self._attr_name = COMMAND_NAMES_DE.get(command, command)
+        self._attr_translation_key = command.lower()
         self._attr_icon = info.get("icon")
 
     @property

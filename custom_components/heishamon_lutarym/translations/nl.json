@@ -1,0 +1,543 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Heishamon",
+        "description": "Voer het IP-adres van je HeishaMon-print in.",
+        "data": {
+          "host": "IP-adres",
+          "username": "Gebruikersnaam (optioneel)",
+          "password": "Wachtwoord (optioneel)",
+          "update_interval": "Bijwerkinterval in seconden",
+          "listening_only": "Alleen lezen (geen bediening)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Geen HeishaMon-gegevens ontvangen van dit adres."
+    },
+    "abort": {
+      "already_configured": "Deze HeishaMon is al ingesteld."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "top0": {
+        "name": "TOP0 Warmtepomp aan/uit"
+      },
+      "top1": {
+        "name": "TOP1 Waterdebiet"
+      },
+      "top2": {
+        "name": "TOP2 Geforceerd warm water"
+      },
+      "top3": {
+        "name": "TOP3 Stille modus via schema"
+      },
+      "top4": {
+        "name": "TOP4 Bedrijfsmodus"
+      },
+      "top5": {
+        "name": "TOP5 Retourtemperatuur water"
+      },
+      "top6": {
+        "name": "TOP6 Aanvoertemperatuur water"
+      },
+      "top7": {
+        "name": "TOP7 Streeftemperatuur aanvoer"
+      },
+      "top8": {
+        "name": "TOP8 Compressorfrequentie"
+      },
+      "top10": {
+        "name": "TOP10 Temperatuur warm water"
+      },
+      "top11": {
+        "name": "TOP11 Totale bedrijfsuren"
+      },
+      "top12": {
+        "name": "TOP12 Aantal starts"
+      },
+      "top13": {
+        "name": "TOP13 Schema actief"
+      },
+      "top14": {
+        "name": "TOP14 Buitentemperatuur"
+      },
+      "top15": {
+        "name": "TOP15 Geleverd warmtevermogen"
+      },
+      "top16": {
+        "name": "TOP16 Opgenomen vermogen verwarmen"
+      },
+      "top17": {
+        "name": "TOP17 Resterende tijd krachtige modus"
+      },
+      "top18": {
+        "name": "TOP18 Niveau stille modus"
+      },
+      "top19": {
+        "name": "TOP19 Vakantiemodus"
+      },
+      "top20": {
+        "name": "TOP20 Stand driewegklep"
+      },
+      "top21": {
+        "name": "TOP21 Buitenleidingtemperatuur"
+      },
+      "top22": {
+        "name": "TOP22 Temperatuurverschil warm water"
+      },
+      "top23": {
+        "name": "TOP23 Temperatuurverschil verwarmen"
+      },
+      "top24": {
+        "name": "TOP24 Temperatuurverschil koelen"
+      },
+      "top25": {
+        "name": "TOP25 Warmwaterverlaging vakantie"
+      },
+      "top26": {
+        "name": "TOP26 Ontdooien actief"
+      },
+      "top29": {
+        "name": "TOP29 Zone 1 curve water hoog"
+      },
+      "top30": {
+        "name": "TOP30 Zone 1 curve water laag"
+      },
+      "top31": {
+        "name": "TOP31 Zone 1 curve buiten hoog"
+      },
+      "top32": {
+        "name": "TOP32 Zone 1 curve buiten laag"
+      },
+      "top33": {
+        "name": "TOP33 Temperatuur kamerthermostaat"
+      },
+      "top36": {
+        "name": "TOP36 Zone 1 watertemperatuur"
+      },
+      "top37": {
+        "name": "TOP37 Zone 2 watertemperatuur"
+      },
+      "top38": {
+        "name": "TOP38 Geleverd koelvermogen"
+      },
+      "top39": {
+        "name": "TOP39 Opgenomen vermogen koelen"
+      },
+      "top40": {
+        "name": "TOP40 Geleverd vermogen warm water"
+      },
+      "top41": {
+        "name": "TOP41 Opgenomen vermogen warm water"
+      },
+      "top42": {
+        "name": "TOP42 Zone 1 streefwaarde water"
+      },
+      "top43": {
+        "name": "TOP43 Zone 2 streefwaarde water"
+      },
+      "top44": {
+        "name": "TOP44 Foutcode"
+      },
+      "top45": {
+        "name": "TOP45 Kamerverlaging vakantie"
+      },
+      "top46": {
+        "name": "TOP46 Buffervattemperatuur"
+      },
+      "top47": {
+        "name": "TOP47 Temperatuur zonnecollector"
+      },
+      "top48": {
+        "name": "TOP48 Zwembadtemperatuur"
+      },
+      "top49": {
+        "name": "TOP49 Uitlaattemperatuur warmtewisselaar"
+      },
+      "top50": {
+        "name": "TOP50 Persgastemperatuur compressor"
+      },
+      "top51": {
+        "name": "TOP51 Binnenleidingtemperatuur"
+      },
+      "top52": {
+        "name": "TOP52 Temperatuur ontdooisensor"
+      },
+      "top53": {
+        "name": "TOP53 Uitlaattemperatuur verdamper"
+      },
+      "top54": {
+        "name": "TOP54 Uitlaattemperatuur bypass"
+      },
+      "top55": {
+        "name": "TOP55 Temperatuur vermogenselektronica"
+      },
+      "top56": {
+        "name": "TOP56 Zone 1 kamertemperatuur"
+      },
+      "top57": {
+        "name": "TOP57 Zone 2 kamertemperatuur"
+      },
+      "top58": {
+        "name": "TOP58 Elektrisch element warm water actief"
+      },
+      "top59": {
+        "name": "TOP59 Elektrisch element verwarming actief"
+      },
+      "top60": {
+        "name": "TOP60 Interne verwarming actief"
+      },
+      "top61": {
+        "name": "TOP61 Externe verwarming actief"
+      },
+      "top62": {
+        "name": "TOP62 Toerental ventilator 1"
+      },
+      "top63": {
+        "name": "TOP63 Toerental ventilator 2"
+      },
+      "top64": {
+        "name": "TOP64 Hoge druk koudemiddel"
+      },
+      "top65": {
+        "name": "TOP65 Toerental circulatiepomp"
+      },
+      "top66": {
+        "name": "TOP66 Lage druk koudemiddel"
+      },
+      "top67": {
+        "name": "TOP67 Compressorstroom"
+      },
+      "top68": {
+        "name": "TOP68 Noodverwarming actief"
+      },
+      "top69": {
+        "name": "TOP69 Legionellabeveiliging actief"
+      },
+      "top70": {
+        "name": "TOP70 Legionellatemperatuur"
+      },
+      "top71": {
+        "name": "TOP71 Maximale duur legionella"
+      },
+      "top72": {
+        "name": "TOP72 Zone 1 koelcurve water hoog"
+      },
+      "top73": {
+        "name": "TOP73 Zone 1 koelcurve water laag"
+      },
+      "top74": {
+        "name": "TOP74 Zone 1 koelcurve buiten hoog"
+      },
+      "top75": {
+        "name": "TOP75 Zone 1 koelcurve buiten laag"
+      },
+      "top76": {
+        "name": "TOP76 Type verwarmingsregeling"
+      },
+      "top79": {
+        "name": "TOP79 Omschakeling verwarmen naar koelen"
+      },
+      "top80": {
+        "name": "TOP80 Omschakeling koelen naar verwarmen"
+      },
+      "top81": {
+        "name": "TOP81 Type koelregeling"
+      },
+      "top82": {
+        "name": "TOP82 Zone 2 curve water hoog"
+      },
+      "top83": {
+        "name": "TOP83 Zone 2 curve water laag"
+      },
+      "top84": {
+        "name": "TOP84 Zone 2 curve buiten hoog"
+      },
+      "top85": {
+        "name": "TOP85 Zone 2 curve buiten laag"
+      },
+      "top86": {
+        "name": "TOP86 Zone 2 koelcurve water hoog"
+      },
+      "top87": {
+        "name": "TOP87 Zone 2 koelcurve water laag"
+      },
+      "top88": {
+        "name": "TOP88 Zone 2 koelcurve buiten hoog"
+      },
+      "top89": {
+        "name": "TOP89 Zone 2 koelcurve buiten laag"
+      },
+      "top90": {
+        "name": "TOP90 Bedrijfsuren element verwarming"
+      },
+      "top91": {
+        "name": "TOP91 Bedrijfsuren element warm water"
+      },
+      "top92": {
+        "name": "TOP92 Warmtepompmodel"
+      },
+      "top93": {
+        "name": "TOP93 Vermogen circulatiepomp"
+      },
+      "top94": {
+        "name": "TOP94 Zoneconfiguratie"
+      },
+      "top95": {
+        "name": "TOP95 Maximaal pompvermogen"
+      },
+      "top96": {
+        "name": "TOP96 Vertraging element"
+      },
+      "top97": {
+        "name": "TOP97 Inschakelverschil element"
+      },
+      "top98": {
+        "name": "TOP98 Uitschakelverschil element"
+      },
+      "top99": {
+        "name": "TOP99 Buffervat aanwezig"
+      },
+      "top100": {
+        "name": "TOP100 Warmwatervat aanwezig"
+      },
+      "top101": {
+        "name": "TOP101 Zonnemodus"
+      },
+      "top102": {
+        "name": "TOP102 Inschakelverschil zon"
+      },
+      "top103": {
+        "name": "TOP103 Uitschakelverschil zon"
+      },
+      "top104": {
+        "name": "TOP104 Vorstbeveiliging zon"
+      },
+      "top105": {
+        "name": "TOP105 Maximale zonnetemperatuur"
+      },
+      "top106": {
+        "name": "TOP106 Type debietregeling"
+      },
+      "top107": {
+        "name": "TOP107 Warmtedragende vloeistof"
+      },
+      "top108": {
+        "name": "TOP108 Alternatieve buitensensor"
+      },
+      "top109": {
+        "name": "TOP109 Antivriesmodus"
+      },
+      "top110": {
+        "name": "TOP110 Optionele print aanwezig"
+      },
+      "top111": {
+        "name": "TOP111 Zone 1 sensortype"
+      },
+      "top112": {
+        "name": "TOP112 Zone 2 sensortype"
+      },
+      "top113": {
+        "name": "TOP113 Verschil buffervat"
+      },
+      "top114": {
+        "name": "TOP114 Externe bodemverwarming"
+      },
+      "top115": {
+        "name": "TOP115 Waterdruk installatie"
+      },
+      "top116": {
+        "name": "TOP116 Tweede retourtemperatuur"
+      },
+      "top117": {
+        "name": "TOP117 Uitlaattemperatuur economiser"
+      },
+      "top118": {
+        "name": "TOP118 Tweede kamerthermostaat"
+      },
+      "top119": {
+        "name": "TOP119 Externe besturing"
+      },
+      "top120": {
+        "name": "TOP120 Externe warm koud omschakeling"
+      },
+      "top121": {
+        "name": "TOP121 Extern foutsignaal"
+      },
+      "top122": {
+        "name": "TOP122 Externe compressorbesturing"
+      },
+      "top123": {
+        "name": "TOP123 Pomp zone 2 draait"
+      },
+      "top124": {
+        "name": "TOP124 Pomp zone 1 draait"
+      },
+      "top125": {
+        "name": "TOP125 Stand tweewegklep"
+      },
+      "top126": {
+        "name": "TOP126 Tweede driewegklep"
+      },
+      "top127": {
+        "name": "TOP127 Stand mengklep zone 1"
+      },
+      "top128": {
+        "name": "TOP128 Stand mengklep zone 2"
+      },
+      "top129": {
+        "name": "TOP129 Bivalente regeling"
+      },
+      "top130": {
+        "name": "TOP130 Bivalente modus"
+      },
+      "top131": {
+        "name": "TOP131 Starttemperatuur bivalent"
+      },
+      "top132": {
+        "name": "TOP132 Bivalent geavanceerd verwarmen"
+      },
+      "top133": {
+        "name": "TOP133 Bivalent geavanceerd warm water"
+      },
+      "top134": {
+        "name": "TOP134 Bivalent geavanceerd starttemperatuur"
+      },
+      "top135": {
+        "name": "TOP135 Bivalent geavanceerd stoptemperatuur"
+      },
+      "top136": {
+        "name": "TOP136 Bivalent geavanceerd startvertraging"
+      },
+      "top137": {
+        "name": "TOP137 Bivalent geavanceerd stopvertraging"
+      },
+      "top138": {
+        "name": "TOP138 Bivalent geavanceerd warmwatervertraging"
+      },
+      "top139": {
+        "name": "TOP139 Verwarmingsregeling"
+      },
+      "top140": {
+        "name": "TOP140 Slim warm water"
+      },
+      "top141": {
+        "name": "TOP141 Prioriteit stille modus"
+      },
+      "top142": {
+        "name": "TOP142 Opening expansieventiel"
+      },
+      "top143": {
+        "name": "TOP143 Keuze warmwatersensor"
+      }
+    },
+    "number": {
+      "top9": {
+        "name": "TOP9 Streeftemperatuur warm water"
+      },
+      "top27": {
+        "name": "TOP27 Zone 1 streefwaarde verwarmen"
+      },
+      "top28": {
+        "name": "TOP28 Zone 1 streefwaarde koelen"
+      },
+      "top34": {
+        "name": "TOP34 Zone 2 streefwaarde verwarmen"
+      },
+      "top35": {
+        "name": "TOP35 Zone 2 streefwaarde koelen"
+      },
+      "top77": {
+        "name": "TOP77 Verwarming uit boven buitentemp"
+      },
+      "top78": {
+        "name": "TOP78 Element aan onder buitentemp"
+      }
+    },
+    "switch": {
+      "setheatpump": {
+        "name": "Warmtepomp"
+      },
+      "setpump": {
+        "name": "Circulatiepomp"
+      },
+      "setforcedhw": {
+        "name": "Warm water nu laden"
+      },
+      "setforcedefrost": {
+        "name": "Ontdooien forceren"
+      },
+      "setforcesterilization": {
+        "name": "Legionellabeveiliging starten"
+      },
+      "setforceheater": {
+        "name": "Noodverwarming"
+      },
+      "setholidaymode": {
+        "name": "Vakantiemodus"
+      },
+      "setmainschedule": {
+        "name": "Schema"
+      },
+      "setaltexternalsensor": {
+        "name": "Alternatieve buitensensor"
+      },
+      "setbuffer": {
+        "name": "Buffervat"
+      },
+      "setexternalcontrol": {
+        "name": "Externe besturing"
+      },
+      "setexternalerror": {
+        "name": "Extern foutsignaal"
+      },
+      "setexternalcompressorcontrol": {
+        "name": "Externe compressorbesturing"
+      },
+      "setbivalentcontrol": {
+        "name": "Bivalente regeling"
+      },
+      "setdhwheaterstate": {
+        "name": "Element warm water"
+      },
+      "setroomheaterstate": {
+        "name": "Element verwarming"
+      }
+    },
+    "select": {
+      "setoperationmode": {
+        "name": "Bedrijfsmodus",
+        "state": {
+          "mode_0": "Alleen verwarmen",
+          "mode_1": "Alleen koelen",
+          "mode_2": "Automatisch",
+          "mode_3": "Alleen warm water",
+          "mode_4": "Verwarmen en warm water",
+          "mode_5": "Koelen en warm water",
+          "mode_6": "Automatisch en warm water"
+        }
+      },
+      "setquietmode": {
+        "name": "Stille modus",
+        "state": {
+          "mode_0": "Uit",
+          "mode_1": "Niveau 1 stil",
+          "mode_2": "Niveau 2 stiller",
+          "mode_3": "Niveau 3 stilst"
+        }
+      },
+      "setpowerfulmode": {
+        "name": "Krachtige modus",
+        "state": {
+          "mode_0": "Uit",
+          "mode_1": "30 minuten",
+          "mode_2": "60 minuten",
+          "mode_3": "90 minuten"
+        }
+      }
+    }
+  }
+}

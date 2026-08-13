@@ -1,0 +1,543 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Heishamon",
+        "description": "Saisissez l'adresse IP de votre carte HeishaMon.",
+        "data": {
+          "host": "Adresse IP",
+          "username": "Nom d'utilisateur (optionnel)",
+          "password": "Mot de passe (optionnel)",
+          "update_interval": "Intervalle de mise a jour en secondes",
+          "listening_only": "Lecture seule (aucune commande)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Aucune donnee HeishaMon recue a cette adresse."
+    },
+    "abort": {
+      "already_configured": "Ce HeishaMon est deja configure."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "top0": {
+        "name": "TOP0 Pompe a chaleur marche/arret"
+      },
+      "top1": {
+        "name": "TOP1 Debit d'eau"
+      },
+      "top2": {
+        "name": "TOP2 Charge forcee eau chaude"
+      },
+      "top3": {
+        "name": "TOP3 Mode silencieux programme"
+      },
+      "top4": {
+        "name": "TOP4 Mode de fonctionnement"
+      },
+      "top5": {
+        "name": "TOP5 Temperature retour d'eau"
+      },
+      "top6": {
+        "name": "TOP6 Temperature depart d'eau"
+      },
+      "top7": {
+        "name": "TOP7 Consigne temperature depart"
+      },
+      "top8": {
+        "name": "TOP8 Frequence du compresseur"
+      },
+      "top10": {
+        "name": "TOP10 Temperature eau chaude"
+      },
+      "top11": {
+        "name": "TOP11 Heures de fonctionnement"
+      },
+      "top12": {
+        "name": "TOP12 Nombre de demarrages"
+      },
+      "top13": {
+        "name": "TOP13 Programmation active"
+      },
+      "top14": {
+        "name": "TOP14 Temperature exterieure"
+      },
+      "top15": {
+        "name": "TOP15 Puissance thermique fournie"
+      },
+      "top16": {
+        "name": "TOP16 Puissance electrique chauffage"
+      },
+      "top17": {
+        "name": "TOP17 Temps restant mode puissant"
+      },
+      "top18": {
+        "name": "TOP18 Niveau mode silencieux"
+      },
+      "top19": {
+        "name": "TOP19 Mode vacances"
+      },
+      "top20": {
+        "name": "TOP20 Position vanne trois voies"
+      },
+      "top21": {
+        "name": "TOP21 Temperature tuyau exterieur"
+      },
+      "top22": {
+        "name": "TOP22 Ecart temperature eau chaude"
+      },
+      "top23": {
+        "name": "TOP23 Ecart temperature chauffage"
+      },
+      "top24": {
+        "name": "TOP24 Ecart temperature refroidissement"
+      },
+      "top25": {
+        "name": "TOP25 Decalage eau chaude vacances"
+      },
+      "top26": {
+        "name": "TOP26 Degivrage en cours"
+      },
+      "top29": {
+        "name": "TOP29 Zone 1 courbe eau haute"
+      },
+      "top30": {
+        "name": "TOP30 Zone 1 courbe eau basse"
+      },
+      "top31": {
+        "name": "TOP31 Zone 1 courbe exterieur haute"
+      },
+      "top32": {
+        "name": "TOP32 Zone 1 courbe exterieur basse"
+      },
+      "top33": {
+        "name": "TOP33 Temperature thermostat ambiance"
+      },
+      "top36": {
+        "name": "TOP36 Zone 1 temperature d'eau"
+      },
+      "top37": {
+        "name": "TOP37 Zone 2 temperature d'eau"
+      },
+      "top38": {
+        "name": "TOP38 Puissance frigorifique fournie"
+      },
+      "top39": {
+        "name": "TOP39 Puissance electrique refroidissement"
+      },
+      "top40": {
+        "name": "TOP40 Puissance fournie eau chaude"
+      },
+      "top41": {
+        "name": "TOP41 Puissance electrique eau chaude"
+      },
+      "top42": {
+        "name": "TOP42 Zone 1 consigne eau"
+      },
+      "top43": {
+        "name": "TOP43 Zone 2 consigne eau"
+      },
+      "top44": {
+        "name": "TOP44 Code d'erreur"
+      },
+      "top45": {
+        "name": "TOP45 Decalage ambiance vacances"
+      },
+      "top46": {
+        "name": "TOP46 Temperature ballon tampon"
+      },
+      "top47": {
+        "name": "TOP47 Temperature capteur solaire"
+      },
+      "top48": {
+        "name": "TOP48 Temperature piscine"
+      },
+      "top49": {
+        "name": "TOP49 Temperature sortie echangeur"
+      },
+      "top50": {
+        "name": "TOP50 Temperature refoulement compresseur"
+      },
+      "top51": {
+        "name": "TOP51 Temperature tuyau interieur"
+      },
+      "top52": {
+        "name": "TOP52 Temperature sonde degivrage"
+      },
+      "top53": {
+        "name": "TOP53 Temperature sortie evaporateur"
+      },
+      "top54": {
+        "name": "TOP54 Temperature sortie bypass"
+      },
+      "top55": {
+        "name": "TOP55 Temperature electronique de puissance"
+      },
+      "top56": {
+        "name": "TOP56 Zone 1 temperature ambiante"
+      },
+      "top57": {
+        "name": "TOP57 Zone 2 temperature ambiante"
+      },
+      "top58": {
+        "name": "TOP58 Appoint electrique eau chaude actif"
+      },
+      "top59": {
+        "name": "TOP59 Appoint electrique chauffage actif"
+      },
+      "top60": {
+        "name": "TOP60 Appoint interne actif"
+      },
+      "top61": {
+        "name": "TOP61 Appoint externe actif"
+      },
+      "top62": {
+        "name": "TOP62 Vitesse ventilateur 1"
+      },
+      "top63": {
+        "name": "TOP63 Vitesse ventilateur 2"
+      },
+      "top64": {
+        "name": "TOP64 Haute pression fluide frigorigene"
+      },
+      "top65": {
+        "name": "TOP65 Vitesse circulateur"
+      },
+      "top66": {
+        "name": "TOP66 Basse pression fluide frigorigene"
+      },
+      "top67": {
+        "name": "TOP67 Courant compresseur"
+      },
+      "top68": {
+        "name": "TOP68 Chauffage de secours actif"
+      },
+      "top69": {
+        "name": "TOP69 Traitement anti legionelle en cours"
+      },
+      "top70": {
+        "name": "TOP70 Temperature anti legionelle"
+      },
+      "top71": {
+        "name": "TOP71 Duree maximale anti legionelle"
+      },
+      "top72": {
+        "name": "TOP72 Zone 1 courbe froid eau haute"
+      },
+      "top73": {
+        "name": "TOP73 Zone 1 courbe froid eau basse"
+      },
+      "top74": {
+        "name": "TOP74 Zone 1 courbe froid exterieur haute"
+      },
+      "top75": {
+        "name": "TOP75 Zone 1 courbe froid exterieur basse"
+      },
+      "top76": {
+        "name": "TOP76 Type de regulation chauffage"
+      },
+      "top79": {
+        "name": "TOP79 Bascule chauffage vers froid"
+      },
+      "top80": {
+        "name": "TOP80 Bascule froid vers chauffage"
+      },
+      "top81": {
+        "name": "TOP81 Type de regulation froid"
+      },
+      "top82": {
+        "name": "TOP82 Zone 2 courbe eau haute"
+      },
+      "top83": {
+        "name": "TOP83 Zone 2 courbe eau basse"
+      },
+      "top84": {
+        "name": "TOP84 Zone 2 courbe exterieur haute"
+      },
+      "top85": {
+        "name": "TOP85 Zone 2 courbe exterieur basse"
+      },
+      "top86": {
+        "name": "TOP86 Zone 2 courbe froid eau haute"
+      },
+      "top87": {
+        "name": "TOP87 Zone 2 courbe froid eau basse"
+      },
+      "top88": {
+        "name": "TOP88 Zone 2 courbe froid exterieur haute"
+      },
+      "top89": {
+        "name": "TOP89 Zone 2 courbe froid exterieur basse"
+      },
+      "top90": {
+        "name": "TOP90 Heures appoint chauffage"
+      },
+      "top91": {
+        "name": "TOP91 Heures appoint eau chaude"
+      },
+      "top92": {
+        "name": "TOP92 Modele de pompe a chaleur"
+      },
+      "top93": {
+        "name": "TOP93 Puissance circulateur"
+      },
+      "top94": {
+        "name": "TOP94 Configuration des zones"
+      },
+      "top95": {
+        "name": "TOP95 Puissance maximale circulateur"
+      },
+      "top96": {
+        "name": "TOP96 Temporisation appoint"
+      },
+      "top97": {
+        "name": "TOP97 Ecart enclenchement appoint"
+      },
+      "top98": {
+        "name": "TOP98 Ecart arret appoint"
+      },
+      "top99": {
+        "name": "TOP99 Ballon tampon installe"
+      },
+      "top100": {
+        "name": "TOP100 Ballon eau chaude installe"
+      },
+      "top101": {
+        "name": "TOP101 Mode solaire"
+      },
+      "top102": {
+        "name": "TOP102 Ecart enclenchement solaire"
+      },
+      "top103": {
+        "name": "TOP103 Ecart arret solaire"
+      },
+      "top104": {
+        "name": "TOP104 Protection gel solaire"
+      },
+      "top105": {
+        "name": "TOP105 Temperature maximale solaire"
+      },
+      "top106": {
+        "name": "TOP106 Mode de regulation du debit"
+      },
+      "top107": {
+        "name": "TOP107 Liquide caloporteur"
+      },
+      "top108": {
+        "name": "TOP108 Sonde exterieure alternative"
+      },
+      "top109": {
+        "name": "TOP109 Mode antigel"
+      },
+      "top110": {
+        "name": "TOP110 Carte optionnelle installee"
+      },
+      "top111": {
+        "name": "TOP111 Zone 1 type de sonde"
+      },
+      "top112": {
+        "name": "TOP112 Zone 2 type de sonde"
+      },
+      "top113": {
+        "name": "TOP113 Ecart ballon tampon"
+      },
+      "top114": {
+        "name": "TOP114 Resistance de bac externe"
+      },
+      "top115": {
+        "name": "TOP115 Pression d'eau installation"
+      },
+      "top116": {
+        "name": "TOP116 Deuxieme temperature retour"
+      },
+      "top117": {
+        "name": "TOP117 Temperature sortie economiseur"
+      },
+      "top118": {
+        "name": "TOP118 Deuxieme thermostat ambiance"
+      },
+      "top119": {
+        "name": "TOP119 Commande externe"
+      },
+      "top120": {
+        "name": "TOP120 Commutation externe chaud froid"
+      },
+      "top121": {
+        "name": "TOP121 Signal d'erreur externe"
+      },
+      "top122": {
+        "name": "TOP122 Commande externe compresseur"
+      },
+      "top123": {
+        "name": "TOP123 Circulateur zone 2 en marche"
+      },
+      "top124": {
+        "name": "TOP124 Circulateur zone 1 en marche"
+      },
+      "top125": {
+        "name": "TOP125 Position vanne deux voies"
+      },
+      "top126": {
+        "name": "TOP126 Deuxieme vanne trois voies"
+      },
+      "top127": {
+        "name": "TOP127 Position vanne melangeuse zone 1"
+      },
+      "top128": {
+        "name": "TOP128 Position vanne melangeuse zone 2"
+      },
+      "top129": {
+        "name": "TOP129 Fonctionnement bivalent"
+      },
+      "top130": {
+        "name": "TOP130 Mode bivalent"
+      },
+      "top131": {
+        "name": "TOP131 Temperature demarrage bivalent"
+      },
+      "top132": {
+        "name": "TOP132 Bivalent avance chauffage"
+      },
+      "top133": {
+        "name": "TOP133 Bivalent avance eau chaude"
+      },
+      "top134": {
+        "name": "TOP134 Bivalent avance temperature demarrage"
+      },
+      "top135": {
+        "name": "TOP135 Bivalent avance temperature arret"
+      },
+      "top136": {
+        "name": "TOP136 Bivalent avance temporisation demarrage"
+      },
+      "top137": {
+        "name": "TOP137 Bivalent avance temporisation arret"
+      },
+      "top138": {
+        "name": "TOP138 Bivalent avance temporisation eau chaude"
+      },
+      "top139": {
+        "name": "TOP139 Regulation chauffage"
+      },
+      "top140": {
+        "name": "TOP140 Eau chaude intelligente"
+      },
+      "top141": {
+        "name": "TOP141 Priorite mode silencieux"
+      },
+      "top142": {
+        "name": "TOP142 Ouverture detendeur"
+      },
+      "top143": {
+        "name": "TOP143 Selection sonde eau chaude"
+      }
+    },
+    "number": {
+      "top9": {
+        "name": "TOP9 Consigne eau chaude"
+      },
+      "top27": {
+        "name": "TOP27 Zone 1 consigne chauffage"
+      },
+      "top28": {
+        "name": "TOP28 Zone 1 consigne refroidissement"
+      },
+      "top34": {
+        "name": "TOP34 Zone 2 consigne chauffage"
+      },
+      "top35": {
+        "name": "TOP35 Zone 2 consigne refroidissement"
+      },
+      "top77": {
+        "name": "TOP77 Arret chauffage au dessus de"
+      },
+      "top78": {
+        "name": "TOP78 Appoint sous temperature exterieure"
+      }
+    },
+    "switch": {
+      "setheatpump": {
+        "name": "Pompe a chaleur"
+      },
+      "setpump": {
+        "name": "Circulateur"
+      },
+      "setforcedhw": {
+        "name": "Forcer eau chaude"
+      },
+      "setforcedefrost": {
+        "name": "Forcer degivrage"
+      },
+      "setforcesterilization": {
+        "name": "Lancer anti legionelle"
+      },
+      "setforceheater": {
+        "name": "Chauffage de secours"
+      },
+      "setholidaymode": {
+        "name": "Mode vacances"
+      },
+      "setmainschedule": {
+        "name": "Programmation"
+      },
+      "setaltexternalsensor": {
+        "name": "Sonde exterieure alternative"
+      },
+      "setbuffer": {
+        "name": "Ballon tampon"
+      },
+      "setexternalcontrol": {
+        "name": "Commande externe"
+      },
+      "setexternalerror": {
+        "name": "Signal d'erreur externe"
+      },
+      "setexternalcompressorcontrol": {
+        "name": "Commande externe compresseur"
+      },
+      "setbivalentcontrol": {
+        "name": "Fonctionnement bivalent"
+      },
+      "setdhwheaterstate": {
+        "name": "Appoint eau chaude"
+      },
+      "setroomheaterstate": {
+        "name": "Appoint chauffage"
+      }
+    },
+    "select": {
+      "setoperationmode": {
+        "name": "Mode de fonctionnement",
+        "state": {
+          "mode_0": "Chauffage seul",
+          "mode_1": "Froid seul",
+          "mode_2": "Automatique",
+          "mode_3": "Eau chaude seule",
+          "mode_4": "Chauffage et eau chaude",
+          "mode_5": "Froid et eau chaude",
+          "mode_6": "Automatique et eau chaude"
+        }
+      },
+      "setquietmode": {
+        "name": "Mode silencieux",
+        "state": {
+          "mode_0": "Arret",
+          "mode_1": "Niveau 1 silencieux",
+          "mode_2": "Niveau 2 plus silencieux",
+          "mode_3": "Niveau 3 le plus silencieux"
+        }
+      },
+      "setpowerfulmode": {
+        "name": "Mode puissant",
+        "state": {
+          "mode_0": "Arret",
+          "mode_1": "30 minutes",
+          "mode_2": "60 minutes",
+          "mode_3": "90 minutes"
+        }
+      }
+    }
+  }
+}

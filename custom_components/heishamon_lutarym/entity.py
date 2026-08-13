@@ -8,9 +8,13 @@ from .const import DOMAIN
 
 
 class HeishamonEntity(CoordinatorEntity):
-    """Bindet jede Entity an dasselbe Geraet."""
+    """Bindet jede Entity an dasselbe Geraet.
 
-    _attr_has_entity_name = False
+    has_entity_name muss True sein, damit Home Assistant die Namen
+    aus translations/<sprache>.json uebernimmt.
+    """
+
+    _attr_has_entity_name = True
 
     def __init__(self, coordinator, host: str) -> None:
         super().__init__(coordinator)

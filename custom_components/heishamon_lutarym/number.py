@@ -8,7 +8,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, HEISHAMON_TOPICS
 from .entity import HeishamonEntity
-from .names_de import TOPIC_NAMES_DE
 
 
 async def async_setup_entry(
@@ -37,7 +36,7 @@ class HeishamonNumber(HeishamonEntity, NumberEntity):
 
         self._attr_unique_id = f"heishamon_{host}_{topic_id.lower()}_set"
         self.entity_id = f"number.heishamon_{topic_id.lower()}"
-        self._attr_name = f"{topic_id} {TOPIC_NAMES_DE.get(topic_id, info['name'])}"
+        self._attr_translation_key = topic_id.lower()
         self._attr_icon = info.get("icon")
         self._attr_native_unit_of_measurement = info.get("unit")
         self._attr_native_min_value = info["min"]

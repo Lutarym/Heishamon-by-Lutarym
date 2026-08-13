@@ -2,7 +2,7 @@
 
 Home Assistant Integration für Panasonic Aquarea Wärmepumpen über HeishaMon, ohne MQTT, direkt über die HTTP-Schnittstelle.
 
-Version 0.2.0
+Version 0.3.0
 
 ## Was die Integration macht
 
@@ -33,7 +33,19 @@ Ein Gerät, darunter:
 - 7 Sollwerte als Number, nur wenn "Nur lesen" deaktiviert ist
 - 16 Schalter, 3 Auswahllisten, ebenfalls nur bei aktiver Steuerung
 
-Die Anzeigenamen sind deutsch, zum Beispiel `TOP5 Ruecklauftemperatur`. Die Entity-ID enthält immer die TOP-Nummer.
+Die Anzeigenamen folgen der Spracheinstellung von Home Assistant. Verfügbar sind Deutsch, Englisch, Französisch, Niederländisch und Italienisch. Die Entity-ID enthält immer die TOP-Nummer und bleibt sprachunabhängig, Automationen brechen also beim Sprachwechsel nicht.
+
+Beispiel für `sensor.heishamon_top5`:
+
+| Sprache | Anzeigename |
+|---|---|
+| Deutsch | TOP5 Ruecklauftemperatur |
+| Englisch | TOP5 Return water temperature |
+| Französisch | TOP5 Temperature retour d'eau |
+| Niederländisch | TOP5 Retourtemperatuur water |
+| Italienisch | TOP5 Temperatura ritorno acqua |
+
+Die Namen sind bewusst allgemeinverständlich formuliert statt wörtlich übersetzt. Aus `Ipm_Temp` wird zum Beispiel "Temperatur Leistungselektronik", aus `Sterilization_State` wird "Legionellenschutz laeuft".
 
 Die Klartext-Beschreibung, die HeishaMon mitliefert, steht als Attribut `beschreibung` an jeder Entity.
 
@@ -54,6 +66,7 @@ Die Klartext-Beschreibung, die HeishaMon mitliefert, steht als Attribut `beschre
 - Die Zonen sind als Number und Select abgebildet, es gibt keine Climate-Entity.
 - Die Sektionen `1wire` und `s0` werden mitgelesen, aber es sind dafür keine festen Entities definiert.
 - Die Wertebereiche der Sollwerte stammen aus der HeishaMon-Dokumentation und können je nach Wärmepumpenmodell abweichen.
+- Die Übersetzungen ins Französische, Niederländische und Italienische sind nicht von Muttersprachlern geprüft.
 
 ## Lizenz
 

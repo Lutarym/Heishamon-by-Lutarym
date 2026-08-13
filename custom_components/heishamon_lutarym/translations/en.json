@@ -13,7 +13,531 @@
         }
       }
     },
-    "error": { "cannot_connect": "No data received from HeishaMon at this address." },
-    "abort": { "already_configured": "This HeishaMon is already set up." }
+    "error": {
+      "cannot_connect": "No HeishaMon data received from this address."
+    },
+    "abort": {
+      "already_configured": "This HeishaMon is already set up."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "top0": {
+        "name": "TOP0 Heat pump on/off"
+      },
+      "top1": {
+        "name": "TOP1 Water flow rate"
+      },
+      "top2": {
+        "name": "TOP2 Forced hot water"
+      },
+      "top3": {
+        "name": "TOP3 Quiet mode by schedule"
+      },
+      "top4": {
+        "name": "TOP4 Operating mode"
+      },
+      "top5": {
+        "name": "TOP5 Return water temperature"
+      },
+      "top6": {
+        "name": "TOP6 Flow water temperature"
+      },
+      "top7": {
+        "name": "TOP7 Target flow temperature"
+      },
+      "top8": {
+        "name": "TOP8 Compressor frequency"
+      },
+      "top10": {
+        "name": "TOP10 Hot water temperature"
+      },
+      "top11": {
+        "name": "TOP11 Total operating hours"
+      },
+      "top12": {
+        "name": "TOP12 Number of starts"
+      },
+      "top13": {
+        "name": "TOP13 Schedule active"
+      },
+      "top14": {
+        "name": "TOP14 Outdoor temperature"
+      },
+      "top15": {
+        "name": "TOP15 Heat output"
+      },
+      "top16": {
+        "name": "TOP16 Power input heating"
+      },
+      "top17": {
+        "name": "TOP17 Powerful mode time left"
+      },
+      "top18": {
+        "name": "TOP18 Quiet mode level"
+      },
+      "top19": {
+        "name": "TOP19 Holiday mode"
+      },
+      "top20": {
+        "name": "TOP20 Three way valve position"
+      },
+      "top21": {
+        "name": "TOP21 Outdoor pipe temperature"
+      },
+      "top22": {
+        "name": "TOP22 Hot water temperature delta"
+      },
+      "top23": {
+        "name": "TOP23 Heating temperature delta"
+      },
+      "top24": {
+        "name": "TOP24 Cooling temperature delta"
+      },
+      "top25": {
+        "name": "TOP25 Hot water holiday offset"
+      },
+      "top26": {
+        "name": "TOP26 Defrosting active"
+      },
+      "top29": {
+        "name": "TOP29 Zone 1 curve water high"
+      },
+      "top30": {
+        "name": "TOP30 Zone 1 curve water low"
+      },
+      "top31": {
+        "name": "TOP31 Zone 1 curve outdoor high"
+      },
+      "top32": {
+        "name": "TOP32 Zone 1 curve outdoor low"
+      },
+      "top33": {
+        "name": "TOP33 Room thermostat temperature"
+      },
+      "top36": {
+        "name": "TOP36 Zone 1 water temperature"
+      },
+      "top37": {
+        "name": "TOP37 Zone 2 water temperature"
+      },
+      "top38": {
+        "name": "TOP38 Cooling output"
+      },
+      "top39": {
+        "name": "TOP39 Power input cooling"
+      },
+      "top40": {
+        "name": "TOP40 Hot water output"
+      },
+      "top41": {
+        "name": "TOP41 Power input hot water"
+      },
+      "top42": {
+        "name": "TOP42 Zone 1 target water temperature"
+      },
+      "top43": {
+        "name": "TOP43 Zone 2 target water temperature"
+      },
+      "top44": {
+        "name": "TOP44 Error code"
+      },
+      "top45": {
+        "name": "TOP45 Room holiday offset"
+      },
+      "top46": {
+        "name": "TOP46 Buffer tank temperature"
+      },
+      "top47": {
+        "name": "TOP47 Solar collector temperature"
+      },
+      "top48": {
+        "name": "TOP48 Pool temperature"
+      },
+      "top49": {
+        "name": "TOP49 Heat exchanger outlet temperature"
+      },
+      "top50": {
+        "name": "TOP50 Compressor discharge temperature"
+      },
+      "top51": {
+        "name": "TOP51 Indoor pipe temperature"
+      },
+      "top52": {
+        "name": "TOP52 Defrost sensor temperature"
+      },
+      "top53": {
+        "name": "TOP53 Evaporator outlet temperature"
+      },
+      "top54": {
+        "name": "TOP54 Bypass outlet temperature"
+      },
+      "top55": {
+        "name": "TOP55 Power electronics temperature"
+      },
+      "top56": {
+        "name": "TOP56 Zone 1 room temperature"
+      },
+      "top57": {
+        "name": "TOP57 Zone 2 room temperature"
+      },
+      "top58": {
+        "name": "TOP58 Hot water heater active"
+      },
+      "top59": {
+        "name": "TOP59 Room heater active"
+      },
+      "top60": {
+        "name": "TOP60 Internal heater active"
+      },
+      "top61": {
+        "name": "TOP61 External heater active"
+      },
+      "top62": {
+        "name": "TOP62 Fan 1 speed"
+      },
+      "top63": {
+        "name": "TOP63 Fan 2 speed"
+      },
+      "top64": {
+        "name": "TOP64 Refrigerant high pressure"
+      },
+      "top65": {
+        "name": "TOP65 Circulation pump speed"
+      },
+      "top66": {
+        "name": "TOP66 Refrigerant low pressure"
+      },
+      "top67": {
+        "name": "TOP67 Compressor current"
+      },
+      "top68": {
+        "name": "TOP68 Emergency heater active"
+      },
+      "top69": {
+        "name": "TOP69 Sterilisation running"
+      },
+      "top70": {
+        "name": "TOP70 Sterilisation temperature"
+      },
+      "top71": {
+        "name": "TOP71 Sterilisation maximum time"
+      },
+      "top72": {
+        "name": "TOP72 Zone 1 cool curve water high"
+      },
+      "top73": {
+        "name": "TOP73 Zone 1 cool curve water low"
+      },
+      "top74": {
+        "name": "TOP74 Zone 1 cool curve outdoor high"
+      },
+      "top75": {
+        "name": "TOP75 Zone 1 cool curve outdoor low"
+      },
+      "top76": {
+        "name": "TOP76 Heating control type"
+      },
+      "top79": {
+        "name": "TOP79 Switch heating to cooling"
+      },
+      "top80": {
+        "name": "TOP80 Switch cooling to heating"
+      },
+      "top81": {
+        "name": "TOP81 Cooling control type"
+      },
+      "top82": {
+        "name": "TOP82 Zone 2 curve water high"
+      },
+      "top83": {
+        "name": "TOP83 Zone 2 curve water low"
+      },
+      "top84": {
+        "name": "TOP84 Zone 2 curve outdoor high"
+      },
+      "top85": {
+        "name": "TOP85 Zone 2 curve outdoor low"
+      },
+      "top86": {
+        "name": "TOP86 Zone 2 cool curve water high"
+      },
+      "top87": {
+        "name": "TOP87 Zone 2 cool curve water low"
+      },
+      "top88": {
+        "name": "TOP88 Zone 2 cool curve outdoor high"
+      },
+      "top89": {
+        "name": "TOP89 Zone 2 cool curve outdoor low"
+      },
+      "top90": {
+        "name": "TOP90 Room heater operating hours"
+      },
+      "top91": {
+        "name": "TOP91 Hot water heater operating hours"
+      },
+      "top92": {
+        "name": "TOP92 Heat pump model"
+      },
+      "top93": {
+        "name": "TOP93 Circulation pump duty"
+      },
+      "top94": {
+        "name": "TOP94 Zone configuration"
+      },
+      "top95": {
+        "name": "TOP95 Maximum pump duty"
+      },
+      "top96": {
+        "name": "TOP96 Heater delay time"
+      },
+      "top97": {
+        "name": "TOP97 Heater start delta"
+      },
+      "top98": {
+        "name": "TOP98 Heater stop delta"
+      },
+      "top99": {
+        "name": "TOP99 Buffer tank installed"
+      },
+      "top100": {
+        "name": "TOP100 Hot water tank installed"
+      },
+      "top101": {
+        "name": "TOP101 Solar mode"
+      },
+      "top102": {
+        "name": "TOP102 Solar start delta"
+      },
+      "top103": {
+        "name": "TOP103 Solar stop delta"
+      },
+      "top104": {
+        "name": "TOP104 Solar frost protection"
+      },
+      "top105": {
+        "name": "TOP105 Solar maximum temperature"
+      },
+      "top106": {
+        "name": "TOP106 Flow rate control mode"
+      },
+      "top107": {
+        "name": "TOP107 Heat transfer liquid"
+      },
+      "top108": {
+        "name": "TOP108 Alternative outdoor sensor"
+      },
+      "top109": {
+        "name": "TOP109 Anti freeze mode"
+      },
+      "top110": {
+        "name": "TOP110 Optional PCB installed"
+      },
+      "top111": {
+        "name": "TOP111 Zone 1 sensor type"
+      },
+      "top112": {
+        "name": "TOP112 Zone 2 sensor type"
+      },
+      "top113": {
+        "name": "TOP113 Buffer tank delta"
+      },
+      "top114": {
+        "name": "TOP114 External pad heater"
+      },
+      "top115": {
+        "name": "TOP115 System water pressure"
+      },
+      "top116": {
+        "name": "TOP116 Second inlet temperature"
+      },
+      "top117": {
+        "name": "TOP117 Economiser outlet temperature"
+      },
+      "top118": {
+        "name": "TOP118 Second room thermostat"
+      },
+      "top119": {
+        "name": "TOP119 External control"
+      },
+      "top120": {
+        "name": "TOP120 External heat cool switching"
+      },
+      "top121": {
+        "name": "TOP121 External error signal"
+      },
+      "top122": {
+        "name": "TOP122 External compressor control"
+      },
+      "top123": {
+        "name": "TOP123 Zone 2 pump running"
+      },
+      "top124": {
+        "name": "TOP124 Zone 1 pump running"
+      },
+      "top125": {
+        "name": "TOP125 Two way valve position"
+      },
+      "top126": {
+        "name": "TOP126 Second three way valve"
+      },
+      "top127": {
+        "name": "TOP127 Zone 1 mixing valve position"
+      },
+      "top128": {
+        "name": "TOP128 Zone 2 mixing valve position"
+      },
+      "top129": {
+        "name": "TOP129 Bivalent control"
+      },
+      "top130": {
+        "name": "TOP130 Bivalent mode"
+      },
+      "top131": {
+        "name": "TOP131 Bivalent start temperature"
+      },
+      "top132": {
+        "name": "TOP132 Bivalent advanced heating"
+      },
+      "top133": {
+        "name": "TOP133 Bivalent advanced hot water"
+      },
+      "top134": {
+        "name": "TOP134 Bivalent advanced start temperature"
+      },
+      "top135": {
+        "name": "TOP135 Bivalent advanced stop temperature"
+      },
+      "top136": {
+        "name": "TOP136 Bivalent advanced start delay"
+      },
+      "top137": {
+        "name": "TOP137 Bivalent advanced stop delay"
+      },
+      "top138": {
+        "name": "TOP138 Bivalent advanced hot water delay"
+      },
+      "top139": {
+        "name": "TOP139 Heating control"
+      },
+      "top140": {
+        "name": "TOP140 Smart hot water"
+      },
+      "top141": {
+        "name": "TOP141 Quiet mode priority"
+      },
+      "top142": {
+        "name": "TOP142 Expansion valve opening"
+      },
+      "top143": {
+        "name": "TOP143 Hot water sensor selection"
+      }
+    },
+    "number": {
+      "top9": {
+        "name": "TOP9 Hot water target temperature"
+      },
+      "top27": {
+        "name": "TOP27 Zone 1 heating setpoint"
+      },
+      "top28": {
+        "name": "TOP28 Zone 1 cooling setpoint"
+      },
+      "top34": {
+        "name": "TOP34 Zone 2 heating setpoint"
+      },
+      "top35": {
+        "name": "TOP35 Zone 2 cooling setpoint"
+      },
+      "top77": {
+        "name": "TOP77 Heating off above outdoor temp"
+      },
+      "top78": {
+        "name": "TOP78 Heater on below outdoor temp"
+      }
+    },
+    "switch": {
+      "setheatpump": {
+        "name": "Heat pump"
+      },
+      "setpump": {
+        "name": "Circulation pump"
+      },
+      "setforcedhw": {
+        "name": "Force hot water now"
+      },
+      "setforcedefrost": {
+        "name": "Force defrost"
+      },
+      "setforcesterilization": {
+        "name": "Start sterilisation"
+      },
+      "setforceheater": {
+        "name": "Emergency heater"
+      },
+      "setholidaymode": {
+        "name": "Holiday mode"
+      },
+      "setmainschedule": {
+        "name": "Schedule"
+      },
+      "setaltexternalsensor": {
+        "name": "Alternative outdoor sensor"
+      },
+      "setbuffer": {
+        "name": "Buffer tank"
+      },
+      "setexternalcontrol": {
+        "name": "External control"
+      },
+      "setexternalerror": {
+        "name": "External error signal"
+      },
+      "setexternalcompressorcontrol": {
+        "name": "External compressor control"
+      },
+      "setbivalentcontrol": {
+        "name": "Bivalent control"
+      },
+      "setdhwheaterstate": {
+        "name": "Hot water heater"
+      },
+      "setroomheaterstate": {
+        "name": "Room heater"
+      }
+    },
+    "select": {
+      "setoperationmode": {
+        "name": "Operating mode",
+        "state": {
+          "mode_0": "Heat only",
+          "mode_1": "Cool only",
+          "mode_2": "Auto",
+          "mode_3": "Hot water only",
+          "mode_4": "Heating and hot water",
+          "mode_5": "Cooling and hot water",
+          "mode_6": "Auto and hot water"
+        }
+      },
+      "setquietmode": {
+        "name": "Quiet mode",
+        "state": {
+          "mode_0": "Off",
+          "mode_1": "Level 1 quiet",
+          "mode_2": "Level 2 quieter",
+          "mode_3": "Level 3 quietest"
+        }
+      },
+      "setpowerfulmode": {
+        "name": "Powerful mode",
+        "state": {
+          "mode_0": "Off",
+          "mode_1": "30 minutes",
+          "mode_2": "60 minutes",
+          "mode_3": "90 minutes"
+        }
+      }
+    }
   }
 }

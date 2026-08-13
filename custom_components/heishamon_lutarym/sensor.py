@@ -8,7 +8,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, HEISHAMON_TOPICS
 from .entity import HeishamonEntity
-from .names_de import TOPIC_NAMES_DE
 
 
 async def async_setup_entry(
@@ -16,11 +15,8 @@ async def async_setup_entry(
 ) -> None:
     """Legt fuer jedes Topic einen Sensor an."""
     data = hass.data[DOMAIN][entry.entry_id]
-    coordinator = data["coordinator"]
-    host = data["host"]
-
     async_add_entities(
-        HeishamonSensor(coordinator, host, topic_id, info)
+        HeishamonSensor(data["coordinator"], data["host"], topic_id, info)
         for topic_id, info in HEISHAMON_TOPICS.items()
         if info["type"] == "sensor"
     )
@@ -32,21 +28,19 @@ class HeishamonSensor(HeishamonEntity, SensorEntity):
     def __init__(self, coordinator, host: str, topic_id: str, info: dict) -> None:
         super().__init__(coordinator, host)
         self._topic_id = topic_id
-        self._info = info
 
         self._attr_unique_id = f"heishamon_{host}_{topic_id.lower()}"
         self.entity_id = f"sensor.heishamon_{topic_id.lower()}"
-        self._attr_name = f"{topic_id} {TOPIC_NAMES_DE.get(topic_id, info['name'])}"
+        # Der Name kommt aus translations/<sprache>.json unter entity.sensor.<key>
+        self._attr_translation_key = topic_id.lower()
         self._attr_icon = info.get("icon")
 
         if info["numeric"]:
             if info.get("unit"):
                 self._attr_native_unit_of_measurement = info["unit"]
+                self._attr_state_class = SensorStateClass.MEASUREMENT
             if info.get("device_class"):
                 self._attr_device_class = info["device_class"]
-            # State-Class nur bei echten Messgroessen, sonst meckert der Recorder.
-            if info.get("unit"):
-                self._attr_state_class = SensorStateClass.MEASUREMENT
 
     @property
     def native_value(self):

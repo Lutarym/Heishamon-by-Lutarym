@@ -183,20 +183,17 @@ SWITCH_COMMANDS = {
 SELECT_COMMANDS = {
     "SetOperationMode": {
         "icon": "mdi:cog",
-        "options": [
-            "Nur Heizen", "Nur Kuehlen", "Auto", "Nur Warmwasser",
-            "Heizen + Warmwasser", "Kuehlen + Warmwasser", "Auto + Warmwasser",
-        ],
+        "option_count": 7,
         "state_topic": "TOP4",
     },
     "SetQuietMode": {
         "icon": "mdi:volume-mute",
-        "options": ["Aus", "Stufe 1", "Stufe 2", "Stufe 3"],
+        "option_count": 4,
         "state_topic": "TOP18",
     },
     "SetPowerfulMode": {
         "icon": "mdi:flash",
-        "options": ["Aus", "30 min", "60 min", "90 min"],
+        "option_count": 4,
         "state_topic": "TOP17",
     },
 }

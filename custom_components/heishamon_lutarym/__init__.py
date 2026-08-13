@@ -46,9 +46,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def async_update_data():
         """Fetch data from Heishamon."""
         try:
-            _LOGGER.debug(f"Fetching data from Heishamon {host}")
+            _LOGGER.info(f"Fetching data from Heishamon {host}")
             data = await api.async_get_data()
-            _LOGGER.debug(f"Got {len(data) if data else 0} data points from Heishamon")
+            _LOGGER.info(f"Got {len(data) if data else 0} data points from Heishamon")
+            if data and isinstance(data, dict):
+                sample_keys = list(data.keys())[:3]
+                _LOGGER.info(f"Sample data: {sample_keys}")
             return data
         except Exception as err:
             _LOGGER.error(f"Error fetching Heishamon data: {err}")

@@ -21,7 +21,7 @@ class HeishamonAPI:
         self.username = username
         self.password = password
         self.base_url = f"http://{host}"
-        _LOGGER.debug(f"HeishamonAPI initialized for {self.base_url}")
+        _LOGGER.info(f"HeishamonAPI initialized for {self.base_url}")
 
     async def async_get_data(self) -> Dict[str, Any]:
         """Fetch data from Heishamon /json endpoint."""
@@ -32,25 +32,25 @@ class HeishamonAPI:
                 if self.username and self.password:
                     auth = aiohttp.BasicAuth(self.username, self.password)
 
-                _LOGGER.debug(f"Fetching from {url}")
+                _LOGGER.info(f"Fetching from {url}")
                 
                 try:
                     async with session.get(
                         url, auth=auth, timeout=aiohttp.ClientTimeout(total=20)
                     ) as response:
-                        _LOGGER.debug(f"Response status: {response.status}")
+                        _LOGGER.info(f"Response status: {response.status}")
                         
                         if response.status == 200:
                             try:
                                 data = await response.json()
-                                _LOGGER.debug(f"Got JSON data: {len(data) if isinstance(data, dict) else 'not dict'} keys")
+                                _LOGGER.info(f"Got JSON data: {len(data) if isinstance(data, dict) else 'not dict'} keys")
                                 
                                 # Debug: Zeige erste paar Keys
                                 if isinstance(data, dict):
                                     sample_keys = list(data.keys())[:5]
-                                    _LOGGER.debug(f"Sample keys: {sample_keys}")
+                                    _LOGGER.info(f"Sample keys: {sample_keys}")
                                     for key in sample_keys:
-                                        _LOGGER.debug(f"  {key}: {data[key]}")
+                                        _LOGGER.info(f"  {key}: {data[key]}")
                                 
                                 return data if isinstance(data, dict) else {}
                             except Exception as json_err:
@@ -101,14 +101,14 @@ class HeishamonAPI:
     async def test_connection(self) -> bool:
         """Test connection to Heishamon."""
         try:
-            _LOGGER.debug(f"Testing connection to {self.base_url}")
+            _LOGGER.info(f"Testing connection to {self.base_url}")
             data = await self.async_get_data()
             if data and isinstance(data, dict) and len(data) > 0:
-                _LOGGER.debug(f"Connection test successful, got {len(data)} keys")
+                _LOGGER.info(f"✓ Connection test successful, got {len(data)} keys")
                 return True
             else:
-                _LOGGER.error(f"Connection test failed: no data or wrong format")
+                _LOGGER.error(f"✗ Connection test failed: no data or wrong format")
                 return False
         except Exception as e:
-            _LOGGER.error(f"Connection test failed: {e}")
+            _LOGGER.error(f"✗ Connection test failed: {e}")
             return False

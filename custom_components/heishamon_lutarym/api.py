@@ -1,4 +1,5 @@
 """Heishamon API Client."""
+import asyncio
 import aiohttp
 import logging
 from typing import Any, Dict, Optional
@@ -32,22 +33,45 @@ class HeishamonAPI:
                     auth = aiohttp.BasicAuth(self.username, self.password)
 
                 _LOGGER.debug(f"Fetching from {url}")
-                async with session.get(
-                    url, auth=auth, timeout=aiohttp.ClientTimeout(total=15)
-                ) as response:
-                    if response.status == 200:
-                        data = await response.json()
-                        _LOGGER.debug(f"Got data from Heishamon: {len(data)} keys")
-                        return data
-                    else:
-                        error_text = await response.text()
-                        _LOGGER.error(f"HTTP {response.status}: {error_text}")
-                        raise Exception(f"HTTP {response.status}: {error_text}")
+                
+                try:
+                    async with session.get(
+                        url, auth=auth, timeout=aiohttp.ClientTimeout(total=20)
+                    ) as response:
+                        _LOGGER.debug(f"Response status: {response.status}")
+                        
+                        if response.status == 200:
+                            try:
+                                data = await response.json()
+                                _LOGGER.debug(f"Got JSON data: {len(data) if isinstance(data, dict) else 'not dict'} keys")
+                                
+                                # Debug: Zeige erste paar Keys
+                                if isinstance(data, dict):
+                                    sample_keys = list(data.keys())[:5]
+                                    _LOGGER.debug(f"Sample keys: {sample_keys}")
+                                    for key in sample_keys:
+                                        _LOGGER.debug(f"  {key}: {data[key]}")
+                                
+                                return data if isinstance(data, dict) else {}
+                            except Exception as json_err:
+                                _LOGGER.error(f"JSON parse error: {json_err}")
+                                text = await response.text()
+                                _LOGGER.error(f"Response text: {text[:500]}")
+                                raise
+                        else:
+                            error_text = await response.text()
+                            _LOGGER.error(f"HTTP {response.status}: {error_text[:200]}")
+                            raise Exception(f"HTTP {response.status}")
+                            
+                except asyncio.TimeoutError:
+                    _LOGGER.error(f"Timeout connecting to {url}")
+                    raise Exception("Connection timeout")
+                    
         except aiohttp.ClientError as e:
             _LOGGER.error(f"Connection error to {self.base_url}: {e}")
             raise
         except Exception as e:
-            _LOGGER.error(f"Heishamon API error: {e}")
+            _LOGGER.error(f"Heishamon API error: {type(e).__name__}: {e}")
             raise
 
     async def async_set_value(self, key: str, value: Any) -> bool:
@@ -62,7 +86,7 @@ class HeishamonAPI:
 
                 _LOGGER.debug(f"Setting {key}={value} on {url}")
                 async with session.get(
-                    url, params=params, auth=auth, timeout=aiohttp.ClientTimeout(total=15)
+                    url, params=params, auth=auth, timeout=aiohttp.ClientTimeout(total=20)
                 ) as response:
                     success = response.status == 200
                     if success:
@@ -78,9 +102,13 @@ class HeishamonAPI:
         """Test connection to Heishamon."""
         try:
             _LOGGER.debug(f"Testing connection to {self.base_url}")
-            await self.async_get_data()
-            _LOGGER.debug(f"Connection test successful")
-            return True
+            data = await self.async_get_data()
+            if data and isinstance(data, dict) and len(data) > 0:
+                _LOGGER.debug(f"Connection test successful, got {len(data)} keys")
+                return True
+            else:
+                _LOGGER.error(f"Connection test failed: no data or wrong format")
+                return False
         except Exception as e:
             _LOGGER.error(f"Connection test failed: {e}")
             return False

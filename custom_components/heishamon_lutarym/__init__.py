@@ -29,10 +29,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
 
     host = entry.data[CONF_HOST]
+    username = entry.data.get(CONF_USERNAME)
+    password = entry.data.get(CONF_PASSWORD)
+    
+    _LOGGER.info(f"Setting up Heishamon at {host}")
+    
     api = HeishamonAPI(
         host=host,
-        username=entry.data.get(CONF_USERNAME),
-        password=entry.data.get(CONF_PASSWORD),
+        username=username if username else None,
+        password=password if password else None,
     )
 
     update_interval = entry.data.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)
@@ -41,9 +46,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def async_update_data():
         """Fetch data from Heishamon."""
         try:
+            _LOGGER.debug(f"Fetching data from Heishamon {host}")
             data = await api.async_get_data()
+            _LOGGER.debug(f"Got {len(data) if data else 0} data points from Heishamon")
             return data
         except Exception as err:
+            _LOGGER.error(f"Error fetching Heishamon data: {err}")
             raise UpdateFailed(f"Error communicating with Heishamon: {err}") from err
 
     coordinator = DataUpdateCoordinator(
@@ -54,7 +62,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         update_interval=timedelta(seconds=update_interval),
     )
 
-    await coordinator.async_config_entry_first_refresh()
+    _LOGGER.info(f"Starting first refresh for Heishamon {host}")
+    try:
+        await coordinator.async_config_entry_first_refresh()
+        _LOGGER.info(f"First refresh successful for Heishamon {host}")
+    except UpdateFailed as ex:
+        _LOGGER.error(f"Failed first refresh: {ex}")
+        return False
 
     hass.data[DOMAIN][entry.entry_id] = {
         "api": api,
@@ -63,10 +77,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "host": host,
     }
 
+    _LOGGER.info(f"Setting up platforms for Heishamon {host}")
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
+    _LOGGER.info(f"Heishamon {host} setup complete")
     return True
 
 

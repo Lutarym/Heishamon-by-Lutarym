@@ -13,12 +13,14 @@
         }
       },
       "reconfigure": {
-        "title": "Change address",
-        "description": "Enter the new IP address of the HeishaMon board.",
+        "title": "Adjust Heishamon",
+        "description": "Change address, interval and control mode.",
         "data": {
           "host": "IP address",
           "username": "Username (optional)",
-          "password": "Password (optional)"
+          "password": "Password (optional)",
+          "update_interval": "Update interval in seconds, 1 to 300",
+          "listening_only": "Read only (do not create controls)"
         }
       }
     },

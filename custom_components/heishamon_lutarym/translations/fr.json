@@ -13,12 +13,14 @@
         }
       },
       "reconfigure": {
-        "title": "Changer l'adresse",
-        "description": "Saisir la nouvelle adresse IP de la carte HeishaMon.",
+        "title": "Ajuster Heishamon",
+        "description": "Modifier l'adresse, l'intervalle et le mode de commande.",
         "data": {
           "host": "Adresse IP",
           "username": "Nom d'utilisateur (facultatif)",
-          "password": "Mot de passe (facultatif)"
+          "password": "Mot de passe (facultatif)",
+          "update_interval": "Intervalle de mise à jour en secondes, 1 à 300",
+          "listening_only": "Lecture seule (ne pas créer de commandes)"
         }
       }
     },

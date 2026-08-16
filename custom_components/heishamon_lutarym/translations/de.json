@@ -13,12 +13,14 @@
         }
       },
       "reconfigure": {
-        "title": "Adresse ändern",
-        "description": "Neue IP-Adresse der HeishaMon-Platine eingeben.",
+        "title": "Heishamon anpassen",
+        "description": "Adresse, Takt und Steuerbarkeit ändern.",
         "data": {
           "host": "IP-Adresse",
           "username": "Benutzername (optional)",
-          "password": "Passwort (optional)"
+          "password": "Passwort (optional)",
+          "update_interval": "Aktualisierung in Sekunden, 1 bis 300",
+          "listening_only": "Nur lesen (keine Steuerung anlegen)"
         }
       }
     },

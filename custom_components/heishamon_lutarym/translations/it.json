@@ -13,12 +13,14 @@
         }
       },
       "reconfigure": {
-        "title": "Cambia indirizzo",
-        "description": "Inserire il nuovo indirizzo IP della scheda HeishaMon.",
+        "title": "Modifica Heishamon",
+        "description": "Modifica indirizzo, intervallo e modalità di comando.",
         "data": {
           "host": "Indirizzo IP",
           "username": "Nome utente (facoltativo)",
-          "password": "Password (facoltativa)"
+          "password": "Password (facoltativa)",
+          "update_interval": "Aggiornamento in secondi, da 1 a 300",
+          "listening_only": "Sola lettura (non creare comandi)"
         }
       }
     },

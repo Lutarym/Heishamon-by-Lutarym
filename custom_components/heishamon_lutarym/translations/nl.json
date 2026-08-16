@@ -13,12 +13,14 @@
         }
       },
       "reconfigure": {
-        "title": "Adres wijzigen",
-        "description": "Voer het nieuwe IP-adres van de HeishaMon-print in.",
+        "title": "Heishamon aanpassen",
+        "description": "Adres, interval en bediening wijzigen.",
         "data": {
           "host": "IP-adres",
           "username": "Gebruikersnaam (optioneel)",
-          "password": "Wachtwoord (optioneel)"
+          "password": "Wachtwoord (optioneel)",
+          "update_interval": "Vernieuwing in seconden, 1 tot 300",
+          "listening_only": "Alleen lezen (geen bediening aanmaken)"
         }
       }
     },

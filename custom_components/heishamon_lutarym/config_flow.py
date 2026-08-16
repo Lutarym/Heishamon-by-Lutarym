@@ -88,9 +88,25 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if await api.test_connection():
                 await self.async_set_unique_id(user_input[CONF_HOST])
                 self._abort_if_unique_id_mismatch(reason="wrong_device")
-                return self.async_update_reload_and_abort(
-                    entry, data_updates=user_input
+                # Verbindungsdaten gehoeren zum Eintrag, Takt und
+                # Steuerbarkeit zu den Optionen. Beides wird hier
+                # gemeinsam gespeichert und der Eintrag neu geladen.
+                daten = {
+                    **entry.data,
+                    CONF_HOST: user_input[CONF_HOST],
+                    CONF_USERNAME: user_input.get(CONF_USERNAME, ""),
+                    CONF_PASSWORD: user_input.get(CONF_PASSWORD, ""),
+                }
+                optionen = {
+                    **entry.options,
+                    CONF_UPDATE_INTERVAL: user_input[CONF_UPDATE_INTERVAL],
+                    CONF_LISTENING_ONLY: user_input[CONF_LISTENING_ONLY],
+                }
+                self.hass.config_entries.async_update_entry(
+                    entry, data=daten, options=optionen
                 )
+                await self.hass.config_entries.async_reload(entry.entry_id)
+                return self.async_abort(reason="reconfigure_successful")
             errors["base"] = "cannot_connect"
 
         schema = vol.Schema(
@@ -102,6 +118,18 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 vol.Optional(
                     CONF_PASSWORD, default=entry.data.get(CONF_PASSWORD, "")
                 ): str,
+                vol.Optional(
+                    CONF_UPDATE_INTERVAL,
+                    default=einstellung(
+                        entry, CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL
+                    ),
+                ): INTERVAL,
+                vol.Optional(
+                    CONF_LISTENING_ONLY,
+                    default=einstellung(
+                        entry, CONF_LISTENING_ONLY, DEFAULT_LISTENING_ONLY
+                    ),
+                ): bool,
             }
         )
         return self.async_show_form(

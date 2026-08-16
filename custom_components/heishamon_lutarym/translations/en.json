@@ -11,13 +11,24 @@
           "update_interval": "Update interval in seconds",
           "listening_only": "Read only (no control entities)"
         }
+      },
+      "reconfigure": {
+        "title": "Change address",
+        "description": "Enter the new IP address of the HeishaMon board.",
+        "data": {
+          "host": "IP address",
+          "username": "Username (optional)",
+          "password": "Password (optional)"
+        }
       }
     },
     "error": {
       "cannot_connect": "No HeishaMon data received from this address."
     },
     "abort": {
-      "already_configured": "This HeishaMon is already set up."
+      "already_configured": "This HeishaMon is already set up.",
+      "wrong_device": "A different HeishaMon board answers at this address.",
+      "reconfigure_successful": "The address has been changed."
     }
   },
   "entity": {
@@ -536,6 +547,18 @@
           "mode_1": "30 minutes",
           "mode_2": "60 minutes",
           "mode_3": "90 minutes"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Adjust Heishamon",
+        "description": "These settings take effect right after saving.",
+        "data": {
+          "update_interval": "Update interval in seconds, 1 to 300",
+          "listening_only": "Read only (do not create controls)"
         }
       }
     }

@@ -11,13 +11,24 @@
           "update_interval": "Intervallo di aggiornamento in secondi",
           "listening_only": "Sola lettura (nessun comando)"
         }
+      },
+      "reconfigure": {
+        "title": "Cambia indirizzo",
+        "description": "Inserire il nuovo indirizzo IP della scheda HeishaMon.",
+        "data": {
+          "host": "Indirizzo IP",
+          "username": "Nome utente (facoltativo)",
+          "password": "Password (facoltativa)"
+        }
       }
     },
     "error": {
       "cannot_connect": "Nessun dato HeishaMon ricevuto da questo indirizzo."
     },
     "abort": {
-      "already_configured": "Questo HeishaMon e gia configurato."
+      "already_configured": "Questo HeishaMon e gia configurato.",
+      "wrong_device": "A questo indirizzo risponde un'altra scheda HeishaMon.",
+      "reconfigure_successful": "L'indirizzo è stato modificato."
     }
   },
   "entity": {
@@ -536,6 +547,18 @@
           "mode_1": "30 minuti",
           "mode_2": "60 minuti",
           "mode_3": "90 minuti"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Modifica Heishamon",
+        "description": "Queste impostazioni hanno effetto subito dopo il salvataggio.",
+        "data": {
+          "update_interval": "Aggiornamento in secondi, da 1 a 300",
+          "listening_only": "Sola lettura (non creare comandi)"
         }
       }
     }

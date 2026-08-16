@@ -8,7 +8,11 @@ CONF_PASSWORD = "password"
 CONF_UPDATE_INTERVAL = "update_interval"
 CONF_LISTENING_ONLY = "listening_only"
 
-DEFAULT_UPDATE_INTERVAL = 30
+# Standardtakt. HeishaMon fragt die Waermepumpe selbst etwa alle fuenf
+# Sekunden ab, schneller liefert sie keine neuen Werte.
+DEFAULT_UPDATE_INTERVAL = 5
+MIN_UPDATE_INTERVAL = 1
+MAX_UPDATE_INTERVAL = 300
 DEFAULT_LISTENING_ONLY = True
 
 # Topic-Namen 1:1 aus HeishaMon decode.h (Firmware-Quellcode).

@@ -11,6 +11,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import HeishamonAPI
+from .config_flow import einstellung
 from .const import (
     CONF_HOST,
     CONF_LISTENING_ONLY,
@@ -44,8 +45,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         password=entry.data.get(CONF_PASSWORD),
     )
 
-    update_interval = entry.data.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)
-    listening_only = entry.data.get(CONF_LISTENING_ONLY, DEFAULT_LISTENING_ONLY)
+    # Nachtraeglich geaenderte Optionen haben Vorrang vor der Ersteinrichtung.
+    update_interval = einstellung(entry, CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)
+    listening_only = einstellung(entry, CONF_LISTENING_ONLY, DEFAULT_LISTENING_ONLY)
 
     async def _async_update_data():
         try:
@@ -68,7 +70,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.async_config_entry_first_refresh()
 
     _LOGGER.info(
-        "Heishamon %s eingerichtet, %d Topics gelesen", host, len(coordinator.data)
+        "Heishamon %s eingerichtet, %d Topics gelesen, Takt %d s, %s",
+        host,
+        len(coordinator.data),
+        update_interval,
+        "nur lesen" if listening_only else "mit Steuerung",
     )
 
     hass.data[DOMAIN][entry.entry_id] = {

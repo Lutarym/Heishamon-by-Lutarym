@@ -1,12 +1,14 @@
 {
   "domain": "heishamon_lutarym",
   "name": "Heishamon by Lutarym",
-  "codeowners": ["@Lutarym"],
+  "codeowners": [
+    "@Lutarym"
+  ],
   "config_flow": true,
   "documentation": "https://github.com/Lutarym/heishamon-homeassistant-lutarym",
   "integration_type": "hub",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/Lutarym/heishamon-homeassistant-lutarym/issues",
   "requirements": [],
-  "version": "0.3.0"
+  "version": "0.4.0"
 }

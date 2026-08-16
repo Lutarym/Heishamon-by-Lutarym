@@ -11,13 +11,24 @@
           "update_interval": "Aktualisierung in Sekunden",
           "listening_only": "Nur lesen (keine Steuerung anlegen)"
         }
+      },
+      "reconfigure": {
+        "title": "Adresse ändern",
+        "description": "Neue IP-Adresse der HeishaMon-Platine eingeben.",
+        "data": {
+          "host": "IP-Adresse",
+          "username": "Benutzername (optional)",
+          "password": "Passwort (optional)"
+        }
       }
     },
     "error": {
       "cannot_connect": "Von dieser Adresse kamen keine HeishaMon-Daten."
     },
     "abort": {
-      "already_configured": "Dieser HeishaMon ist bereits eingerichtet."
+      "already_configured": "Dieser HeishaMon ist bereits eingerichtet.",
+      "wrong_device": "Unter dieser Adresse antwortet eine andere HeishaMon-Platine.",
+      "reconfigure_successful": "Die Adresse wurde geändert."
     }
   },
   "entity": {
@@ -536,6 +547,18 @@
           "mode_1": "30 Minuten",
           "mode_2": "60 Minuten",
           "mode_3": "90 Minuten"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Heishamon anpassen",
+        "description": "Diese Einstellungen wirken sofort nach dem Speichern.",
+        "data": {
+          "update_interval": "Aktualisierung in Sekunden, 1 bis 300",
+          "listening_only": "Nur lesen (keine Steuerung anlegen)"
         }
       }
     }

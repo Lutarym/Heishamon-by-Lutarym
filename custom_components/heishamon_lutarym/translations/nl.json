@@ -11,13 +11,24 @@
           "update_interval": "Bijwerkinterval in seconden",
           "listening_only": "Alleen lezen (geen bediening)"
         }
+      },
+      "reconfigure": {
+        "title": "Adres wijzigen",
+        "description": "Voer het nieuwe IP-adres van de HeishaMon-print in.",
+        "data": {
+          "host": "IP-adres",
+          "username": "Gebruikersnaam (optioneel)",
+          "password": "Wachtwoord (optioneel)"
+        }
       }
     },
     "error": {
       "cannot_connect": "Geen HeishaMon-gegevens ontvangen van dit adres."
     },
     "abort": {
-      "already_configured": "Deze HeishaMon is al ingesteld."
+      "already_configured": "Deze HeishaMon is al ingesteld.",
+      "wrong_device": "Op dit adres antwoordt een andere HeishaMon-print.",
+      "reconfigure_successful": "Het adres is gewijzigd."
     }
   },
   "entity": {
@@ -536,6 +547,18 @@
           "mode_1": "30 minuten",
           "mode_2": "60 minuten",
           "mode_3": "90 minuten"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Heishamon aanpassen",
+        "description": "Deze instellingen werken direct na het opslaan.",
+        "data": {
+          "update_interval": "Vernieuwing in seconden, 1 tot 300",
+          "listening_only": "Alleen lezen (geen bediening aanmaken)"
         }
       }
     }

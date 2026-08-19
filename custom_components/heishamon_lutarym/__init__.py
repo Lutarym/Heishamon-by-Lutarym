@@ -30,6 +30,10 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+# So viele Abfragen in Folge duerfen fehlschlagen, bevor die Entitaeten
+# als nicht verfuegbar gelten. Bei fuenf Sekunden Takt sind das 15 Sekunden.
+TOLERIERTE_FEHLER = 3
+
 PLATFORMS = [
     Platform.SENSOR,
     Platform.NUMBER,
@@ -105,14 +109,45 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             data[topic] = eintrag["gemeldet"]
         return data
 
+    # Zaehlt aufeinanderfolgende Fehlschlaege. Kurze Aussetzer werden
+    # ueberbrueckt, damit der Verlauf keine Luecken bekommt. Erst wenn die
+    # Platine laenger nicht antwortet, gelten die Werte als ungueltig.
+    fehler = {"anzahl": 0}
+    letzte_daten: dict = {}
+
     async def _async_update_data():
         try:
             data = await api.async_get_data()
         except Exception as err:  # noqa: BLE001
+            fehler["anzahl"] += 1
+            if fehler["anzahl"] <= TOLERIERTE_FEHLER and letzte_daten:
+                _LOGGER.warning(
+                    "Heishamon %s antwortete nicht (%d von %d toleriert): %s",
+                    host,
+                    fehler["anzahl"],
+                    TOLERIERTE_FEHLER,
+                    err,
+                )
+                return letzte_daten
             raise UpdateFailed(f"Heishamon {host}: {err}") from err
+
         if not data:
+            fehler["anzahl"] += 1
+            if fehler["anzahl"] <= TOLERIERTE_FEHLER and letzte_daten:
+                _LOGGER.warning(
+                    "Heishamon %s lieferte keine Topics (%d von %d toleriert)",
+                    host,
+                    fehler["anzahl"],
+                    TOLERIERTE_FEHLER,
+                )
+                return letzte_daten
             raise UpdateFailed(f"Heishamon {host} lieferte keine Topics")
-        return _beruhige(data)
+
+        fehler["anzahl"] = 0
+        beruhigt = _beruhige(data)
+        letzte_daten.clear()
+        letzte_daten.update(beruhigt)
+        return beruhigt
 
     coordinator = DataUpdateCoordinator(
         hass,

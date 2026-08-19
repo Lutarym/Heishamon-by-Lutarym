@@ -9,7 +9,9 @@
           "username": "Nome utente (opzionale)",
           "password": "Password (opzionale)",
           "update_interval": "Intervallo di aggiornamento in secondi",
-          "listening_only": "Sola lettura (nessun comando)"
+          "listening_only": "Sola lettura (nessun comando)",
+          "stabilize": "Stabilizza i valori (sopprimi gli sbalzi)",
+          "stabilize_count": "Ripetizioni necessarie, da 2 a 20"
         }
       },
       "reconfigure": {
@@ -20,7 +22,9 @@
           "username": "Nome utente (facoltativo)",
           "password": "Password (facoltativa)",
           "update_interval": "Aggiornamento in secondi, da 1 a 300",
-          "listening_only": "Sola lettura (non creare comandi)"
+          "listening_only": "Sola lettura (non creare comandi)",
+          "stabilize": "Stabilizza i valori (sopprimi gli sbalzi)",
+          "stabilize_count": "Ripetizioni necessarie, da 2 a 20"
         }
       }
     },
@@ -560,7 +564,9 @@
         "description": "Queste impostazioni hanno effetto subito dopo il salvataggio.",
         "data": {
           "update_interval": "Aggiornamento in secondi, da 1 a 300",
-          "listening_only": "Sola lettura (non creare comandi)"
+          "listening_only": "Sola lettura (non creare comandi)",
+          "stabilize": "Stabilizza i valori (sopprimi gli sbalzi)",
+          "stabilize_count": "Ripetizioni necessarie, da 2 a 20"
         }
       }
     }

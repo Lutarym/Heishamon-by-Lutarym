@@ -16,11 +16,16 @@ from .const import (
     CONF_HOST,
     CONF_LISTENING_ONLY,
     CONF_PASSWORD,
+    CONF_STABILIZE,
+    CONF_STABILIZE_COUNT,
     CONF_UPDATE_INTERVAL,
     CONF_USERNAME,
     DEFAULT_LISTENING_ONLY,
+    DEFAULT_STABILIZE,
+    DEFAULT_STABILIZE_COUNT,
     DEFAULT_UPDATE_INTERVAL,
     DOMAIN,
+    HEISHAMON_TOPICS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -49,6 +54,57 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     update_interval = einstellung(entry, CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)
     listening_only = einstellung(entry, CONF_LISTENING_ONLY, DEFAULT_LISTENING_ONLY)
 
+    stabilisieren = einstellung(entry, CONF_STABILIZE, DEFAULT_STABILIZE)
+    noetige_wiederholungen = einstellung(
+        entry, CONF_STABILIZE_COUNT, DEFAULT_STABILIZE_COUNT
+    )
+    # Merkt sich je Topic den zuletzt gemeldeten Wert und den Anwaerter.
+    verlauf: dict[str, dict] = {}
+
+    def _beruhige(data: dict) -> dict:
+        """Uebernimmt einen geaenderten Temperaturwert erst nach Bestaetigung.
+
+        Die Waermepumpe liefert Temperaturen nur in ganzen Grad. Liegt der
+        echte Wert dazwischen, wechselt die Meldung staendig zwischen zwei
+        Schritten. Ein neuer Wert gilt daher erst, wenn er mehrfach
+        hintereinander gemeldet wurde. Gemittelt wird nichts.
+        """
+        if not stabilisieren:
+            return data
+        for topic, wert in list(data.items()):
+            beschreibung = HEISHAMON_TOPICS.get(topic)
+            if not beschreibung or beschreibung.get("device_class") != "temperature":
+                continue
+            eintrag = verlauf.get(topic)
+            if eintrag is None:
+                verlauf[topic] = {"gemeldet": wert, "anwaerter": wert, "zaehler": 0}
+                continue
+            # Ein Sprung ueber ein Grad ist eine echte Aenderung und gilt
+            # sofort. Das Zappeln betraegt genau einen Schritt, alles
+            # Groessere darf nicht verzoegert werden.
+            try:
+                gross = abs(float(wert) - float(eintrag["gemeldet"])) > 1
+            except (TypeError, ValueError):
+                gross = False
+
+            if gross:
+                eintrag["gemeldet"] = wert
+                eintrag["anwaerter"] = wert
+                eintrag["zaehler"] = 0
+            elif wert == eintrag["gemeldet"]:
+                eintrag["anwaerter"] = wert
+                eintrag["zaehler"] = 0
+            elif wert == eintrag["anwaerter"]:
+                eintrag["zaehler"] += 1
+                if eintrag["zaehler"] >= noetige_wiederholungen:
+                    eintrag["gemeldet"] = wert
+                    eintrag["zaehler"] = 0
+            else:
+                eintrag["anwaerter"] = wert
+                eintrag["zaehler"] = 1
+            data[topic] = eintrag["gemeldet"]
+        return data
+
     async def _async_update_data():
         try:
             data = await api.async_get_data()
@@ -56,7 +112,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             raise UpdateFailed(f"Heishamon {host}: {err}") from err
         if not data:
             raise UpdateFailed(f"Heishamon {host} lieferte keine Topics")
-        return data
+        return _beruhige(data)
 
     coordinator = DataUpdateCoordinator(
         hass,

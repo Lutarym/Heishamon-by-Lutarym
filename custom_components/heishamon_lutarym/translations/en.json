@@ -9,7 +9,9 @@
           "username": "Username (optional)",
           "password": "Password (optional)",
           "update_interval": "Update interval in seconds",
-          "listening_only": "Read only (no control entities)"
+          "listening_only": "Read only (no control entities)",
+          "stabilize": "Steady readings (suppress temperature jitter)",
+          "stabilize_count": "Required repetitions, 2 to 20"
         }
       },
       "reconfigure": {
@@ -20,7 +22,9 @@
           "username": "Username (optional)",
           "password": "Password (optional)",
           "update_interval": "Update interval in seconds, 1 to 300",
-          "listening_only": "Read only (do not create controls)"
+          "listening_only": "Read only (do not create controls)",
+          "stabilize": "Steady readings (suppress temperature jitter)",
+          "stabilize_count": "Required repetitions, 2 to 20"
         }
       }
     },
@@ -560,7 +564,9 @@
         "description": "These settings take effect right after saving.",
         "data": {
           "update_interval": "Update interval in seconds, 1 to 300",
-          "listening_only": "Read only (do not create controls)"
+          "listening_only": "Read only (do not create controls)",
+          "stabilize": "Steady readings (suppress temperature jitter)",
+          "stabilize_count": "Required repetitions, 2 to 20"
         }
       }
     }

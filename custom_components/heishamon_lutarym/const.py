@@ -7,6 +7,8 @@ CONF_USERNAME = "username"
 CONF_PASSWORD = "password"
 CONF_UPDATE_INTERVAL = "update_interval"
 CONF_LISTENING_ONLY = "listening_only"
+CONF_STABILIZE = "stabilize"
+CONF_STABILIZE_COUNT = "stabilize_count"
 
 # Standardtakt. HeishaMon fragt die Waermepumpe selbst etwa alle fuenf
 # Sekunden ab, schneller liefert sie keine neuen Werte.
@@ -14,6 +16,16 @@ DEFAULT_UPDATE_INTERVAL = 5
 MIN_UPDATE_INTERVAL = 1
 MAX_UPDATE_INTERVAL = 300
 DEFAULT_LISTENING_ONLY = True
+
+# Temperaturen liefert die Waermepumpe nur ganzzahlig. Liegt der echte
+# Wert zwischen zwei Gradschritten, springt die Anzeige staendig hin und
+# her. Ein neuer Wert wird deshalb erst uebernommen, wenn er mehrfach
+# hintereinander gemeldet wurde. Die Aufloesung bleibt dabei erhalten,
+# es wird nichts gemittelt und nichts erfunden.
+DEFAULT_STABILIZE = True
+DEFAULT_STABILIZE_COUNT = 3
+MIN_STABILIZE_COUNT = 2
+MAX_STABILIZE_COUNT = 20
 
 # Topic-Namen 1:1 aus HeishaMon decode.h (Firmware-Quellcode).
 # "numeric": False bei den beiden Textwerten TOP44 (Error) und TOP92 (Heat_Pump_Model).

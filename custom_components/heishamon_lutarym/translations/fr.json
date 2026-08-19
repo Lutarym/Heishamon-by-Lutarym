@@ -9,7 +9,9 @@
           "username": "Nom d'utilisateur (optionnel)",
           "password": "Mot de passe (optionnel)",
           "update_interval": "Intervalle de mise a jour en secondes",
-          "listening_only": "Lecture seule (aucune commande)"
+          "listening_only": "Lecture seule (aucune commande)",
+          "stabilize": "Stabiliser les valeurs (supprimer les sauts)",
+          "stabilize_count": "Répétitions nécessaires, 2 à 20"
         }
       },
       "reconfigure": {
@@ -20,7 +22,9 @@
           "username": "Nom d'utilisateur (facultatif)",
           "password": "Mot de passe (facultatif)",
           "update_interval": "Intervalle de mise à jour en secondes, 1 à 300",
-          "listening_only": "Lecture seule (ne pas créer de commandes)"
+          "listening_only": "Lecture seule (ne pas créer de commandes)",
+          "stabilize": "Stabiliser les valeurs (supprimer les sauts)",
+          "stabilize_count": "Répétitions nécessaires, 2 à 20"
         }
       }
     },
@@ -560,7 +564,9 @@
         "description": "Ces réglages prennent effet dès l'enregistrement.",
         "data": {
           "update_interval": "Intervalle de mise à jour en secondes, 1 à 300",
-          "listening_only": "Lecture seule (ne pas créer de commandes)"
+          "listening_only": "Lecture seule (ne pas créer de commandes)",
+          "stabilize": "Stabiliser les valeurs (supprimer les sauts)",
+          "stabilize_count": "Répétitions nécessaires, 2 à 20"
         }
       }
     }

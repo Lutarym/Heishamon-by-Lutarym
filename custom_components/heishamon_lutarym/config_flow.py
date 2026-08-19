@@ -17,17 +17,26 @@ from .const import (
     CONF_HOST,
     CONF_LISTENING_ONLY,
     CONF_PASSWORD,
+    CONF_STABILIZE,
+    CONF_STABILIZE_COUNT,
     CONF_UPDATE_INTERVAL,
     CONF_USERNAME,
     DEFAULT_LISTENING_ONLY,
+    DEFAULT_STABILIZE,
+    DEFAULT_STABILIZE_COUNT,
     DEFAULT_UPDATE_INTERVAL,
     DOMAIN,
+    MAX_STABILIZE_COUNT,
     MAX_UPDATE_INTERVAL,
+    MIN_STABILIZE_COUNT,
     MIN_UPDATE_INTERVAL,
 )
 
 INTERVAL = vol.All(
     vol.Coerce(int), vol.Range(min=MIN_UPDATE_INTERVAL, max=MAX_UPDATE_INTERVAL)
+)
+WIEDERHOLUNGEN = vol.All(
+    vol.Coerce(int), vol.Range(min=MIN_STABILIZE_COUNT, max=MAX_STABILIZE_COUNT)
 )
 
 
@@ -75,6 +84,10 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_UPDATE_INTERVAL, default=DEFAULT_UPDATE_INTERVAL
                 ): INTERVAL,
                 vol.Optional(CONF_LISTENING_ONLY, default=DEFAULT_LISTENING_ONLY): bool,
+                vol.Optional(CONF_STABILIZE, default=DEFAULT_STABILIZE): bool,
+                vol.Optional(
+                    CONF_STABILIZE_COUNT, default=DEFAULT_STABILIZE_COUNT
+                ): WIEDERHOLUNGEN,
             }
         )
         return self.async_show_form(step_id="user", data_schema=schema, errors=errors)
@@ -107,6 +120,8 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     **entry.options,
                     CONF_UPDATE_INTERVAL: user_input[CONF_UPDATE_INTERVAL],
                     CONF_LISTENING_ONLY: user_input[CONF_LISTENING_ONLY],
+                    CONF_STABILIZE: user_input[CONF_STABILIZE],
+                    CONF_STABILIZE_COUNT: user_input[CONF_STABILIZE_COUNT],
                 }
                 self.hass.config_entries.async_update_entry(
                     entry, data=daten, options=optionen
@@ -136,6 +151,16 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         entry, CONF_LISTENING_ONLY, DEFAULT_LISTENING_ONLY
                     ),
                 ): bool,
+                vol.Optional(
+                    CONF_STABILIZE,
+                    default=einstellung(entry, CONF_STABILIZE, DEFAULT_STABILIZE),
+                ): bool,
+                vol.Optional(
+                    CONF_STABILIZE_COUNT,
+                    default=einstellung(
+                        entry, CONF_STABILIZE_COUNT, DEFAULT_STABILIZE_COUNT
+                    ),
+                ): WIEDERHOLUNGEN,
             }
         )
         return self.async_show_form(
@@ -166,6 +191,16 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
                         entry, CONF_LISTENING_ONLY, DEFAULT_LISTENING_ONLY
                     ),
                 ): bool,
+                vol.Optional(
+                    CONF_STABILIZE,
+                    default=einstellung(entry, CONF_STABILIZE, DEFAULT_STABILIZE),
+                ): bool,
+                vol.Optional(
+                    CONF_STABILIZE_COUNT,
+                    default=einstellung(
+                        entry, CONF_STABILIZE_COUNT, DEFAULT_STABILIZE_COUNT
+                    ),
+                ): WIEDERHOLUNGEN,
             }
         )
         return self.async_show_form(step_id="init", data_schema=schema)

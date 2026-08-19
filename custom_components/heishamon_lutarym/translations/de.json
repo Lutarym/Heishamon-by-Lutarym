@@ -9,7 +9,9 @@
           "username": "Benutzername (optional)",
           "password": "Passwort (optional)",
           "update_interval": "Aktualisierung in Sekunden",
-          "listening_only": "Nur lesen (keine Steuerung anlegen)"
+          "listening_only": "Nur lesen (keine Steuerung anlegen)",
+          "stabilize": "Werte beruhigen (Temperatursprünge unterdrücken)",
+          "stabilize_count": "Nötige Wiederholungen, 2 bis 20"
         }
       },
       "reconfigure": {
@@ -20,7 +22,9 @@
           "username": "Benutzername (optional)",
           "password": "Passwort (optional)",
           "update_interval": "Aktualisierung in Sekunden, 1 bis 300",
-          "listening_only": "Nur lesen (keine Steuerung anlegen)"
+          "listening_only": "Nur lesen (keine Steuerung anlegen)",
+          "stabilize": "Werte beruhigen (Temperatursprünge unterdrücken)",
+          "stabilize_count": "Nötige Wiederholungen, 2 bis 20"
         }
       }
     },
@@ -560,7 +564,9 @@
         "description": "Diese Einstellungen wirken sofort nach dem Speichern.",
         "data": {
           "update_interval": "Aktualisierung in Sekunden, 1 bis 300",
-          "listening_only": "Nur lesen (keine Steuerung anlegen)"
+          "listening_only": "Nur lesen (keine Steuerung anlegen)",
+          "stabilize": "Werte beruhigen (Temperatursprünge unterdrücken)",
+          "stabilize_count": "Nötige Wiederholungen, 2 bis 20"
         }
       }
     }

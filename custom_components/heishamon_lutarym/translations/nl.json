@@ -9,7 +9,9 @@
           "username": "Gebruikersnaam (optioneel)",
           "password": "Wachtwoord (optioneel)",
           "update_interval": "Bijwerkinterval in seconden",
-          "listening_only": "Alleen lezen (geen bediening)"
+          "listening_only": "Alleen lezen (geen bediening)",
+          "stabilize": "Waarden stabiliseren (temperatuursprongen onderdrukken)",
+          "stabilize_count": "Benodigde herhalingen, 2 tot 20"
         }
       },
       "reconfigure": {
@@ -20,7 +22,9 @@
           "username": "Gebruikersnaam (optioneel)",
           "password": "Wachtwoord (optioneel)",
           "update_interval": "Vernieuwing in seconden, 1 tot 300",
-          "listening_only": "Alleen lezen (geen bediening aanmaken)"
+          "listening_only": "Alleen lezen (geen bediening aanmaken)",
+          "stabilize": "Waarden stabiliseren (temperatuursprongen onderdrukken)",
+          "stabilize_count": "Benodigde herhalingen, 2 tot 20"
         }
       }
     },
@@ -560,7 +564,9 @@
         "description": "Deze instellingen werken direct na het opslaan.",
         "data": {
           "update_interval": "Vernieuwing in seconden, 1 tot 300",
-          "listening_only": "Alleen lezen (geen bediening aanmaken)"
+          "listening_only": "Alleen lezen (geen bediening aanmaken)",
+          "stabilize": "Waarden stabiliseren (temperatuursprongen onderdrukken)",
+          "stabilize_count": "Benodigde herhalingen, 2 tot 20"
         }
       }
     }

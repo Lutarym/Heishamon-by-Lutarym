@@ -554,6 +554,14 @@
           "mode_2": "60 Minuten",
           "mode_3": "90 Minuten"
         }
+      },
+      "setzones": {
+        "name": "Aktive Zonen",
+        "state": {
+          "mode_0": "Nur Heizkreis 1",
+          "mode_1": "Nur Heizkreis 2",
+          "mode_2": "Beide Heizkreise"
+        }
       }
     }
   },

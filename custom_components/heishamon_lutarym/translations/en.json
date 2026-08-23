@@ -554,6 +554,14 @@
           "mode_2": "60 minutes",
           "mode_3": "90 minutes"
         }
+      },
+      "setzones": {
+        "name": "Active zones",
+        "state": {
+          "mode_0": "Circuit 1 only",
+          "mode_1": "Circuit 2 only",
+          "mode_2": "Both circuits"
+        }
       }
     }
   },

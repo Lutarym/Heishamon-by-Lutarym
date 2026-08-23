@@ -212,4 +212,12 @@ SELECT_COMMANDS = {
         "option_count": 4,
         "state_topic": "TOP17",
     },
+    # Waehlt die aktiven Zonen. Laut commands.cpp sind nur drei Werte
+    # zulaessig: 0 nur Zone 1, 1 nur Zone 2, 2 beide Zonen.
+    # Beide Zonen gleichzeitig aus ist nicht vorgesehen.
+    "SetZones": {
+        "icon": "mdi:home-thermometer",
+        "option_count": 3,
+        "state_topic": "TOP94",
+    },
 }

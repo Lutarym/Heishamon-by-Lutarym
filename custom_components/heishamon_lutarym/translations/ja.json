@@ -1,0 +1,582 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Heishamon",
+        "description": "HeishaMon基板のIPアドレスを入力してください。",
+        "data": {
+          "host": "IPアドレス",
+          "username": "ユーザー名（任意）",
+          "password": "パスワード（任意）",
+          "update_interval": "更新間隔（秒）",
+          "listening_only": "読み取り専用（制御エンティティを作成しない）",
+          "stabilize": "表示を安定化（温度のばらつきを抑制）",
+          "stabilize_count": "必要な連続回数（2〜20）"
+        }
+      },
+      "reconfigure": {
+        "title": "Heishamonの設定変更",
+        "description": "アドレス、更新間隔、制御モードを変更します。",
+        "data": {
+          "host": "IPアドレス",
+          "username": "ユーザー名（任意）",
+          "password": "パスワード（任意）",
+          "update_interval": "更新間隔（秒、1〜300）",
+          "listening_only": "読み取り専用（制御を作成しない）",
+          "stabilize": "表示を安定化（温度のばらつきを抑制）",
+          "stabilize_count": "必要な連続回数（2〜20）"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "このアドレスからHeishaMonのデータを受信できませんでした。"
+    },
+    "abort": {
+      "already_configured": "このHeishaMonは既に設定されています。",
+      "wrong_device": "このアドレスでは別のHeishaMon基板が応答しています。",
+      "reconfigure_successful": "アドレスを変更しました。"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "top0": {
+        "name": "TOP0 ヒートポンプ入切"
+      },
+      "top1": {
+        "name": "TOP1 流量"
+      },
+      "top2": {
+        "name": "TOP2 強制給湯"
+      },
+      "top3": {
+        "name": "TOP3 静音モード（スケジュール）"
+      },
+      "top4": {
+        "name": "TOP4 運転モード"
+      },
+      "top5": {
+        "name": "TOP5 戻り水温度"
+      },
+      "top6": {
+        "name": "TOP6 往き水温度"
+      },
+      "top7": {
+        "name": "TOP7 往き目標温度"
+      },
+      "top8": {
+        "name": "TOP8 圧縮機周波数"
+      },
+      "top10": {
+        "name": "TOP10 給湯温度"
+      },
+      "top11": {
+        "name": "TOP11 積算運転時間"
+      },
+      "top12": {
+        "name": "TOP12 起動回数"
+      },
+      "top13": {
+        "name": "TOP13 スケジュール有効"
+      },
+      "top14": {
+        "name": "TOP14 外気温度"
+      },
+      "top15": {
+        "name": "TOP15 暖房出力"
+      },
+      "top16": {
+        "name": "TOP16 暖房消費電力"
+      },
+      "top17": {
+        "name": "TOP17 パワフルモード残り時間"
+      },
+      "top18": {
+        "name": "TOP18 静音モードレベル"
+      },
+      "top19": {
+        "name": "TOP19 ホリデーモード"
+      },
+      "top20": {
+        "name": "TOP20 三方弁位置"
+      },
+      "top21": {
+        "name": "TOP21 屋外配管温度"
+      },
+      "top22": {
+        "name": "TOP22 給湯温度差"
+      },
+      "top23": {
+        "name": "TOP23 暖房温度差"
+      },
+      "top24": {
+        "name": "TOP24 冷房温度差"
+      },
+      "top25": {
+        "name": "TOP25 給湯ホリデー補正"
+      },
+      "top26": {
+        "name": "TOP26 除霜中"
+      },
+      "top29": {
+        "name": "TOP29 ゾーン1 暖房曲線 高温側水温"
+      },
+      "top30": {
+        "name": "TOP30 ゾーン1 暖房曲線 低温側水温"
+      },
+      "top31": {
+        "name": "TOP31 ゾーン1 暖房曲線 高外気温"
+      },
+      "top32": {
+        "name": "TOP32 ゾーン1 暖房曲線 低外気温"
+      },
+      "top33": {
+        "name": "TOP33 室内サーモスタット温度"
+      },
+      "top36": {
+        "name": "TOP36 ゾーン1 水温"
+      },
+      "top37": {
+        "name": "TOP37 ゾーン2 水温"
+      },
+      "top38": {
+        "name": "TOP38 冷房出力"
+      },
+      "top39": {
+        "name": "TOP39 冷房消費電力"
+      },
+      "top40": {
+        "name": "TOP40 給湯出力"
+      },
+      "top41": {
+        "name": "TOP41 給湯消費電力"
+      },
+      "top42": {
+        "name": "TOP42 ゾーン1 目標水温"
+      },
+      "top43": {
+        "name": "TOP43 ゾーン2 目標水温"
+      },
+      "top44": {
+        "name": "TOP44 エラーコード"
+      },
+      "top45": {
+        "name": "TOP45 室温ホリデー補正"
+      },
+      "top46": {
+        "name": "TOP46 バッファタンク温度"
+      },
+      "top47": {
+        "name": "TOP47 集熱器温度"
+      },
+      "top48": {
+        "name": "TOP48 プール温度"
+      },
+      "top49": {
+        "name": "TOP49 熱交換器出口温度"
+      },
+      "top50": {
+        "name": "TOP50 圧縮機吐出温度"
+      },
+      "top51": {
+        "name": "TOP51 屋内配管温度"
+      },
+      "top52": {
+        "name": "TOP52 除霜センサー温度"
+      },
+      "top53": {
+        "name": "TOP53 蒸発器出口温度"
+      },
+      "top54": {
+        "name": "TOP54 バイパス出口温度"
+      },
+      "top55": {
+        "name": "TOP55 パワーエレクトロニクス温度"
+      },
+      "top56": {
+        "name": "TOP56 ゾーン1 室温"
+      },
+      "top57": {
+        "name": "TOP57 ゾーン2 室温"
+      },
+      "top58": {
+        "name": "TOP58 給湯ヒーター作動"
+      },
+      "top59": {
+        "name": "TOP59 室内ヒーター作動"
+      },
+      "top60": {
+        "name": "TOP60 内部ヒーター作動"
+      },
+      "top61": {
+        "name": "TOP61 外部ヒーター作動"
+      },
+      "top62": {
+        "name": "TOP62 ファン1回転数"
+      },
+      "top63": {
+        "name": "TOP63 ファン2回転数"
+      },
+      "top64": {
+        "name": "TOP64 冷媒高圧"
+      },
+      "top65": {
+        "name": "TOP65 循環ポンプ回転数"
+      },
+      "top66": {
+        "name": "TOP66 冷媒低圧"
+      },
+      "top67": {
+        "name": "TOP67 圧縮機電流"
+      },
+      "top68": {
+        "name": "TOP68 非常用ヒーター作動"
+      },
+      "top69": {
+        "name": "TOP69 レジオネラ殺菌運転中"
+      },
+      "top70": {
+        "name": "TOP70 殺菌温度"
+      },
+      "top71": {
+        "name": "TOP71 殺菌最大時間"
+      },
+      "top72": {
+        "name": "TOP72 ゾーン1 冷房曲線 高温側水温"
+      },
+      "top73": {
+        "name": "TOP73 ゾーン1 冷房曲線 低温側水温"
+      },
+      "top74": {
+        "name": "TOP74 ゾーン1 冷房曲線 高外気温"
+      },
+      "top75": {
+        "name": "TOP75 ゾーン1 冷房曲線 低外気温"
+      },
+      "top76": {
+        "name": "TOP76 暖房制御方式"
+      },
+      "top79": {
+        "name": "TOP79 暖房から冷房への切替温度"
+      },
+      "top80": {
+        "name": "TOP80 冷房から暖房への切替温度"
+      },
+      "top81": {
+        "name": "TOP81 冷房制御方式"
+      },
+      "top82": {
+        "name": "TOP82 ゾーン2 暖房曲線 高温側水温"
+      },
+      "top83": {
+        "name": "TOP83 ゾーン2 暖房曲線 低温側水温"
+      },
+      "top84": {
+        "name": "TOP84 ゾーン2 暖房曲線 高外気温"
+      },
+      "top85": {
+        "name": "TOP85 ゾーン2 暖房曲線 低外気温"
+      },
+      "top86": {
+        "name": "TOP86 ゾーン2 冷房曲線 高温側水温"
+      },
+      "top87": {
+        "name": "TOP87 ゾーン2 冷房曲線 低温側水温"
+      },
+      "top88": {
+        "name": "TOP88 ゾーン2 冷房曲線 高外気温"
+      },
+      "top89": {
+        "name": "TOP89 ゾーン2 冷房曲線 低外気温"
+      },
+      "top90": {
+        "name": "TOP90 室内ヒーター運転時間"
+      },
+      "top91": {
+        "name": "TOP91 給湯ヒーター運転時間"
+      },
+      "top92": {
+        "name": "TOP92 ヒートポンプ機種"
+      },
+      "top93": {
+        "name": "TOP93 循環ポンプ出力"
+      },
+      "top94": {
+        "name": "TOP94 ゾーン構成"
+      },
+      "top95": {
+        "name": "TOP95 ポンプ最大出力"
+      },
+      "top96": {
+        "name": "TOP96 ヒーター遅延時間"
+      },
+      "top97": {
+        "name": "TOP97 ヒーター起動温度差"
+      },
+      "top98": {
+        "name": "TOP98 ヒーター停止温度差"
+      },
+      "top99": {
+        "name": "TOP99 バッファタンク設置"
+      },
+      "top100": {
+        "name": "TOP100 給湯タンク設置"
+      },
+      "top101": {
+        "name": "TOP101 ソーラーモード"
+      },
+      "top102": {
+        "name": "TOP102 ソーラー起動温度差"
+      },
+      "top103": {
+        "name": "TOP103 ソーラー停止温度差"
+      },
+      "top104": {
+        "name": "TOP104 ソーラー凍結防止"
+      },
+      "top105": {
+        "name": "TOP105 ソーラー最高温度"
+      },
+      "top106": {
+        "name": "TOP106 流量制御モード"
+      },
+      "top107": {
+        "name": "TOP107 熱媒液"
+      },
+      "top108": {
+        "name": "TOP108 外気センサー切替"
+      },
+      "top109": {
+        "name": "TOP109 凍結防止モード"
+      },
+      "top110": {
+        "name": "TOP110 オプション基板設置"
+      },
+      "top111": {
+        "name": "TOP111 ゾーン1 センサー種別"
+      },
+      "top112": {
+        "name": "TOP112 ゾーン2 センサー種別"
+      },
+      "top113": {
+        "name": "TOP113 バッファタンク温度差"
+      },
+      "top114": {
+        "name": "TOP114 外部パッドヒーター"
+      },
+      "top115": {
+        "name": "TOP115 系統水圧"
+      },
+      "top116": {
+        "name": "TOP116 第2入口温度"
+      },
+      "top117": {
+        "name": "TOP117 エコノマイザー出口温度"
+      },
+      "top118": {
+        "name": "TOP118 第2室内サーモスタット"
+      },
+      "top119": {
+        "name": "TOP119 外部制御"
+      },
+      "top120": {
+        "name": "TOP120 外部暖房冷房切替"
+      },
+      "top121": {
+        "name": "TOP121 外部エラー信号"
+      },
+      "top122": {
+        "name": "TOP122 外部圧縮機制御"
+      },
+      "top123": {
+        "name": "TOP123 ゾーン2 ポンプ運転"
+      },
+      "top124": {
+        "name": "TOP124 ゾーン1 ポンプ運転"
+      },
+      "top125": {
+        "name": "TOP125 二方弁位置"
+      },
+      "top126": {
+        "name": "TOP126 第2三方弁"
+      },
+      "top127": {
+        "name": "TOP127 ゾーン1 混合弁位置"
+      },
+      "top128": {
+        "name": "TOP128 ゾーン2 混合弁位置"
+      },
+      "top129": {
+        "name": "TOP129 バイバレント制御"
+      },
+      "top130": {
+        "name": "TOP130 バイバレントモード"
+      },
+      "top131": {
+        "name": "TOP131 バイバレント起動温度"
+      },
+      "top132": {
+        "name": "TOP132 バイバレント詳細 暖房"
+      },
+      "top133": {
+        "name": "TOP133 バイバレント詳細 給湯"
+      },
+      "top134": {
+        "name": "TOP134 バイバレント詳細 起動温度"
+      },
+      "top135": {
+        "name": "TOP135 バイバレント詳細 停止温度"
+      },
+      "top136": {
+        "name": "TOP136 バイバレント詳細 起動遅延"
+      },
+      "top137": {
+        "name": "TOP137 バイバレント詳細 停止遅延"
+      },
+      "top138": {
+        "name": "TOP138 バイバレント詳細 給湯遅延"
+      },
+      "top139": {
+        "name": "TOP139 暖房制御"
+      },
+      "top140": {
+        "name": "TOP140 スマート給湯"
+      },
+      "top141": {
+        "name": "TOP141 静音モード優先"
+      },
+      "top142": {
+        "name": "TOP142 膨張弁開度"
+      },
+      "top143": {
+        "name": "TOP143 給湯センサー選択"
+      }
+    },
+    "number": {
+      "top9": {
+        "name": "TOP9 給湯目標温度"
+      },
+      "top27": {
+        "name": "TOP27 ゾーン1 暖房設定温度"
+      },
+      "top28": {
+        "name": "TOP28 ゾーン1 冷房設定温度"
+      },
+      "top34": {
+        "name": "TOP34 ゾーン2 暖房設定温度"
+      },
+      "top35": {
+        "name": "TOP35 ゾーン2 冷房設定温度"
+      },
+      "top77": {
+        "name": "TOP77 暖房停止外気温"
+      },
+      "top78": {
+        "name": "TOP78 ヒーター作動外気温"
+      }
+    },
+    "switch": {
+      "setheatpump": {
+        "name": "ヒートポンプ"
+      },
+      "setpump": {
+        "name": "循環ポンプ"
+      },
+      "setforcedhw": {
+        "name": "給湯強制運転"
+      },
+      "setforcedefrost": {
+        "name": "強制除霜"
+      },
+      "setforcesterilization": {
+        "name": "殺菌運転開始"
+      },
+      "setforceheater": {
+        "name": "非常用ヒーター"
+      },
+      "setholidaymode": {
+        "name": "ホリデーモード"
+      },
+      "setmainschedule": {
+        "name": "スケジュール"
+      },
+      "setaltexternalsensor": {
+        "name": "外気センサー切替"
+      },
+      "setbuffer": {
+        "name": "バッファタンク"
+      },
+      "setexternalcontrol": {
+        "name": "外部制御"
+      },
+      "setexternalerror": {
+        "name": "外部エラー信号"
+      },
+      "setexternalcompressorcontrol": {
+        "name": "外部圧縮機制御"
+      },
+      "setbivalentcontrol": {
+        "name": "バイバレント制御"
+      },
+      "setdhwheaterstate": {
+        "name": "給湯ヒーター"
+      },
+      "setroomheaterstate": {
+        "name": "室内ヒーター"
+      }
+    },
+    "select": {
+      "setoperationmode": {
+        "name": "運転モード",
+        "state": {
+          "mode_0": "暖房のみ",
+          "mode_1": "冷房のみ",
+          "mode_2": "自動",
+          "mode_3": "給湯のみ",
+          "mode_4": "暖房＋給湯",
+          "mode_5": "冷房＋給湯",
+          "mode_6": "自動＋給湯"
+        }
+      },
+      "setquietmode": {
+        "name": "静音モード",
+        "state": {
+          "mode_0": "オフ",
+          "mode_1": "レベル1（弱）",
+          "mode_2": "レベル2（中）",
+          "mode_3": "レベル3（強）"
+        }
+      },
+      "setpowerfulmode": {
+        "name": "パワフルモード",
+        "state": {
+          "mode_0": "オフ",
+          "mode_1": "30分",
+          "mode_2": "60分",
+          "mode_3": "90分"
+        }
+      },
+      "setzones": {
+        "name": "有効ゾーン",
+        "state": {
+          "mode_0": "ゾーン1のみ",
+          "mode_1": "ゾーン2のみ",
+          "mode_2": "両ゾーン"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Heishamonの設定変更",
+        "description": "これらの設定は保存後すぐに反映されます。",
+        "data": {
+          "update_interval": "更新間隔（秒、1〜300）",
+          "listening_only": "読み取り専用（制御を作成しない）",
+          "stabilize": "表示を安定化（温度のばらつきを抑制）",
+          "stabilize_count": "必要な連続回数（2〜20）"
+        }
+      }
+    }
+  }
+}

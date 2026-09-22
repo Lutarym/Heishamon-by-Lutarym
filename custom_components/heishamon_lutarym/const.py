@@ -1,5 +1,7 @@
 """Constants for Heishamon by Lutarym."""
 
+import re
+
 DOMAIN = "heishamon_lutarym"
 
 CONF_HOST = "host"
@@ -41,8 +43,8 @@ HEISHAMON_TOPICS = {
     "TOP8": {"name": "Compressor_Freq", "type": "sensor", "unit": "Hz", "icon": "mdi:sine-wave", "device_class": None, "numeric": True},
     "TOP9": {"name": "DHW_Target_Temp", "type": "number", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True, "set_command": "SetDHWTemp", "min": 40, "max": 75},
     "TOP10": {"name": "DHW_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True},
-    "TOP11": {"name": "Operations_Hours", "type": "sensor", "unit": "h", "icon": "mdi:clock", "device_class": None, "numeric": True},
-    "TOP12": {"name": "Operations_Counter", "type": "sensor", "unit": None, "icon": "mdi:counter", "device_class": None, "numeric": True},
+    "TOP11": {"name": "Operations_Hours", "type": "sensor", "unit": "h", "icon": "mdi:clock", "device_class": None, "numeric": True, "state_class": "total_increasing"},
+    "TOP12": {"name": "Operations_Counter", "type": "sensor", "unit": None, "icon": "mdi:counter", "device_class": None, "numeric": True, "state_class": "total_increasing"},
     "TOP13": {"name": "Main_Schedule_State", "type": "sensor", "unit": None, "icon": "mdi:calendar", "device_class": None, "numeric": True},
     "TOP14": {"name": "Outside_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True},
     "TOP15": {"name": "Heat_Power_Production", "type": "sensor", "unit": "W", "icon": "mdi:flash", "device_class": "power", "numeric": True},
@@ -120,8 +122,8 @@ HEISHAMON_TOPICS = {
     "TOP87": {"name": "Z2_Cool_Curve_Target_Low_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP88": {"name": "Z2_Cool_Curve_Outside_High_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP89": {"name": "Z2_Cool_Curve_Outside_Low_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
-    "TOP90": {"name": "Room_Heater_Operations_Hours", "type": "sensor", "unit": "h", "icon": "mdi:clock", "device_class": None, "numeric": True},
-    "TOP91": {"name": "DHW_Heater_Operations_Hours", "type": "sensor", "unit": "h", "icon": "mdi:clock", "device_class": None, "numeric": True},
+    "TOP90": {"name": "Room_Heater_Operations_Hours", "type": "sensor", "unit": "h", "icon": "mdi:clock", "device_class": None, "numeric": True, "state_class": "total_increasing"},
+    "TOP91": {"name": "DHW_Heater_Operations_Hours", "type": "sensor", "unit": "h", "icon": "mdi:clock", "device_class": None, "numeric": True, "state_class": "total_increasing"},
     "TOP92": {"name": "Heat_Pump_Model", "type": "sensor", "unit": None, "icon": "mdi:information", "device_class": None, "numeric": False},
     "TOP93": {"name": "Pump_Duty", "type": "sensor", "unit": "%", "icon": "mdi:percent", "device_class": None, "numeric": True},
     "TOP94": {"name": "Zones_State", "type": "sensor", "unit": None, "icon": "mdi:cog", "device_class": None, "numeric": True},
@@ -220,4 +222,37 @@ SELECT_COMMANDS = {
         "option_count": 3,
         "state_topic": "TOP94",
     },
+}
+
+
+def slug_host(host: str) -> str:
+    """Macht aus der Adresse ein fuer Entity-IDs gueltiges Kuerzel.
+
+    Nur Kleinbuchstaben, Ziffern und Unterstriche sind in einer Entity-ID
+    erlaubt. Aus 192.168.1.50 wird 192_168_1_50, aus einem Hostnamen mit
+    Bindestrich ein Unterstrich. So bleibt die ID auch bei mehreren
+    HeishaMon-Geraeten eindeutig.
+    """
+    return re.sub(r"[^a-z0-9]+", "_", str(host).lower()).strip("_")
+
+
+# Schalter-Kommando -> Topic, das den Zustand zurueckmeldet.
+# SetPump fehlt bewusst: HeishaMon meldet fuer die Pumpe keinen
+# eigenen Ein-Aus-Zustand zurueck, der Schalter bleibt daher zustandslos.
+STATE_TOPICS = {
+    "SetHeatpump": "TOP0",
+    "SetForceDHW": "TOP2",
+    "SetHolidayMode": "TOP19",
+    "SetMainSchedule": "TOP13",
+    "SetForceDefrost": "TOP26",
+    "SetForceSterilization": "TOP69",
+    "SetForceHeater": "TOP68",
+    "SetAltExternalSensor": "TOP108",
+    "SetBuffer": "TOP99",
+    "SetExternalControl": "TOP119",
+    "SetExternalError": "TOP121",
+    "SetExternalCompressorControl": "TOP122",
+    "SetBivalentControl": "TOP129",
+    "SetDHWHeaterState": "TOP58",
+    "SetRoomHeaterState": "TOP59",
 }

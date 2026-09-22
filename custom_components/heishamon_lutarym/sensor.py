@@ -6,7 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, HEISHAMON_TOPICS
+from .const import DOMAIN, HEISHAMON_TOPICS, slug_host
 from .entity import HeishamonEntity
 
 
@@ -30,7 +30,7 @@ class HeishamonSensor(HeishamonEntity, SensorEntity):
         self._topic_id = topic_id
 
         self._attr_unique_id = f"heishamon_{host}_{topic_id.lower()}"
-        self.entity_id = f"sensor.heishamon_{topic_id.lower()}"
+        self.entity_id = f"sensor.heishamon_{slug_host(host)}_{topic_id.lower()}"
         # Der Name kommt aus translations/<sprache>.json unter entity.sensor.<key>
         self._attr_translation_key = topic_id.lower()
         self._attr_icon = info.get("icon")
@@ -38,7 +38,17 @@ class HeishamonSensor(HeishamonEntity, SensorEntity):
         if info["numeric"]:
             if info.get("unit"):
                 self._attr_native_unit_of_measurement = info["unit"]
+            # Standard ist "measurement". Stetig steigende Zaehler
+            # (Betriebsstunden, Startzahl) sind in const.py als
+            # "total_increasing" markiert, damit die Langzeitstatistik
+            # den Verbrauch bildet und nicht den Mittelwert.
+            state_class = info.get("state_class")
+            if state_class is None and info.get("unit"):
+                state_class = "measurement"
+            if state_class == "measurement":
                 self._attr_state_class = SensorStateClass.MEASUREMENT
+            elif state_class == "total_increasing":
+                self._attr_state_class = SensorStateClass.TOTAL_INCREASING
             if info.get("device_class"):
                 self._attr_device_class = info["device_class"]
 

@@ -1,9 +1,9 @@
 """Einrichtung und spaetere Aenderung.
 
-Fassung 0.4.1
-Die Neukonfiguration fragt fuenf Angaben ab:
-Adresse, Benutzer, Passwort, Aktualisierungstakt und Nur-Lesen.
-In 0.4.0 waren es nur die ersten drei.
+Der Einrichtungsdialog fragt Adresse, Benutzer, Passwort,
+Aktualisierungstakt, Nur-Lesen und die Beruhigung der Temperaturwerte
+ab. Adresse, Benutzer und Passwort gehoeren zum Eintrag, die uebrigen
+Angaben lassen sich spaeter ueber "Konfigurieren" aendern.
 """
 from __future__ import annotations
 

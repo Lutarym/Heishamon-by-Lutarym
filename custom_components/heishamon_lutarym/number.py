@@ -6,7 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, HEISHAMON_TOPICS
+from .const import DOMAIN, HEISHAMON_TOPICS, slug_host
 from .entity import HeishamonEntity
 
 
@@ -35,7 +35,7 @@ class HeishamonNumber(HeishamonEntity, NumberEntity):
         self._set_command = info["set_command"]
 
         self._attr_unique_id = f"heishamon_{host}_{topic_id.lower()}_set"
-        self.entity_id = f"number.heishamon_{topic_id.lower()}"
+        self.entity_id = f"number.heishamon_{slug_host(host)}_{topic_id.lower()}"
         self._attr_translation_key = topic_id.lower()
         self._attr_icon = info.get("icon")
         self._attr_native_unit_of_measurement = info.get("unit")

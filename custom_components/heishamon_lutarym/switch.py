@@ -6,27 +6,9 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, SWITCH_COMMANDS
+from .const import DOMAIN, SWITCH_COMMANDS, STATE_TOPICS, slug_host
 from .entity import HeishamonEntity
 
-# Kommando -> Topic, das den Zustand zurueckmeldet.
-STATE_TOPICS = {
-    "SetHeatpump": "TOP0",
-    "SetForceDHW": "TOP2",
-    "SetHolidayMode": "TOP19",
-    "SetMainSchedule": "TOP13",
-    "SetForceDefrost": "TOP26",
-    "SetForceSterilization": "TOP69",
-    "SetForceHeater": "TOP68",
-    "SetAltExternalSensor": "TOP108",
-    "SetBuffer": "TOP99",
-    "SetExternalControl": "TOP119",
-    "SetExternalError": "TOP121",
-    "SetExternalCompressorControl": "TOP122",
-    "SetBivalentControl": "TOP129",
-    "SetDHWHeaterState": "TOP58",
-    "SetRoomHeaterState": "TOP59",
-}
 
 
 async def async_setup_entry(
@@ -53,7 +35,7 @@ class HeishamonSwitch(HeishamonEntity, SwitchEntity):
         self._state_topic = STATE_TOPICS.get(command)
 
         self._attr_unique_id = f"heishamon_{host}_{command.lower()}"
-        self.entity_id = f"switch.heishamon_{command.lower()}"
+        self.entity_id = f"switch.heishamon_{slug_host(host)}_{command.lower()}"
         self._attr_translation_key = command.lower()
         self._attr_icon = info.get("icon")
 

@@ -6,7 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, SELECT_COMMANDS
+from .const import DOMAIN, SELECT_COMMANDS, slug_host
 from .entity import HeishamonEntity
 
 
@@ -39,7 +39,7 @@ class HeishamonSelect(HeishamonEntity, SelectEntity):
         self._state_topic = info.get("state_topic")
 
         self._attr_unique_id = f"heishamon_{host}_{command.lower()}"
-        self.entity_id = f"select.heishamon_{command.lower()}"
+        self.entity_id = f"select.heishamon_{slug_host(host)}_{command.lower()}"
         self._attr_translation_key = command.lower()
         self._attr_icon = info.get("icon")
         self._attr_options = [f"mode_{i}" for i in range(info["option_count"])]

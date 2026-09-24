@@ -1,11 +1,4 @@
 {
   "name": "Heishamon by Lutarym",
-  "domains": [
-    "sensor",
-    "number",
-    "switch",
-    "select"
-  ],
-  "iot_class": "local_polling",
   "homeassistant": "2024.1.0"
 }

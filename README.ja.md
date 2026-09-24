@@ -4,7 +4,7 @@
 
 HeishaMon を介して Panasonic Aquarea ヒートポンプを Home Assistant に統合します。MQTT を使わず、HTTP インターフェースを直接利用します。
 
-バージョン 1.0.0
+バージョン 1.0.1
 
 ## この統合の機能
 

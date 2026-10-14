@@ -11,7 +11,11 @@
           "update_interval": "Intervalle de mise a jour en secondes",
           "listening_only": "Lecture seule (aucune commande)",
           "stabilize": "Stabiliser les valeurs (supprimer les sauts)",
-          "stabilize_count": "Répétitions nécessaires, 2 à 20"
+          "stabilize_count": "Répétitions nécessaires, 2 à 20",
+          "power_entity": "Compteur électrique externe (facultatif)"
+        },
+        "data_description": {
+          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly PM. Un COP mesuré est alors calculé en plus. Laisser vide si aucun n'est disponible."
         }
       },
       "reconfigure": {
@@ -24,7 +28,11 @@
           "update_interval": "Intervalle de mise à jour en secondes, 1 à 300",
           "listening_only": "Lecture seule (ne pas créer de commandes)",
           "stabilize": "Stabiliser les valeurs (supprimer les sauts)",
-          "stabilize_count": "Répétitions nécessaires, 2 à 20"
+          "stabilize_count": "Répétitions nécessaires, 2 à 20",
+          "power_entity": "Compteur électrique externe (facultatif)"
+        },
+        "data_description": {
+          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly PM. Un COP mesuré est alors calculé en plus. Laisser vide si aucun n'est disponible."
         }
       }
     },
@@ -449,6 +457,18 @@
       },
       "top143": {
         "name": "TOP143 Selection sonde eau chaude"
+      },
+      "cop_heating": {
+        "name": "COP chauffage"
+      },
+      "cop_dhw": {
+        "name": "COP eau chaude"
+      },
+      "cop_heating_measured": {
+        "name": "COP chauffage mesuré"
+      },
+      "cop_dhw_measured": {
+        "name": "COP eau chaude mesuré"
       }
     },
     "number": {
@@ -574,7 +594,11 @@
           "update_interval": "Intervalle de mise à jour en secondes, 1 à 300",
           "listening_only": "Lecture seule (ne pas créer de commandes)",
           "stabilize": "Stabiliser les valeurs (supprimer les sauts)",
-          "stabilize_count": "Répétitions nécessaires, 2 à 20"
+          "stabilize_count": "Répétitions nécessaires, 2 à 20",
+          "power_entity": "Compteur électrique externe (facultatif)"
+        },
+        "data_description": {
+          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly PM. Un COP mesuré est alors calculé en plus. Laisser vide si aucun n'est disponible."
         }
       }
     }

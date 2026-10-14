@@ -11,6 +11,8 @@ CONF_UPDATE_INTERVAL = "update_interval"
 CONF_LISTENING_ONLY = "listening_only"
 CONF_STABILIZE = "stabilize"
 CONF_STABILIZE_COUNT = "stabilize_count"
+# Optionaler externer Strommesser (etwa Shelly PM) fuer den gemessenen COP
+CONF_POWER_ENTITY = "power_entity"
 
 # Standardtakt. HeishaMon fragt die Waermepumpe selbst etwa alle fuenf
 # Sekunden ab, schneller liefert sie keine neuen Werte.

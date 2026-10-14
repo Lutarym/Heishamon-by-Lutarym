@@ -11,11 +11,13 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import HeishamonAPI
+from .cop import ROH_SCHLUESSEL, ROH_TOPICS
 from .config_flow import einstellung
 from .const import (
     CONF_HOST,
     CONF_LISTENING_ONLY,
     CONF_PASSWORD,
+    CONF_POWER_ENTITY,
     CONF_STABILIZE,
     CONF_STABILIZE_COUNT,
     CONF_UPDATE_INTERVAL,
@@ -144,7 +146,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             raise UpdateFailed(f"Heishamon {host} lieferte keine Topics")
 
         fehler["anzahl"] = 0
+        # Vor- und Ruecklauf ungeglaettet fuer die COP-Berechnung sichern,
+        # bevor die Beruhigung die Werte verzoegert.
+        roh = {topic: data.get(topic) for topic in ROH_TOPICS}
         beruhigt = _beruhige(data)
+        beruhigt[ROH_SCHLUESSEL] = roh
         letzte_daten.clear()
         letzte_daten.update(beruhigt)
         return beruhigt
@@ -173,6 +179,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "coordinator": coordinator,
         "listening_only": listening_only,
         "host": host,
+        # Leer, wenn kein externer Strommesser gewaehlt ist
+        "power_entity": einstellung(entry, CONF_POWER_ENTITY, None) or None,
     }
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

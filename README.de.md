@@ -4,7 +4,7 @@
 
 Home Assistant Integration für Panasonic Aquarea Wärmepumpen über HeishaMon, ohne MQTT, direkt über die HTTP-Schnittstelle.
 
-Version 1.0.1
+Version 1.1.0
 
 ## Was die Integration macht
 
@@ -34,8 +34,9 @@ Als eigenes Repository (Custom Repository) mit der Kategorie **Integration** hin
 | Nur lesen | aktiv: nur Sensoren. Inaktiv: zusätzlich Steuerung |
 | Werte beruhigen | glättet das Zappeln ganzzahliger Temperaturwerte |
 | Nötige Wiederholungen | wie oft ein neuer Wert bestätigt sein muss, 2 bis 20 |
+| Externer Strommesser | optional, Leistungssensor nur für die Wärmepumpe, etwa ein Shelly PM |
 
-Takt, Steuerbarkeit und Beruhigung lassen sich später über "Konfigurieren" ändern, ohne den Eintrag neu anzulegen.
+Takt, Steuerbarkeit, Beruhigung und Strommesser lassen sich später über "Konfigurieren" ändern, ohne den Eintrag neu anzulegen.
 
 ## Entities
 
@@ -44,6 +45,8 @@ Ein Gerät, darunter:
 - 137 Sensoren, je Topic einer, `sensor.heishamon_<adresse>_top0` bis `..._top143`
 - 7 Sollwerte als Number, nur wenn "Nur lesen" deaktiviert ist
 - 16 Schalter und 4 Auswahllisten, ebenfalls nur bei aktiver Steuerung
+- COP Heizen und COP Warmwasser, `sensor.heishamon_<adresse>_cop_heating` und `..._cop_dhw`
+- COP Heizen gemessen und COP Warmwasser gemessen, `..._cop_heating_measured` und `..._cop_dhw_measured`, nur mit externem Strommesser
 
 Die Anzeigenamen folgen der Spracheinstellung von Home Assistant. Verfügbar sind Deutsch, Englisch, Französisch und Japanisch. Ist die Sprache nicht dabei, wird Englisch genutzt. Die Entity-ID enthält die Adresse der Platine und die TOP-Nummer und bleibt sprachunabhängig, Automationen brechen also beim Sprachwechsel nicht. Bei mehreren HeishaMon-Geräten bleibt so jede ID eindeutig.
 
@@ -59,6 +62,23 @@ Beispiel für Topic TOP5 bei der Adresse 192.168.1.50 (`sensor.heishamon_192_168
 Die Namen sind bewusst allgemeinverständlich formuliert statt wörtlich übersetzt. Aus `Ipm_Temp` wird zum Beispiel "Temperatur Leistungselektronik", aus `Sterilization_State` wird "Legionellenschutz laeuft".
 
 Die Klartext-Beschreibung, die HeishaMon mitliefert, steht als Attribut `beschreibung` an jeder Entity.
+
+### COP
+
+Heizen und Warmwasser werden getrennt berechnet. Ein Wert erscheint nur, solange der Verdichter läuft, die Wärmepumpe nicht abtaut und gerade diese Betriebsart aktiv ist. Sonst ist der Zustand "unbekannt". Kühlen wird nicht erfasst.
+
+| Sensor | Wärmeleistung | Elektrische Leistung |
+|---|---|---|
+| COP Heizen, COP Warmwasser | laut Wärmepumpe, je Betriebsart getrennt | laut Wärmepumpe, je Betriebsart getrennt |
+| COP Heizen gemessen, COP Warmwasser gemessen | Durchfluss × 4180 × (Vorlauf − Rücklauf) | externer Strommesser |
+
+Beim gemessenen COP entscheidet das Dreiwegeventil (TOP20), ob der Wert zu Heizen oder Warmwasser zählt.
+
+Geräte der K/L-Serie und neuer melden genaue Leistungswerte (XTOP0 bis XTOP5), die dann verwendet werden. Ältere Geräte melden die Leistung nur im Raster von 200 W, der COP laut Wärmepumpe ist dort entsprechend grob. Genauer ist der gemessene COP.
+
+Der Strommesser muss ausschließlich die Wärmepumpe messen und in W, kW, mW oder MW melden. Bei Glykol im Kreislauf fällt der gemessene COP zu hoch aus, weil mit der Wärmekapazität von Wasser gerechnet wird.
+
+Die verwendeten Leistungen stehen als Attribute `thermische_leistung_w` und `elektrische_leistung_w` am Sensor.
 
 ### Schreibbare Sollwerte
 

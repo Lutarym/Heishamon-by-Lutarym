@@ -11,7 +11,11 @@
           "update_interval": "Update interval in seconds",
           "listening_only": "Read only (no control entities)",
           "stabilize": "Steady readings (suppress temperature jitter)",
-          "stabilize_count": "Required repetitions, 2 to 20"
+          "stabilize_count": "Required repetitions, 2 to 20",
+          "power_entity": "External power meter (optional)"
+        },
+        "data_description": {
+          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly PM. An additional measured COP is calculated from it. Leave empty if none is available."
         }
       },
       "reconfigure": {
@@ -24,7 +28,11 @@
           "update_interval": "Update interval in seconds, 1 to 300",
           "listening_only": "Read only (do not create controls)",
           "stabilize": "Steady readings (suppress temperature jitter)",
-          "stabilize_count": "Required repetitions, 2 to 20"
+          "stabilize_count": "Required repetitions, 2 to 20",
+          "power_entity": "External power meter (optional)"
+        },
+        "data_description": {
+          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly PM. An additional measured COP is calculated from it. Leave empty if none is available."
         }
       }
     },
@@ -449,6 +457,18 @@
       },
       "top143": {
         "name": "TOP143 Hot water sensor selection"
+      },
+      "cop_heating": {
+        "name": "COP heating"
+      },
+      "cop_dhw": {
+        "name": "COP hot water"
+      },
+      "cop_heating_measured": {
+        "name": "COP heating measured"
+      },
+      "cop_dhw_measured": {
+        "name": "COP hot water measured"
       }
     },
     "number": {
@@ -574,7 +594,11 @@
           "update_interval": "Update interval in seconds, 1 to 300",
           "listening_only": "Read only (do not create controls)",
           "stabilize": "Steady readings (suppress temperature jitter)",
-          "stabilize_count": "Required repetitions, 2 to 20"
+          "stabilize_count": "Required repetitions, 2 to 20",
+          "power_entity": "External power meter (optional)"
+        },
+        "data_description": {
+          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly PM. An additional measured COP is calculated from it. Leave empty if none is available."
         }
       }
     }

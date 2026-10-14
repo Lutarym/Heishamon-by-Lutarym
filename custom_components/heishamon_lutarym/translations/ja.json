@@ -11,7 +11,11 @@
           "update_interval": "更新間隔（秒）",
           "listening_only": "読み取り専用（制御エンティティを作成しない）",
           "stabilize": "表示を安定化（温度のばらつきを抑制）",
-          "stabilize_count": "必要な連続回数（2〜20）"
+          "stabilize_count": "必要な連続回数（2〜20）",
+          "power_entity": "外部電力計（任意）"
+        },
+        "data_description": {
+          "power_entity": "ヒートポンプのみを計測する電力センサー（例：Shelly PM）。これを使って実測 COP を追加で計算します。ない場合は空欄のままにしてください。"
         }
       },
       "reconfigure": {
@@ -24,7 +28,11 @@
           "update_interval": "更新間隔（秒、1〜300）",
           "listening_only": "読み取り専用（制御を作成しない）",
           "stabilize": "表示を安定化（温度のばらつきを抑制）",
-          "stabilize_count": "必要な連続回数（2〜20）"
+          "stabilize_count": "必要な連続回数（2〜20）",
+          "power_entity": "外部電力計（任意）"
+        },
+        "data_description": {
+          "power_entity": "ヒートポンプのみを計測する電力センサー（例：Shelly PM）。これを使って実測 COP を追加で計算します。ない場合は空欄のままにしてください。"
         }
       }
     },
@@ -449,6 +457,18 @@
       },
       "top143": {
         "name": "TOP143 給湯センサー選択"
+      },
+      "cop_heating": {
+        "name": "COP 暖房"
+      },
+      "cop_dhw": {
+        "name": "COP 給湯"
+      },
+      "cop_heating_measured": {
+        "name": "COP 暖房 実測"
+      },
+      "cop_dhw_measured": {
+        "name": "COP 給湯 実測"
       }
     },
     "number": {
@@ -574,7 +594,11 @@
           "update_interval": "更新間隔（秒、1〜300）",
           "listening_only": "読み取り専用（制御を作成しない）",
           "stabilize": "表示を安定化（温度のばらつきを抑制）",
-          "stabilize_count": "必要な連続回数（2〜20）"
+          "stabilize_count": "必要な連続回数（2〜20）",
+          "power_entity": "外部電力計（任意）"
+        },
+        "data_description": {
+          "power_entity": "ヒートポンプのみを計測する電力センサー（例：Shelly PM）。これを使って実測 COP を追加で計算します。ない場合は空欄のままにしてください。"
         }
       }
     }

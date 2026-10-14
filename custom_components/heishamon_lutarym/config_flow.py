@@ -1,8 +1,8 @@
 """Einrichtung und spaetere Aenderung.
 
 Der Einrichtungsdialog fragt Adresse, Benutzer, Passwort,
-Aktualisierungstakt, Nur-Lesen und die Beruhigung der Temperaturwerte
-ab. Adresse, Benutzer und Passwort gehoeren zum Eintrag, die uebrigen
+Aktualisierungstakt, Nur-Lesen, die Beruhigung der Temperaturwerte und
+einen optionalen externen Strommesser fuer den gemessenen COP ab. Adresse, Benutzer und Passwort gehoeren zum Eintrag, die uebrigen
 Angaben lassen sich spaeter ueber "Konfigurieren" aendern.
 """
 from __future__ import annotations
@@ -11,12 +11,14 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
+from homeassistant.helpers import selector
 
 from .api import HeishamonAPI
 from .const import (
     CONF_HOST,
     CONF_LISTENING_ONLY,
     CONF_PASSWORD,
+    CONF_POWER_ENTITY,
     CONF_STABILIZE,
     CONF_STABILIZE_COUNT,
     CONF_UPDATE_INTERVAL,
@@ -38,6 +40,32 @@ INTERVAL = vol.All(
 WIEDERHOLUNGEN = vol.All(
     vol.Coerce(int), vol.Range(min=MIN_STABILIZE_COUNT, max=MAX_STABILIZE_COUNT)
 )
+
+
+# Auswahl eines Leistungssensors, etwa der Leistung eines Shelly PM
+STROMMESSER = selector.EntitySelector(
+    selector.EntitySelectorConfig(domain="sensor", device_class="power")
+)
+
+
+def strommesser_feld(aktuell: str | None):
+    """Optionales Feld, vorbelegt aber leerbar.
+
+    Ein Standardwert liesse sich im Dialog nicht entfernen, ein
+    Vorschlagswert schon. Ist das Feld leer, fehlt der Schluessel.
+    """
+    if aktuell:
+        return vol.Optional(CONF_POWER_ENTITY, description={"suggested_value": aktuell})
+    return vol.Optional(CONF_POWER_ENTITY)
+
+
+def strommesser_wert(user_input: dict) -> str:
+    """Gewaehlter Strommesser oder leerer Text, wenn keiner gewaehlt ist.
+
+    Der leere Text wird ausdruecklich gespeichert. Sonst bliebe ein bei
+    der Ersteinrichtung gewaehlter Strommesser aktiv.
+    """
+    return user_input.get(CONF_POWER_ENTITY) or ""
 
 
 def einstellung(entry: config_entries.ConfigEntry, schluessel: str, standard):
@@ -88,6 +116,7 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 vol.Optional(
                     CONF_STABILIZE_COUNT, default=DEFAULT_STABILIZE_COUNT
                 ): WIEDERHOLUNGEN,
+                strommesser_feld(None): STROMMESSER,
             }
         )
         return self.async_show_form(step_id="user", data_schema=schema, errors=errors)
@@ -122,6 +151,7 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_LISTENING_ONLY: user_input[CONF_LISTENING_ONLY],
                     CONF_STABILIZE: user_input[CONF_STABILIZE],
                     CONF_STABILIZE_COUNT: user_input[CONF_STABILIZE_COUNT],
+                    CONF_POWER_ENTITY: strommesser_wert(user_input),
                 }
                 self.hass.config_entries.async_update_entry(
                     entry, data=daten, options=optionen
@@ -161,6 +191,9 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         entry, CONF_STABILIZE_COUNT, DEFAULT_STABILIZE_COUNT
                     ),
                 ): WIEDERHOLUNGEN,
+                strommesser_feld(
+                    einstellung(entry, CONF_POWER_ENTITY, None)
+                ): STROMMESSER,
             }
         )
         return self.async_show_form(
@@ -169,12 +202,15 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class HeishamonOptionsFlow(config_entries.OptionsFlow):
-    """Takt und Steuerbarkeit nachtraeglich aendern."""
+    """Takt, Steuerbarkeit, Beruhigung und Strommesser nachtraeglich aendern."""
 
     async def async_step_init(self, user_input=None) -> FlowResult:
         """Einziger Schritt."""
         if user_input is not None:
-            return self.async_create_entry(title="", data=user_input)
+            return self.async_create_entry(
+                title="",
+                data={**user_input, CONF_POWER_ENTITY: strommesser_wert(user_input)},
+            )
 
         entry = self.config_entry
         schema = vol.Schema(
@@ -201,6 +237,9 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
                         entry, CONF_STABILIZE_COUNT, DEFAULT_STABILIZE_COUNT
                     ),
                 ): WIEDERHOLUNGEN,
+                strommesser_feld(
+                    einstellung(entry, CONF_POWER_ENTITY, None)
+                ): STROMMESSER,
             }
         )
         return self.async_show_form(step_id="init", data_schema=schema)

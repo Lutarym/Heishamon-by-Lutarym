@@ -11,7 +11,11 @@
           "update_interval": "Aktualisierung in Sekunden",
           "listening_only": "Nur lesen (keine Steuerung anlegen)",
           "stabilize": "Werte beruhigen (Temperatursprünge unterdrücken)",
-          "stabilize_count": "Nötige Wiederholungen, 2 bis 20"
+          "stabilize_count": "Nötige Wiederholungen, 2 bis 20",
+          "power_entity": "Externer Strommesser (optional)"
+        },
+        "data_description": {
+          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly PM. Damit wird zusätzlich ein gemessener COP berechnet. Leer lassen, wenn keiner vorhanden ist."
         }
       },
       "reconfigure": {
@@ -24,7 +28,11 @@
           "update_interval": "Aktualisierung in Sekunden, 1 bis 300",
           "listening_only": "Nur lesen (keine Steuerung anlegen)",
           "stabilize": "Werte beruhigen (Temperatursprünge unterdrücken)",
-          "stabilize_count": "Nötige Wiederholungen, 2 bis 20"
+          "stabilize_count": "Nötige Wiederholungen, 2 bis 20",
+          "power_entity": "Externer Strommesser (optional)"
+        },
+        "data_description": {
+          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly PM. Damit wird zusätzlich ein gemessener COP berechnet. Leer lassen, wenn keiner vorhanden ist."
         }
       }
     },
@@ -449,6 +457,18 @@
       },
       "top143": {
         "name": "TOP143 Warmwasserfuehler Auswahl"
+      },
+      "cop_heating": {
+        "name": "COP Heizen"
+      },
+      "cop_dhw": {
+        "name": "COP Warmwasser"
+      },
+      "cop_heating_measured": {
+        "name": "COP Heizen gemessen"
+      },
+      "cop_dhw_measured": {
+        "name": "COP Warmwasser gemessen"
       }
     },
     "number": {
@@ -574,7 +594,11 @@
           "update_interval": "Aktualisierung in Sekunden, 1 bis 300",
           "listening_only": "Nur lesen (keine Steuerung anlegen)",
           "stabilize": "Werte beruhigen (Temperatursprünge unterdrücken)",
-          "stabilize_count": "Nötige Wiederholungen, 2 bis 20"
+          "stabilize_count": "Nötige Wiederholungen, 2 bis 20",
+          "power_entity": "Externer Strommesser (optional)"
+        },
+        "data_description": {
+          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly PM. Damit wird zusätzlich ein gemessener COP berechnet. Leer lassen, wenn keiner vorhanden ist."
         }
       }
     }

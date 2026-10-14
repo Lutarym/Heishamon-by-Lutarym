@@ -4,7 +4,7 @@
 
 Intégration Home Assistant pour les pompes à chaleur Panasonic Aquarea via HeishaMon, sans MQTT, directement par l'interface HTTP.
 
-Version 1.0.1
+Version 1.1.0
 
 ## Ce que fait l'intégration
 
@@ -34,8 +34,9 @@ Ajouter le projet comme dépôt personnalisé (Custom Repository) avec la catég
 | Lecture seule | activé : capteurs uniquement. Désactivé : commandes en plus |
 | Lissage des valeurs | atténue les sauts des températures en nombres entiers |
 | Répétitions requises | combien de fois une nouvelle valeur doit être confirmée, 2 à 20 |
+| Compteur électrique externe | facultatif, capteur de puissance pour la pompe à chaleur seule, par exemple un Shelly PM |
 
-L'intervalle, le mode de commande et le lissage peuvent être modifiés ensuite via "Configurer", sans recréer l'entrée.
+L'intervalle, le mode de commande, le lissage et le compteur électrique peuvent être modifiés ensuite via "Configurer", sans recréer l'entrée.
 
 ## Entités
 
@@ -44,6 +45,8 @@ Un appareil, contenant :
 - 137 capteurs, un par topic, `sensor.heishamon_<adresse>_top0` à `..._top143`
 - 7 consignes en Number, seulement si "Lecture seule" est désactivée
 - 16 interrupteurs et 4 listes de sélection, également seulement si la commande est activée
+- COP chauffage et COP eau chaude, `sensor.heishamon_<adresse>_cop_heating` et `..._cop_dhw`
+- COP chauffage mesuré et COP eau chaude mesuré, `..._cop_heating_measured` et `..._cop_dhw_measured`, seulement avec un compteur électrique externe
 
 Les noms affichés suivent la langue de Home Assistant. Sont disponibles l'allemand, l'anglais, le français et le japonais. Si la langue n'en fait pas partie, l'anglais est utilisé. L'ID d'entité contient l'adresse de la carte et le numéro TOP et reste indépendant de la langue, les automatisations ne cassent donc pas lors d'un changement de langue. Avec plusieurs cartes HeishaMon, chaque ID reste ainsi unique.
 
@@ -59,6 +62,23 @@ Exemple pour le topic TOP5 à l'adresse 192.168.1.50 (`sensor.heishamon_192_168_
 Les noms sont volontairement formulés pour être compréhensibles plutôt que traduits mot à mot. `Ipm_Temp` devient par exemple "Température électronique de puissance", `Sterilization_State` devient "Stérilisation en cours".
 
 La description en clair fournie par HeishaMon est disponible dans l'attribut `beschreibung` de chaque entité.
+
+### COP
+
+Le chauffage et l'eau chaude sont calculés séparément. Une valeur n'apparaît que lorsque le compresseur tourne, que la pompe à chaleur ne dégivre pas et que ce mode de fonctionnement est actif. Sinon l'état est "inconnu". Le refroidissement n'est pas pris en compte.
+
+| Capteur | Puissance thermique | Puissance électrique |
+|---|---|---|
+| COP chauffage, COP eau chaude | selon la pompe à chaleur, séparément par mode | selon la pompe à chaleur, séparément par mode |
+| COP chauffage mesuré, COP eau chaude mesuré | débit × 4180 × (départ − retour) | compteur électrique externe |
+
+Pour le COP mesuré, la vanne trois voies (TOP20) détermine si la valeur compte pour le chauffage ou l'eau chaude.
+
+Les appareils de la série K/L et plus récents transmettent des valeurs de puissance précises (XTOP0 à XTOP5), qui sont alors utilisées. Les appareils plus anciens ne transmettent la puissance que par paliers de 200 W, le COP selon la pompe à chaleur y est donc approximatif. Le COP mesuré est plus précis.
+
+Le compteur électrique doit mesurer uniquement la pompe à chaleur et indiquer la puissance en W, kW, mW ou MW. Avec du glycol dans le circuit, le COP mesuré est trop élevé, car le calcul utilise la capacité thermique de l'eau.
+
+Les puissances utilisées sont disponibles dans les attributs `thermische_leistung_w` et `elektrische_leistung_w` du capteur.
 
 ### Consignes modifiables
 

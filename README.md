@@ -4,7 +4,7 @@
 
 Home Assistant integration for Panasonic Aquarea heat pumps through HeishaMon, without MQTT, straight over the HTTP interface.
 
-Version 1.1.0
+Version 1.2.0
 
 ## What the integration does
 
@@ -46,7 +46,7 @@ One device, containing:
 - 7 setpoints as Number, only when "Read only" is disabled
 - 16 switches and 4 select lists, likewise only with control enabled
 - COP heating and COP hot water, `sensor.heishamon_<address>_cop_heating` and `..._cop_dhw`
-- COP heating measured and COP hot water measured, `..._cop_heating_measured` and `..._cop_dhw_measured`, only with an external power meter
+- Select COP source, `select.heishamon_<address>_cop_source`, only with an external power meter, also in read only mode
 
 The display names follow the language setting of Home Assistant. Available are German, English, French and Japanese. If the language is not among them, English is used. The entity ID contains the address of the board and the TOP number and stays language independent, so automations do not break on a language change. With several HeishaMon boards every ID therefore stays unique.
 
@@ -65,20 +65,26 @@ The plain text description that HeishaMon supplies is available as the attribute
 
 ### COP
 
-Heating and hot water are calculated separately. A value appears only while the compressor is running, the heat pump is not defrosting and that operating mode is currently active. Otherwise the state is "unknown". Cooling is not covered.
+Heating and hot water are calculated separately. The COP is the heat energy divided by the electrical energy of the current run, however long the run takes. A run starts when the compressor starts and ends when the compressor stops or the three way valve (TOP20) changes the operating mode. After that the state is "unknown". Defrosting is part of the run, because it uses electricity and takes heat from the water. Cooling is not covered.
 
-| Sensor | Thermal power | Electrical power |
+The energy is summed up at every poll as power times the time since the previous poll.
+
+The COP source select decides where the displayed value comes from. Switching takes effect immediately, both calculations always run in the background. The choice is kept after a restart.
+
+| COP source | Heat energy | Electrical energy |
 |---|---|---|
-| COP heating, COP hot water | as reported by the heat pump, separately per mode | as reported by the heat pump, separately per mode |
-| COP heating measured, COP hot water measured | flow × 4180 × (outlet − inlet) | external power meter |
+| Heat pump | as reported by the heat pump | as reported by the heat pump |
+| Measured (power meter) | volume flow × density × heat capacity × (outlet − inlet) | external power meter |
 
-For the measured COP, the three way valve (TOP20) decides whether the value counts as heating or hot water.
+Density and heat capacity of water are taken from table values at the mean water temperature. With glycol in the circuit the measured COP is therefore not correct.
 
-Units of the K/L series and newer report precise power values (XTOP0 to XTOP5), which are then used. Older units report power only in steps of 200 W, so the COP reported by the heat pump is correspondingly coarse there. The measured COP is more precise.
+Units of the K/L series and newer report precise power values (XTOP0 to XTOP5), which are then used. Older units report power only in steps of 200 W, so the COP from the heat pump is correspondingly coarse there. The attribute `werte` shows which values are used (XTOP or TOP).
 
-The power meter must measure the heat pump only and report in W, kW, mW or MW. With glycol in the circuit the measured COP comes out too high, because the heat capacity of water is used.
+The power meter must measure the heat pump only and report in W, kW, mW or MW.
 
-The power values used are available as the attributes `thermische_leistung_w` and `elektrische_leistung_w` on the sensor.
+If the COP is above the Carnot limit (theoretical maximum from outlet and outdoor temperature), it is physically impossible and is shown as "unknown".
+
+Attributes on the sensor: `quelle`, `waermemenge_kwh`, `strommenge_kwh`, `laufzeit_min`.
 
 ### Writable setpoints
 

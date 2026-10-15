@@ -15,7 +15,7 @@
           "power_entity": "Externer Strommesser (optional)"
         },
         "data_description": {
-          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly PM. Damit wird zusätzlich ein gemessener COP berechnet. Leer lassen, wenn keiner vorhanden ist."
+          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly. Damit kann der COP auch gemessen statt aus Wärmepumpenwerten berechnet werden. Umschalten über die Auswahl \"COP Quelle\" am Gerät. Leer lassen, wenn keiner vorhanden ist."
         }
       },
       "reconfigure": {
@@ -32,7 +32,7 @@
           "power_entity": "Externer Strommesser (optional)"
         },
         "data_description": {
-          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly PM. Damit wird zusätzlich ein gemessener COP berechnet. Leer lassen, wenn keiner vorhanden ist."
+          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly. Damit kann der COP auch gemessen statt aus Wärmepumpenwerten berechnet werden. Umschalten über die Auswahl \"COP Quelle\" am Gerät. Leer lassen, wenn keiner vorhanden ist."
         }
       }
     },
@@ -463,12 +463,6 @@
       },
       "cop_dhw": {
         "name": "COP Warmwasser"
-      },
-      "cop_heating_measured": {
-        "name": "COP Heizen gemessen"
-      },
-      "cop_dhw_measured": {
-        "name": "COP Warmwasser gemessen"
       }
     },
     "number": {
@@ -582,6 +576,13 @@
           "mode_1": "Nur Heizkreis 2",
           "mode_2": "Beide Heizkreise"
         }
+      },
+      "cop_source": {
+        "name": "COP Quelle",
+        "state": {
+          "heat_pump": "Wärmepumpe",
+          "measured": "Gemessen (Strommesser)"
+        }
       }
     }
   },
@@ -598,7 +599,7 @@
           "power_entity": "Externer Strommesser (optional)"
         },
         "data_description": {
-          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly PM. Damit wird zusätzlich ein gemessener COP berechnet. Leer lassen, wenn keiner vorhanden ist."
+          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly. Damit kann der COP auch gemessen statt aus Wärmepumpenwerten berechnet werden. Umschalten über die Auswahl \"COP Quelle\" am Gerät. Leer lassen, wenn keiner vorhanden ist."
         }
       }
     }

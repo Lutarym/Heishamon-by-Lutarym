@@ -15,7 +15,7 @@
           "power_entity": "External power meter (optional)"
         },
         "data_description": {
-          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly PM. An additional measured COP is calculated from it. Leave empty if none is available."
+          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly. With it the COP can also be measured instead of calculated from heat pump values. Switch with the \"COP source\" selection on the device. Leave empty if none is available."
         }
       },
       "reconfigure": {
@@ -32,7 +32,7 @@
           "power_entity": "External power meter (optional)"
         },
         "data_description": {
-          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly PM. An additional measured COP is calculated from it. Leave empty if none is available."
+          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly. With it the COP can also be measured instead of calculated from heat pump values. Switch with the \"COP source\" selection on the device. Leave empty if none is available."
         }
       }
     },
@@ -463,12 +463,6 @@
       },
       "cop_dhw": {
         "name": "COP hot water"
-      },
-      "cop_heating_measured": {
-        "name": "COP heating measured"
-      },
-      "cop_dhw_measured": {
-        "name": "COP hot water measured"
       }
     },
     "number": {
@@ -582,6 +576,13 @@
           "mode_1": "Circuit 2 only",
           "mode_2": "Both circuits"
         }
+      },
+      "cop_source": {
+        "name": "COP source",
+        "state": {
+          "heat_pump": "Heat pump",
+          "measured": "Measured (power meter)"
+        }
       }
     }
   },
@@ -598,7 +599,7 @@
           "power_entity": "External power meter (optional)"
         },
         "data_description": {
-          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly PM. An additional measured COP is calculated from it. Leave empty if none is available."
+          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly. With it the COP can also be measured instead of calculated from heat pump values. Switch with the \"COP source\" selection on the device. Leave empty if none is available."
         }
       }
     }

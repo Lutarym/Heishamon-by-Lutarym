@@ -4,7 +4,7 @@
 
 Home Assistant Integration für Panasonic Aquarea Wärmepumpen über HeishaMon, ohne MQTT, direkt über die HTTP-Schnittstelle.
 
-Version 1.1.0
+Version 1.2.0
 
 ## Was die Integration macht
 
@@ -46,7 +46,7 @@ Ein Gerät, darunter:
 - 7 Sollwerte als Number, nur wenn "Nur lesen" deaktiviert ist
 - 16 Schalter und 4 Auswahllisten, ebenfalls nur bei aktiver Steuerung
 - COP Heizen und COP Warmwasser, `sensor.heishamon_<adresse>_cop_heating` und `..._cop_dhw`
-- COP Heizen gemessen und COP Warmwasser gemessen, `..._cop_heating_measured` und `..._cop_dhw_measured`, nur mit externem Strommesser
+- Auswahl COP Quelle, `select.heishamon_<adresse>_cop_source`, nur mit externem Strommesser, auch im Nur-Lesen-Betrieb
 
 Die Anzeigenamen folgen der Spracheinstellung von Home Assistant. Verfügbar sind Deutsch, Englisch, Französisch und Japanisch. Ist die Sprache nicht dabei, wird Englisch genutzt. Die Entity-ID enthält die Adresse der Platine und die TOP-Nummer und bleibt sprachunabhängig, Automationen brechen also beim Sprachwechsel nicht. Bei mehreren HeishaMon-Geräten bleibt so jede ID eindeutig.
 
@@ -65,20 +65,26 @@ Die Klartext-Beschreibung, die HeishaMon mitliefert, steht als Attribut `beschre
 
 ### COP
 
-Heizen und Warmwasser werden getrennt berechnet. Ein Wert erscheint nur, solange der Verdichter läuft, die Wärmepumpe nicht abtaut und gerade diese Betriebsart aktiv ist. Sonst ist der Zustand "unbekannt". Kühlen wird nicht erfasst.
+Heizen und Warmwasser werden getrennt berechnet. Der COP ist die Wärmemenge geteilt durch die Strommenge des laufenden Laufs, egal wie lang der Lauf dauert. Ein Lauf beginnt mit dem Start des Verdichters und endet, wenn der Verdichter stoppt oder das Dreiwegeventil (TOP20) die Betriebsart wechselt. Danach ist der Zustand "unbekannt". Abtauen gehört zum Lauf, weil es Strom verbraucht und dem Wasser Wärme entzieht. Kühlen wird nicht erfasst.
 
-| Sensor | Wärmeleistung | Elektrische Leistung |
+Die Energie wird bei jeder Abfrage als Leistung mal Zeit seit der letzten Abfrage aufsummiert.
+
+Mit der Auswahl COP Quelle legst du fest, woher der angezeigte Wert kommt. Das Umschalten wirkt sofort, beide Rechnungen laufen immer mit. Die Wahl bleibt nach einem Neustart erhalten.
+
+| COP Quelle | Wärmemenge | Strommenge |
 |---|---|---|
-| COP Heizen, COP Warmwasser | laut Wärmepumpe, je Betriebsart getrennt | laut Wärmepumpe, je Betriebsart getrennt |
-| COP Heizen gemessen, COP Warmwasser gemessen | Durchfluss × 4180 × (Vorlauf − Rücklauf) | externer Strommesser |
+| Wärmepumpe | laut Wärmepumpe | laut Wärmepumpe |
+| Gemessen (Strommesser) | Volumenstrom × Dichte × Wärmekapazität × (Vorlauf − Rücklauf) | externer Strommesser |
 
-Beim gemessenen COP entscheidet das Dreiwegeventil (TOP20), ob der Wert zu Heizen oder Warmwasser zählt.
+Dichte und Wärmekapazität von Wasser werden bei der mittleren Wassertemperatur aus Tabellenwerten bestimmt. Bei Glykol im Kreislauf stimmt der gemessene COP deshalb nicht.
 
-Geräte der K/L-Serie und neuer melden genaue Leistungswerte (XTOP0 bis XTOP5), die dann verwendet werden. Ältere Geräte melden die Leistung nur im Raster von 200 W, der COP laut Wärmepumpe ist dort entsprechend grob. Genauer ist der gemessene COP.
+Geräte der K/L-Serie und neuer melden genaue Leistungswerte (XTOP0 bis XTOP5), die dann verwendet werden. Ältere Geräte melden die Leistung nur im Raster von 200 W, der COP laut Wärmepumpe ist dort entsprechend grob. Welche Werte genutzt werden, steht im Attribut `werte` (XTOP oder TOP).
 
-Der Strommesser muss ausschließlich die Wärmepumpe messen und in W, kW, mW oder MW melden. Bei Glykol im Kreislauf fällt der gemessene COP zu hoch aus, weil mit der Wärmekapazität von Wasser gerechnet wird.
+Der Strommesser muss ausschließlich die Wärmepumpe messen und in W, kW, mW oder MW melden.
 
-Die verwendeten Leistungen stehen als Attribute `thermische_leistung_w` und `elektrische_leistung_w` am Sensor.
+Liegt der COP über der Carnot-Grenze (theoretischer Höchstwert aus Vorlauf- und Außentemperatur), ist er physikalisch unmöglich und wird als "unbekannt" angezeigt.
+
+Attribute am Sensor: `quelle`, `waermemenge_kwh`, `strommenge_kwh`, `laufzeit_min`.
 
 ### Schreibbare Sollwerte
 

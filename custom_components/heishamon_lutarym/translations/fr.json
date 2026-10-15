@@ -15,7 +15,7 @@
           "power_entity": "Compteur électrique externe (facultatif)"
         },
         "data_description": {
-          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly PM. Un COP mesuré est alors calculé en plus. Laisser vide si aucun n'est disponible."
+          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly. Le COP peut alors aussi être mesuré au lieu d'être calculé à partir des valeurs de la pompe à chaleur. Basculer avec la sélection \"Source du COP\" de l'appareil. Laisser vide si aucun n'est disponible."
         }
       },
       "reconfigure": {
@@ -32,7 +32,7 @@
           "power_entity": "Compteur électrique externe (facultatif)"
         },
         "data_description": {
-          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly PM. Un COP mesuré est alors calculé en plus. Laisser vide si aucun n'est disponible."
+          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly. Le COP peut alors aussi être mesuré au lieu d'être calculé à partir des valeurs de la pompe à chaleur. Basculer avec la sélection \"Source du COP\" de l'appareil. Laisser vide si aucun n'est disponible."
         }
       }
     },
@@ -463,12 +463,6 @@
       },
       "cop_dhw": {
         "name": "COP eau chaude"
-      },
-      "cop_heating_measured": {
-        "name": "COP chauffage mesuré"
-      },
-      "cop_dhw_measured": {
-        "name": "COP eau chaude mesuré"
       }
     },
     "number": {
@@ -582,6 +576,13 @@
           "mode_1": "Circuit 2 seulement",
           "mode_2": "Les deux circuits"
         }
+      },
+      "cop_source": {
+        "name": "Source du COP",
+        "state": {
+          "heat_pump": "Pompe à chaleur",
+          "measured": "Mesuré (compteur électrique)"
+        }
       }
     }
   },
@@ -598,7 +599,7 @@
           "power_entity": "Compteur électrique externe (facultatif)"
         },
         "data_description": {
-          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly PM. Un COP mesuré est alors calculé en plus. Laisser vide si aucun n'est disponible."
+          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly. Le COP peut alors aussi être mesuré au lieu d'être calculé à partir des valeurs de la pompe à chaleur. Basculer avec la sélection \"Source du COP\" de l'appareil. Laisser vide si aucun n'est disponible."
         }
       }
     }

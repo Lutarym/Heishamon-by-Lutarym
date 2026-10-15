@@ -4,7 +4,7 @@
 
 Intégration Home Assistant pour les pompes à chaleur Panasonic Aquarea via HeishaMon, sans MQTT, directement par l'interface HTTP.
 
-Version 1.1.0
+Version 1.2.0
 
 ## Ce que fait l'intégration
 
@@ -46,7 +46,7 @@ Un appareil, contenant :
 - 7 consignes en Number, seulement si "Lecture seule" est désactivée
 - 16 interrupteurs et 4 listes de sélection, également seulement si la commande est activée
 - COP chauffage et COP eau chaude, `sensor.heishamon_<adresse>_cop_heating` et `..._cop_dhw`
-- COP chauffage mesuré et COP eau chaude mesuré, `..._cop_heating_measured` et `..._cop_dhw_measured`, seulement avec un compteur électrique externe
+- Sélection Source du COP, `select.heishamon_<adresse>_cop_source`, seulement avec un compteur électrique externe, aussi en lecture seule
 
 Les noms affichés suivent la langue de Home Assistant. Sont disponibles l'allemand, l'anglais, le français et le japonais. Si la langue n'en fait pas partie, l'anglais est utilisé. L'ID d'entité contient l'adresse de la carte et le numéro TOP et reste indépendant de la langue, les automatisations ne cassent donc pas lors d'un changement de langue. Avec plusieurs cartes HeishaMon, chaque ID reste ainsi unique.
 
@@ -65,20 +65,26 @@ La description en clair fournie par HeishaMon est disponible dans l'attribut `be
 
 ### COP
 
-Le chauffage et l'eau chaude sont calculés séparément. Une valeur n'apparaît que lorsque le compresseur tourne, que la pompe à chaleur ne dégivre pas et que ce mode de fonctionnement est actif. Sinon l'état est "inconnu". Le refroidissement n'est pas pris en compte.
+Le chauffage et l'eau chaude sont calculés séparément. Le COP est l'énergie thermique divisée par l'énergie électrique du cycle en cours, quelle que soit sa durée. Un cycle commence au démarrage du compresseur et se termine lorsque le compresseur s'arrête ou que la vanne trois voies (TOP20) change de mode. L'état est ensuite "inconnu". Le dégivrage fait partie du cycle, car il consomme de l'électricité et retire de la chaleur à l'eau. Le refroidissement n'est pas pris en compte.
 
-| Capteur | Puissance thermique | Puissance électrique |
+L'énergie est additionnée à chaque interrogation, comme puissance multipliée par le temps écoulé depuis l'interrogation précédente.
+
+La sélection Source du COP détermine l'origine de la valeur affichée. Le changement est immédiat, les deux calculs tournent toujours en arrière-plan. Le choix est conservé après un redémarrage.
+
+| Source du COP | Énergie thermique | Énergie électrique |
 |---|---|---|
-| COP chauffage, COP eau chaude | selon la pompe à chaleur, séparément par mode | selon la pompe à chaleur, séparément par mode |
-| COP chauffage mesuré, COP eau chaude mesuré | débit × 4180 × (départ − retour) | compteur électrique externe |
+| Pompe à chaleur | selon la pompe à chaleur | selon la pompe à chaleur |
+| Mesuré (compteur électrique) | débit volumique × masse volumique × capacité thermique × (départ − retour) | compteur électrique externe |
 
-Pour le COP mesuré, la vanne trois voies (TOP20) détermine si la valeur compte pour le chauffage ou l'eau chaude.
+La masse volumique et la capacité thermique de l'eau sont tirées de tables à la température moyenne de l'eau. Avec du glycol dans le circuit, le COP mesuré n'est donc pas correct.
 
-Les appareils de la série K/L et plus récents transmettent des valeurs de puissance précises (XTOP0 à XTOP5), qui sont alors utilisées. Les appareils plus anciens ne transmettent la puissance que par paliers de 200 W, le COP selon la pompe à chaleur y est donc approximatif. Le COP mesuré est plus précis.
+Les appareils de la série K/L et plus récents transmettent des valeurs de puissance précises (XTOP0 à XTOP5), qui sont alors utilisées. Les appareils plus anciens ne transmettent la puissance que par paliers de 200 W, le COP selon la pompe à chaleur y est donc approximatif. L'attribut `werte` indique les valeurs utilisées (XTOP ou TOP).
 
-Le compteur électrique doit mesurer uniquement la pompe à chaleur et indiquer la puissance en W, kW, mW ou MW. Avec du glycol dans le circuit, le COP mesuré est trop élevé, car le calcul utilise la capacité thermique de l'eau.
+Le compteur électrique doit mesurer uniquement la pompe à chaleur et indiquer la puissance en W, kW, mW ou MW.
 
-Les puissances utilisées sont disponibles dans les attributs `thermische_leistung_w` et `elektrische_leistung_w` du capteur.
+Si le COP dépasse la limite de Carnot (maximum théorique issu des températures de départ et extérieure), il est physiquement impossible et s'affiche comme "inconnu".
+
+Attributs du capteur : `quelle`, `waermemenge_kwh`, `strommenge_kwh`, `laufzeit_min`.
 
 ### Consignes modifiables
 

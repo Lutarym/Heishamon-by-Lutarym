@@ -11,7 +11,13 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import HeishamonAPI
-from .cop import ROH_SCHLUESSEL, ROH_TOPICS
+from .cop import (
+    QUELLE_GEMESSEN,
+    QUELLE_WAERMEPUMPE,
+    ROH_SCHLUESSEL,
+    ROH_TOPICS,
+    QuellenWahl,
+)
 from .config_flow import einstellung
 from .const import (
     CONF_HOST,
@@ -174,13 +180,20 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "nur lesen" if listening_only else "mit Steuerung",
     )
 
+    # Leer, wenn kein externer Strommesser gewaehlt ist
+    power_entity = einstellung(entry, CONF_POWER_ENTITY, None) or None
+
     hass.data[DOMAIN][entry.entry_id] = {
         "api": api,
         "coordinator": coordinator,
         "listening_only": listening_only,
         "host": host,
-        # Leer, wenn kein externer Strommesser gewaehlt ist
-        "power_entity": einstellung(entry, CONF_POWER_ENTITY, None) or None,
+        "power_entity": power_entity,
+        # Quelle des angezeigten COP. Mit Strommesser standardmaessig
+        # gemessen, die Auswahl am Geraet ueberschreibt das.
+        "cop_quelle": QuellenWahl(
+            QUELLE_GEMESSEN if power_entity else QUELLE_WAERMEPUMPE
+        ),
     }
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

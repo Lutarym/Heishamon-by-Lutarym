@@ -48,7 +48,7 @@
   "entity": {
     "sensor": {
       "top0": {
-        "name": "TOP0 Waermepumpe ein/aus"
+        "name": "TOP0 Wärmepumpe ein/aus"
       },
       "top1": {
         "name": "TOP1 Wasserdurchfluss"
@@ -63,7 +63,7 @@
         "name": "TOP4 Betriebsart"
       },
       "top5": {
-        "name": "TOP5 Ruecklauftemperatur"
+        "name": "TOP5 Rücklauftemperatur"
       },
       "top6": {
         "name": "TOP6 Vorlauftemperatur"
@@ -87,7 +87,7 @@
         "name": "TOP13 Zeitplan aktiv"
       },
       "top14": {
-        "name": "TOP14 Aussentemperatur"
+        "name": "TOP14 Außentemperatur"
       },
       "top15": {
         "name": "TOP15 Abgegebene Heizleistung"
@@ -108,7 +108,7 @@
         "name": "TOP20 Dreiwegeventil Stellung"
       },
       "top21": {
-        "name": "TOP21 Rohrtemperatur Aussengeraet"
+        "name": "TOP21 Rohrtemperatur Außengerät"
       },
       "top22": {
         "name": "TOP22 Temperaturspreizung Warmwasser"
@@ -117,13 +117,13 @@
         "name": "TOP23 Temperaturspreizung Heizen"
       },
       "top24": {
-        "name": "TOP24 Temperaturspreizung Kuehlen"
+        "name": "TOP24 Temperaturspreizung Kühlen"
       },
       "top25": {
         "name": "TOP25 Warmwasser Absenkung im Urlaub"
       },
       "top26": {
-        "name": "TOP26 Abtauvorgang laeuft"
+        "name": "TOP26 Abtauvorgang läuft"
       },
       "top29": {
         "name": "TOP29 Zone 1 Heizkurve Wasser warm"
@@ -132,10 +132,10 @@
         "name": "TOP30 Zone 1 Heizkurve Wasser kalt"
       },
       "top31": {
-        "name": "TOP31 Zone 1 Heizkurve Aussen warm"
+        "name": "TOP31 Zone 1 Heizkurve Außen warm"
       },
       "top32": {
-        "name": "TOP32 Zone 1 Heizkurve Aussen kalt"
+        "name": "TOP32 Zone 1 Heizkurve Außen kalt"
       },
       "top33": {
         "name": "TOP33 Raumthermostat Temperatur"
@@ -147,10 +147,10 @@
         "name": "TOP37 Zone 2 Wassertemperatur"
       },
       "top38": {
-        "name": "TOP38 Abgegebene Kuehlleistung"
+        "name": "TOP38 Abgegebene Kühlleistung"
       },
       "top39": {
-        "name": "TOP39 Stromaufnahme Kuehlen"
+        "name": "TOP39 Stromaufnahme Kühlen"
       },
       "top40": {
         "name": "TOP40 Abgegebene Leistung Warmwasser"
@@ -180,16 +180,16 @@
         "name": "TOP48 Pooltemperatur"
       },
       "top49": {
-        "name": "TOP49 Waermetauscher Austrittstemperatur"
+        "name": "TOP49 Wärmetauscher Austrittstemperatur"
       },
       "top50": {
-        "name": "TOP50 Heissgastemperatur Verdichter"
+        "name": "TOP50 Heißgastemperatur Verdichter"
       },
       "top51": {
-        "name": "TOP51 Rohrtemperatur Innengeraet"
+        "name": "TOP51 Rohrtemperatur Innengerät"
       },
       "top52": {
-        "name": "TOP52 Abtaufuehler Temperatur"
+        "name": "TOP52 Abtaufühler Temperatur"
       },
       "top53": {
         "name": "TOP53 Verdampfer Austrittstemperatur"
@@ -219,19 +219,19 @@
         "name": "TOP61 Externer Heizstab aktiv"
       },
       "top62": {
-        "name": "TOP62 Luefter 1 Drehzahl"
+        "name": "TOP62 Lüfter 1 Drehzahl"
       },
       "top63": {
-        "name": "TOP63 Luefter 2 Drehzahl"
+        "name": "TOP63 Lüfter 2 Drehzahl"
       },
       "top64": {
-        "name": "TOP64 Kaeltemittel Hochdruck"
+        "name": "TOP64 Kältemittel Hochdruck"
       },
       "top65": {
-        "name": "TOP65 Umwaelzpumpe Drehzahl"
+        "name": "TOP65 Umwälzpumpe Drehzahl"
       },
       "top66": {
-        "name": "TOP66 Kaeltemittel Niederdruck"
+        "name": "TOP66 Kältemittel Niederdruck"
       },
       "top67": {
         "name": "TOP67 Verdichter Stromaufnahme"
@@ -240,7 +240,7 @@
         "name": "TOP68 Notheizung aktiv"
       },
       "top69": {
-        "name": "TOP69 Legionellenschutz laeuft"
+        "name": "TOP69 Legionellenschutz läuft"
       },
       "top70": {
         "name": "TOP70 Legionellenschutz Temperatur"
@@ -249,28 +249,28 @@
         "name": "TOP71 Legionellenschutz Maximaldauer"
       },
       "top72": {
-        "name": "TOP72 Zone 1 Kuehlkurve Wasser warm"
+        "name": "TOP72 Zone 1 Kühlkurve Wasser warm"
       },
       "top73": {
-        "name": "TOP73 Zone 1 Kuehlkurve Wasser kalt"
+        "name": "TOP73 Zone 1 Kühlkurve Wasser kalt"
       },
       "top74": {
-        "name": "TOP74 Zone 1 Kuehlkurve Aussen warm"
+        "name": "TOP74 Zone 1 Kühlkurve Außen warm"
       },
       "top75": {
-        "name": "TOP75 Zone 1 Kuehlkurve Aussen kalt"
+        "name": "TOP75 Zone 1 Kühlkurve Außen kalt"
       },
       "top76": {
         "name": "TOP76 Heizungsregelung Art"
       },
       "top79": {
-        "name": "TOP79 Umschaltpunkt Heizen zu Kuehlen"
+        "name": "TOP79 Umschaltpunkt Heizen zu Kühlen"
       },
       "top80": {
-        "name": "TOP80 Umschaltpunkt Kuehlen zu Heizen"
+        "name": "TOP80 Umschaltpunkt Kühlen zu Heizen"
       },
       "top81": {
-        "name": "TOP81 Kuehlregelung Art"
+        "name": "TOP81 Kühlregelung Art"
       },
       "top82": {
         "name": "TOP82 Zone 2 Heizkurve Wasser warm"
@@ -279,22 +279,22 @@
         "name": "TOP83 Zone 2 Heizkurve Wasser kalt"
       },
       "top84": {
-        "name": "TOP84 Zone 2 Heizkurve Aussen warm"
+        "name": "TOP84 Zone 2 Heizkurve Außen warm"
       },
       "top85": {
-        "name": "TOP85 Zone 2 Heizkurve Aussen kalt"
+        "name": "TOP85 Zone 2 Heizkurve Außen kalt"
       },
       "top86": {
-        "name": "TOP86 Zone 2 Kuehlkurve Wasser warm"
+        "name": "TOP86 Zone 2 Kühlkurve Wasser warm"
       },
       "top87": {
-        "name": "TOP87 Zone 2 Kuehlkurve Wasser kalt"
+        "name": "TOP87 Zone 2 Kühlkurve Wasser kalt"
       },
       "top88": {
-        "name": "TOP88 Zone 2 Kuehlkurve Aussen warm"
+        "name": "TOP88 Zone 2 Kühlkurve Außen warm"
       },
       "top89": {
-        "name": "TOP89 Zone 2 Kuehlkurve Aussen kalt"
+        "name": "TOP89 Zone 2 Kühlkurve Außen kalt"
       },
       "top90": {
         "name": "TOP90 Betriebsstunden Heizstab Heizung"
@@ -303,19 +303,19 @@
         "name": "TOP91 Betriebsstunden Heizstab Warmwasser"
       },
       "top92": {
-        "name": "TOP92 Waermepumpen Modell"
+        "name": "TOP92 Wärmepumpen Modell"
       },
       "top93": {
-        "name": "TOP93 Umwaelzpumpe Leistung"
+        "name": "TOP93 Umwälzpumpe Leistung"
       },
       "top94": {
         "name": "TOP94 Zonen Konfiguration"
       },
       "top95": {
-        "name": "TOP95 Umwaelzpumpe Maximalleistung"
+        "name": "TOP95 Umwälzpumpe Maximalleistung"
       },
       "top96": {
-        "name": "TOP96 Verzoegerung Heizstab"
+        "name": "TOP96 Verzögerung Heizstab"
       },
       "top97": {
         "name": "TOP97 Heizstab Einschaltdifferenz"
@@ -348,10 +348,10 @@
         "name": "TOP106 Durchflussregelung Art"
       },
       "top107": {
-        "name": "TOP107 Waermetraegerfluessigkeit"
+        "name": "TOP107 Wärmeträgerflüssigkeit"
       },
       "top108": {
-        "name": "TOP108 Alternativer Aussenfuehler"
+        "name": "TOP108 Alternativer Außenfühler"
       },
       "top109": {
         "name": "TOP109 Frostschutzbetrieb"
@@ -360,10 +360,10 @@
         "name": "TOP110 Zusatzplatine vorhanden"
       },
       "top111": {
-        "name": "TOP111 Zone 1 Fuehlerart"
+        "name": "TOP111 Zone 1 Fühlerart"
       },
       "top112": {
-        "name": "TOP112 Zone 2 Fuehlerart"
+        "name": "TOP112 Zone 2 Fühlerart"
       },
       "top113": {
         "name": "TOP113 Pufferspeicher Schaltdifferenz"
@@ -375,7 +375,7 @@
         "name": "TOP115 Wasserdruck Anlage"
       },
       "top116": {
-        "name": "TOP116 Zweiter Ruecklauffuehler"
+        "name": "TOP116 Zweiter Rücklauffühler"
       },
       "top117": {
         "name": "TOP117 Economizer Austrittstemperatur"
@@ -387,7 +387,7 @@
         "name": "TOP119 Externe Freigabe"
       },
       "top120": {
-        "name": "TOP120 Externe Heiz Kuehl Umschaltung"
+        "name": "TOP120 Externe Heiz Kühl Umschaltung"
       },
       "top121": {
         "name": "TOP121 Externes Fehlersignal"
@@ -396,10 +396,10 @@
         "name": "TOP122 Externe Verdichterfreigabe"
       },
       "top123": {
-        "name": "TOP123 Zone 2 Pumpe laeuft"
+        "name": "TOP123 Zone 2 Pumpe läuft"
       },
       "top124": {
-        "name": "TOP124 Zone 1 Pumpe laeuft"
+        "name": "TOP124 Zone 1 Pumpe läuft"
       },
       "top125": {
         "name": "TOP125 Zweiwegeventil Stellung"
@@ -435,13 +435,13 @@
         "name": "TOP135 Bivalenz erweitert Stopptemperatur"
       },
       "top136": {
-        "name": "TOP136 Bivalenz erweitert Startverzoegerung"
+        "name": "TOP136 Bivalenz erweitert Startverzögerung"
       },
       "top137": {
-        "name": "TOP137 Bivalenz erweitert Stoppverzoegerung"
+        "name": "TOP137 Bivalenz erweitert Stoppverzögerung"
       },
       "top138": {
-        "name": "TOP138 Bivalenz erweitert Warmwasserverzoegerung"
+        "name": "TOP138 Bivalenz erweitert Warmwasserverzögerung"
       },
       "top139": {
         "name": "TOP139 Heizungsregelung"
@@ -453,16 +453,82 @@
         "name": "TOP141 Leisebetrieb Vorrang"
       },
       "top142": {
-        "name": "TOP142 Expansionsventil Oeffnung"
+        "name": "TOP142 Expansionsventil Öffnung"
       },
       "top143": {
-        "name": "TOP143 Warmwasserfuehler Auswahl"
+        "name": "TOP143 Warmwasserfühler Auswahl"
       },
       "cop_heating": {
         "name": "COP Heizen"
       },
       "cop_dhw": {
         "name": "COP Warmwasser"
+      },
+      "xtop0": {
+        "name": "XTOP0 Leistungsaufnahme Heizen (genau)"
+      },
+      "xtop1": {
+        "name": "XTOP1 Leistungsaufnahme Kühlen (genau)"
+      },
+      "xtop2": {
+        "name": "XTOP2 Leistungsaufnahme Warmwasser (genau)"
+      },
+      "xtop3": {
+        "name": "XTOP3 Wärmeleistung Heizen (genau)"
+      },
+      "xtop4": {
+        "name": "XTOP4 Kälteleistung Kühlen (genau)"
+      },
+      "xtop5": {
+        "name": "XTOP5 Wärmeleistung Warmwasser (genau)"
+      },
+      "opt0": {
+        "name": "OPT0 Anforderung Pumpe Zone 1"
+      },
+      "opt1": {
+        "name": "OPT1 Anforderung Mischer Zone 1"
+      },
+      "opt2": {
+        "name": "OPT2 Anforderung Pumpe Zone 2"
+      },
+      "opt3": {
+        "name": "OPT3 Anforderung Mischer Zone 2"
+      },
+      "opt4": {
+        "name": "OPT4 Anforderung Poolpumpe"
+      },
+      "opt5": {
+        "name": "OPT5 Anforderung Solarpumpe"
+      },
+      "opt6": {
+        "name": "OPT6 Alarm"
+      },
+      "s0_power": {
+        "name": "S0 {port} Leistung"
+      },
+      "s0_energy": {
+        "name": "S0 {port} Zählerstand"
+      },
+      "top9": {
+        "name": "TOP9 Warmwasser Wunschtemperatur"
+      },
+      "top27": {
+        "name": "TOP27 Zone 1 Wunschtemperatur Heizen"
+      },
+      "top28": {
+        "name": "TOP28 Zone 1 Wunschtemperatur Kühlen"
+      },
+      "top34": {
+        "name": "TOP34 Zone 2 Wunschtemperatur Heizen"
+      },
+      "top35": {
+        "name": "TOP35 Zone 2 Wunschtemperatur Kühlen"
+      },
+      "top77": {
+        "name": "TOP77 Heizgrenze Außentemperatur"
+      },
+      "top78": {
+        "name": "TOP78 Heizstab ab Außentemperatur"
       }
     },
     "number": {
@@ -473,27 +539,138 @@
         "name": "TOP27 Zone 1 Wunschtemperatur Heizen"
       },
       "top28": {
-        "name": "TOP28 Zone 1 Wunschtemperatur Kuehlen"
+        "name": "TOP28 Zone 1 Wunschtemperatur Kühlen"
       },
       "top34": {
         "name": "TOP34 Zone 2 Wunschtemperatur Heizen"
       },
       "top35": {
-        "name": "TOP35 Zone 2 Wunschtemperatur Kuehlen"
+        "name": "TOP35 Zone 2 Wunschtemperatur Kühlen"
       },
       "top77": {
-        "name": "TOP77 Heizgrenze Aussentemperatur"
+        "name": "TOP77 Heizgrenze Außentemperatur"
       },
       "top78": {
-        "name": "TOP78 Heizstab ab Aussentemperatur"
+        "name": "TOP78 Heizstab ab Außentemperatur"
+      },
+      "top95": {
+        "name": "TOP95 Umwälzpumpe Maximalleistung"
+      },
+      "top23": {
+        "name": "TOP23 Temperaturspreizung Heizen"
+      },
+      "top24": {
+        "name": "TOP24 Temperaturspreizung Kühlen"
+      },
+      "top22": {
+        "name": "TOP22 Temperaturspreizung Warmwasser"
+      },
+      "top96": {
+        "name": "TOP96 Verzögerung Heizstab"
+      },
+      "top97": {
+        "name": "TOP97 Heizstab Einschaltdifferenz"
+      },
+      "top98": {
+        "name": "TOP98 Heizstab Ausschaltdifferenz"
+      },
+      "top113": {
+        "name": "TOP113 Pufferspeicher Schaltdifferenz"
+      },
+      "top131": {
+        "name": "TOP131 Bivalenz Starttemperatur"
+      },
+      "top134": {
+        "name": "TOP134 Bivalenz erweitert Starttemperatur"
+      },
+      "top135": {
+        "name": "TOP135 Bivalenz erweitert Stopptemperatur"
+      },
+      "top70": {
+        "name": "TOP70 Legionellenschutz Temperatur"
+      },
+      "top71": {
+        "name": "TOP71 Legionellenschutz Maximaldauer"
+      },
+      "top29": {
+        "name": "TOP29 Zone 1 Heizkurve Wasser warm"
+      },
+      "top30": {
+        "name": "TOP30 Zone 1 Heizkurve Wasser kalt"
+      },
+      "top31": {
+        "name": "TOP31 Zone 1 Heizkurve Außen warm"
+      },
+      "top32": {
+        "name": "TOP32 Zone 1 Heizkurve Außen kalt"
+      },
+      "top72": {
+        "name": "TOP72 Zone 1 Kühlkurve Wasser warm"
+      },
+      "top73": {
+        "name": "TOP73 Zone 1 Kühlkurve Wasser kalt"
+      },
+      "top74": {
+        "name": "TOP74 Zone 1 Kühlkurve Außen warm"
+      },
+      "top75": {
+        "name": "TOP75 Zone 1 Kühlkurve Außen kalt"
+      },
+      "top82": {
+        "name": "TOP82 Zone 2 Heizkurve Wasser warm"
+      },
+      "top83": {
+        "name": "TOP83 Zone 2 Heizkurve Wasser kalt"
+      },
+      "top84": {
+        "name": "TOP84 Zone 2 Heizkurve Außen warm"
+      },
+      "top85": {
+        "name": "TOP85 Zone 2 Heizkurve Außen kalt"
+      },
+      "top86": {
+        "name": "TOP86 Zone 2 Kühlkurve Wasser warm"
+      },
+      "top87": {
+        "name": "TOP87 Zone 2 Kühlkurve Wasser kalt"
+      },
+      "top88": {
+        "name": "TOP88 Zone 2 Kühlkurve Außen warm"
+      },
+      "top89": {
+        "name": "TOP89 Zone 2 Kühlkurve Außen kalt"
+      },
+      "setdemandcontrol": {
+        "name": "Optional-Platine Leistungsbegrenzung (43 bis 234)"
+      },
+      "setpooltemp": {
+        "name": "Optional-Platine Pooltemperatur"
+      },
+      "setbuffertemp": {
+        "name": "Optional-Platine Puffertemperatur"
+      },
+      "setz1roomtemp": {
+        "name": "Optional-Platine Raumtemperatur Zone 1"
+      },
+      "setz1watertemp": {
+        "name": "Optional-Platine Wassertemperatur Zone 1"
+      },
+      "setz2roomtemp": {
+        "name": "Optional-Platine Raumtemperatur Zone 2"
+      },
+      "setz2watertemp": {
+        "name": "Optional-Platine Wassertemperatur Zone 2"
+      },
+      "setsolartemp": {
+        "name": "Optional-Platine Solartemperatur"
       }
     },
     "switch": {
       "setheatpump": {
-        "name": "Waermepumpe"
+        "name": "Wärmepumpe"
       },
       "setpump": {
-        "name": "Umwaelzpumpe"
+        "name": "Umwälzpumpe"
       },
       "setforcedhw": {
         "name": "Warmwasser sofort laden"
@@ -514,7 +691,7 @@
         "name": "Zeitplan"
       },
       "setaltexternalsensor": {
-        "name": "Alternativer Aussenfuehler"
+        "name": "Alternativer Außenfühler"
       },
       "setbuffer": {
         "name": "Pufferspeicher"
@@ -536,6 +713,15 @@
       },
       "setroomheaterstate": {
         "name": "Heizstab Heizung"
+      },
+      "setexternalheatcoolcontrol": {
+        "name": "Externe Heiz/Kühl-Umschaltung"
+      },
+      "setheatcoolmode": {
+        "name": "Optional-Platine Heiz/Kühl-Schalter"
+      },
+      "setcompressorstate": {
+        "name": "Optional-Platine Verdichter-Schalter"
       }
     },
     "select": {
@@ -543,11 +729,11 @@
         "name": "Betriebsart",
         "state": {
           "mode_0": "Nur Heizen",
-          "mode_1": "Nur Kuehlen",
+          "mode_1": "Nur Kühlen",
           "mode_2": "Automatik",
           "mode_3": "Nur Warmwasser",
           "mode_4": "Heizen und Warmwasser",
-          "mode_5": "Kuehlen und Warmwasser",
+          "mode_5": "Kühlen und Warmwasser",
           "mode_6": "Automatik und Warmwasser"
         }
       },
@@ -583,6 +769,89 @@
           "heat_pump": "Wärmepumpe",
           "measured": "Gemessen (Strommesser)"
         }
+      },
+      "setexternalpadheater": {
+        "name": "Externe Bodenheizung",
+        "state": {
+          "mode_0": "Aus",
+          "mode_1": "Typ A",
+          "mode_2": "Typ B"
+        }
+      },
+      "setbivalentmode": {
+        "name": "Bivalenz Betriebsart",
+        "state": {
+          "mode_0": "Alternativ",
+          "mode_1": "Parallel",
+          "mode_2": "Erweitert parallel"
+        }
+      },
+      "setheatingcontrol": {
+        "name": "Heizungsregelung",
+        "state": {
+          "mode_0": "Komfort",
+          "mode_1": "Effizienz"
+        }
+      },
+      "setsmartdhw": {
+        "name": "Intelligente Warmwasserbereitung",
+        "state": {
+          "mode_0": "Variabel",
+          "mode_1": "Standard"
+        }
+      },
+      "setquietmodepriority": {
+        "name": "Leisebetrieb Vorrang",
+        "state": {
+          "mode_0": "Geräusch",
+          "mode_1": "Leistung"
+        }
+      },
+      "setpumpflowratemode": {
+        "name": "Durchflussregelung Art",
+        "state": {
+          "mode_0": "Temperaturspreizung",
+          "mode_1": "Maximaler Durchfluss"
+        }
+      },
+      "setdhwsensorselection": {
+        "name": "Warmwasserfühler Auswahl",
+        "state": {
+          "mode_0": "Oben",
+          "mode_1": "Mitte"
+        }
+      },
+      "setsmartgridmode": {
+        "name": "Optional-Platine SG Ready",
+        "state": {
+          "mode_0": "Normal",
+          "mode_1": "Kapazität 1",
+          "mode_2": "Wärmepumpe und Warmwasser aus",
+          "mode_3": "Kapazität 2"
+        }
+      },
+      "setexternalthermostat1state": {
+        "name": "Optional-Platine Thermostat 1",
+        "state": {
+          "mode_0": "Keine Anforderung",
+          "mode_1": "Kühlen",
+          "mode_2": "Heizen",
+          "mode_3": "Heizen und Kühlen"
+        }
+      },
+      "setexternalthermostat2state": {
+        "name": "Optional-Platine Thermostat 2",
+        "state": {
+          "mode_0": "Keine Anforderung",
+          "mode_1": "Kühlen",
+          "mode_2": "Heizen",
+          "mode_3": "Heizen und Kühlen"
+        }
+      }
+    },
+    "button": {
+      "setreset": {
+        "name": "Fehler zurücksetzen"
       }
     }
   },

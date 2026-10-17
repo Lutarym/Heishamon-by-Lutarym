@@ -34,6 +34,11 @@ from .const import (
     MIN_UPDATE_INTERVAL,
 )
 
+# Passwort verdeckt eingeben
+PASSWORT = selector.TextSelector(
+    selector.TextSelectorConfig(type=selector.TextSelectorType.PASSWORD)
+)
+
 INTERVAL = vol.All(
     vol.Coerce(int), vol.Range(min=MIN_UPDATE_INTERVAL, max=MAX_UPDATE_INTERVAL)
 )
@@ -107,7 +112,7 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             {
                 vol.Required(CONF_HOST): str,
                 vol.Optional(CONF_USERNAME, default=""): str,
-                vol.Optional(CONF_PASSWORD, default=""): str,
+                vol.Optional(CONF_PASSWORD, default=""): PASSWORT,
                 vol.Optional(
                     CONF_UPDATE_INTERVAL, default=DEFAULT_UPDATE_INTERVAL
                 ): INTERVAL,
@@ -133,15 +138,23 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 username=user_input.get(CONF_USERNAME),
                 password=user_input.get(CONF_PASSWORD),
             )
+            neuer_host = user_input[CONF_HOST]
+            belegt = any(
+                anderer.entry_id != entry.entry_id
+                and (
+                    anderer.data.get(CONF_HOST) == neuer_host
+                    or anderer.unique_id == neuer_host
+                )
+                for anderer in self._async_current_entries(include_ignore=False)
+            )
+            if belegt:
+                return self.async_abort(reason="already_configured")
             if await api.test_connection():
-                await self.async_set_unique_id(user_input[CONF_HOST])
-                self._abort_if_unique_id_mismatch(reason="wrong_device")
-                # Verbindungsdaten gehoeren zum Eintrag, Takt und
-                # Steuerbarkeit zu den Optionen. Beides wird hier
-                # gemeinsam gespeichert und der Eintrag neu geladen.
+                # Die unique_id des Eintrags bleibt die Adresse der
+                # Ersteinrichtung. Darauf beruhen Geraet und Entities, sie
+                # bleiben beim Adresswechsel mit Verlauf erhalten.
                 daten = {
-                    **entry.data,
-                    CONF_HOST: user_input[CONF_HOST],
+                    CONF_HOST: neuer_host,
                     CONF_USERNAME: user_input.get(CONF_USERNAME, ""),
                     CONF_PASSWORD: user_input.get(CONF_PASSWORD, ""),
                 }
@@ -153,11 +166,9 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_STABILIZE_COUNT: user_input[CONF_STABILIZE_COUNT],
                     CONF_POWER_ENTITY: strommesser_wert(user_input),
                 }
-                self.hass.config_entries.async_update_entry(
-                    entry, data=daten, options=optionen
+                return self.async_update_reload_and_abort(
+                    entry, data_updates=daten, options=optionen
                 )
-                await self.hass.config_entries.async_reload(entry.entry_id)
-                return self.async_abort(reason="reconfigure_successful")
             errors["base"] = "cannot_connect"
 
         schema = vol.Schema(
@@ -168,7 +179,7 @@ class HeishamonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 ): str,
                 vol.Optional(
                     CONF_PASSWORD, default=entry.data.get(CONF_PASSWORD, "")
-                ): str,
+                ): PASSWORT,
                 vol.Optional(
                     CONF_UPDATE_INTERVAL,
                     default=einstellung(

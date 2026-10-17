@@ -7,7 +7,6 @@ from datetime import timedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import HeishamonAPI
@@ -34,7 +33,9 @@ from .const import (
     DEFAULT_UPDATE_INTERVAL,
     DOMAIN,
     HEISHAMON_TOPICS,
+    OPT_TOPICS,
 )
+from .entity import Geraet
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -47,6 +48,7 @@ PLATFORMS = [
     Platform.NUMBER,
     Platform.SWITCH,
     Platform.SELECT,
+    Platform.BUTTON,
 ]
 
 
@@ -183,11 +185,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Leer, wenn kein externer Strommesser gewaehlt ist
     power_entity = einstellung(entry, CONF_POWER_ENTITY, None) or None
 
+    # Optional-Platine-Emulation: HeishaMon liefert OPT0 bis OPT6 nur, wenn
+    # sie aktiv ist. Nur dann nimmt die Platine die zugehoerigen Befehle an.
+    optional_pcb = any(topic in coordinator.data for topic in OPT_TOPICS)
+
     hass.data[DOMAIN][entry.entry_id] = {
         "api": api,
         "coordinator": coordinator,
         "listening_only": listening_only,
         "host": host,
+        # Die Kennung bleibt die Adresse der Ersteinrichtung, auch wenn die
+        # Adresse spaeter geaendert wird.
+        "geraet": Geraet(host=host, kennung=entry.unique_id or host),
+        "optional_pcb": optional_pcb,
         "power_entity": power_entity,
         # Quelle des angezeigten COP. Mit Strommesser standardmaessig
         # gemessen, die Auswahl am Geraet ueberschreibt das.

@@ -3,14 +3,25 @@ from __future__ import annotations
 
 import time
 
-from homeassistant.components.sensor import SensorEntity, SensorStateClass
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_UNIT_OF_MEASUREMENT
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, HEISHAMON_TOPICS, slug_host
+from .const import (
+    DOMAIN,
+    EINWIRE_PRAEFIX,
+    EXTRA_TOPICS,
+    HEISHAMON_TOPICS,
+    OPT_TOPICS,
+    S0_PRAEFIX,
+)
 from .cop import (
     HEIZEN,
     QUELLE_GEMESSEN,
@@ -24,7 +35,7 @@ from .cop import (
     thermische_leistung,
     verdichter_laeuft,
 )
-from .entity import HeishamonEntity
+from .entity import Geraet, HeishamonEntity
 
 
 # Betriebsart -> Kennung in unique_id, entity_id und Uebersetzung
@@ -41,21 +52,52 @@ def _entferne(registry, unique_id: str) -> None:
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Legt fuer jedes Topic einen Sensor an."""
+    """Legt fuer jedes Topic einen Sensor an.
+
+    Jedes Topic bekommt einen Sensor, auch wenn es zusaetzlich einstellbar
+    ist. So sind alle Werte auch im Nur-Lesen-Betrieb sichtbar.
+    XTOP, OPT, 1-Wire und S0 nur, wenn die Platine sie beim Einrichten
+    liefert. Kommen sie spaeter dazu, muss die Integration neu geladen werden.
+    """
     data = hass.data[DOMAIN][entry.entry_id]
     coordinator = data["coordinator"]
-    host = data["host"]
+    geraet: Geraet = data["geraet"]
     power_entity = data.get("power_entity")
+    werte = coordinator.data or {}
 
     entities: list[SensorEntity] = [
-        HeishamonSensor(coordinator, host, topic_id, info)
+        HeishamonSensor(coordinator, geraet, topic_id, info)
         for topic_id, info in HEISHAMON_TOPICS.items()
-        if info["type"] == "sensor"
     ]
+    entities.extend(
+        HeishamonSensor(coordinator, geraet, topic_id, {**info, "numeric": True})
+        for topic_id, info in EXTRA_TOPICS.items()
+        if topic_id in werte
+    )
+    entities.extend(
+        HeishamonSensor(coordinator, geraet, topic_id, {"numeric": True, "icon": "mdi:expansion-card"})
+        for topic_id in OPT_TOPICS
+        if topic_id in werte
+    )
+    for schluessel in werte:
+        if (
+            schluessel.startswith(EINWIRE_PRAEFIX)
+            and not schluessel.endswith(("_alias", "_present"))
+        ):
+            entities.append(
+                HeishamonEinwireSensor(
+                    coordinator, geraet, schluessel[len(EINWIRE_PRAEFIX):]
+                )
+            )
+        elif schluessel.startswith(S0_PRAEFIX) and schluessel.endswith("_watt"):
+            port = schluessel[len(S0_PRAEFIX):-len("_watt")]
+            entities.append(HeishamonS0Sensor(coordinator, geraet, port, energie=False))
+            entities.append(HeishamonS0Sensor(coordinator, geraet, port, energie=True))
+
     for betriebsart, kennung in COP_KENNUNG.items():
         entities.append(
             HeishamonCopSensor(
-                coordinator, host, betriebsart, kennung, power_entity, data["cop_quelle"]
+                coordinator, geraet, betriebsart, kennung, power_entity, data["cop_quelle"]
             )
         )
 
@@ -63,7 +105,7 @@ async def async_setup_entry(
     # die Auswahl "COP Quelle" gewaehlt statt ueber eigene Sensoren.
     registry = er.async_get(hass)
     for alt in ("cop", "cop_measured", "cop_heating_measured", "cop_dhw_measured"):
-        _entferne(registry, f"heishamon_{host}_{alt}")
+        _entferne(registry, f"heishamon_{geraet.kennung}_{alt}")
 
     async_add_entities(entities)
 
@@ -71,17 +113,15 @@ async def async_setup_entry(
 class HeishamonSensor(HeishamonEntity, SensorEntity):
     """Ein einzelnes HeishaMon-Topic."""
 
-    def __init__(self, coordinator, host: str, topic_id: str, info: dict) -> None:
-        super().__init__(coordinator, host)
+    def __init__(self, coordinator, geraet: Geraet, topic_id: str, info: dict) -> None:
+        super().__init__(coordinator, geraet)
         self._topic_id = topic_id
-
-        self._attr_unique_id = f"heishamon_{host}_{topic_id.lower()}"
-        self.entity_id = f"sensor.heishamon_{slug_host(host)}_{topic_id.lower()}"
+        self._ids("sensor", topic_id.lower())
         # Der Name kommt aus translations/<sprache>.json unter entity.sensor.<key>
         self._attr_translation_key = topic_id.lower()
         self._attr_icon = info.get("icon")
 
-        if info["numeric"]:
+        if info.get("numeric"):
             if info.get("unit"):
                 self._attr_native_unit_of_measurement = info["unit"]
             # Standard ist "measurement". Stetig steigende Zaehler
@@ -125,6 +165,63 @@ class HeishamonSensor(HeishamonEntity, SensorEntity):
         )
 
 
+class HeishamonEinwireSensor(HeishamonEntity, SensorEntity):
+    """1-Wire-Temperaturfuehler an der HeishaMon-Platine."""
+
+    _attr_device_class = SensorDeviceClass.TEMPERATURE
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_native_unit_of_measurement = "°C"
+
+    def __init__(self, coordinator, geraet: Geraet, kennung: str) -> None:
+        super().__init__(coordinator, geraet)
+        self._schluessel = f"{EINWIRE_PRAEFIX}{kennung}"
+        self._ids("sensor", f"1wire_{kennung.lower()}")
+        alias = (coordinator.data or {}).get(f"{self._schluessel}_alias") or ""
+        # Der Name ist der Alias aus HeishaMon, sonst die Sensor-ID
+        self._attr_name = f"1-Wire {alias or kennung}"
+
+    @property
+    def native_value(self):
+        return (self.coordinator.data or {}).get(self._schluessel)
+
+    @property
+    def available(self) -> bool:
+        data = self.coordinator.data or {}
+        return (
+            super().available
+            and self._schluessel in data
+            and data.get(f"{self._schluessel}_present") is not False
+        )
+
+
+class HeishamonS0Sensor(HeishamonEntity, SensorEntity):
+    """S0-Zaehler an der HeishaMon-Platine: Leistung oder Zaehlerstand."""
+
+    def __init__(self, coordinator, geraet: Geraet, port: str, energie: bool) -> None:
+        super().__init__(coordinator, geraet)
+        art = "energy" if energie else "power"
+        self._schluessel = f"{S0_PRAEFIX}{port}_{'wh_total' if energie else 'watt'}"
+        self._ids("sensor", f"s0_{port}_{art}")
+        self._attr_translation_key = f"s0_{art}"
+        self._attr_translation_placeholders = {"port": str(port)}
+        if energie:
+            self._attr_device_class = SensorDeviceClass.ENERGY
+            self._attr_state_class = SensorStateClass.TOTAL_INCREASING
+            self._attr_native_unit_of_measurement = "Wh"
+        else:
+            self._attr_device_class = SensorDeviceClass.POWER
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_native_unit_of_measurement = "W"
+
+    @property
+    def native_value(self):
+        return (self.coordinator.data or {}).get(self._schluessel)
+
+    @property
+    def available(self) -> bool:
+        return super().available and self._schluessel in (self.coordinator.data or {})
+
+
 class HeishamonCopSensor(HeishamonEntity, SensorEntity):
     """COP des laufenden Laufs fuer Heizen oder Warmwasser.
 
@@ -140,13 +237,13 @@ class HeishamonCopSensor(HeishamonEntity, SensorEntity):
     def __init__(
         self,
         coordinator,
-        host: str,
+        geraet: Geraet,
         betriebsart: str,
         kennung: str,
         power_entity: str | None,
         wahl,
     ) -> None:
-        super().__init__(coordinator, host)
+        super().__init__(coordinator, geraet)
         self._betriebsart = betriebsart
         self._power_entity = power_entity
         self._wahl = wahl
@@ -155,8 +252,7 @@ class HeishamonCopSensor(HeishamonEntity, SensorEntity):
         self._art: str | None = None
         self._letzte_abfrage: float | None = None
         self._attr_translation_key = kennung
-        self._attr_unique_id = f"heishamon_{host}_{kennung}"
-        self.entity_id = f"sensor.heishamon_{slug_host(host)}_{kennung}"
+        self._ids("sensor", kennung)
 
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()

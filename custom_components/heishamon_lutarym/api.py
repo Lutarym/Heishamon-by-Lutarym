@@ -8,6 +8,8 @@ from typing import Any
 import aiohttp
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
+from .const import EINWIRE_PRAEFIX, S0_PRAEFIX
+
 _LOGGER = logging.getLogger(__name__)
 
 # Der Webserver auf dem ESP bearbeitet nur eine Anfrage gleichzeitig und
@@ -16,6 +18,11 @@ _LOGGER = logging.getLogger(__name__)
 VERSUCHE = 3
 PAUSE_SEKUNDEN = 1.5
 ZEITLIMIT_SEKUNDEN = 15
+ZEITLIMIT_BEFEHL_SEKUNDEN = 20
+
+
+class HeishamonBefehlFehler(Exception):
+    """Ein Befehl konnte nicht an die Platine uebertragen werden."""
 
 
 class HeishamonAPI:
@@ -28,6 +35,9 @@ class HeishamonAPI:
         self.username = username or None
         self.password = password or None
         self.base_url = f"http://{host}"
+        # Abfrage und Befehle nacheinander, nie gleichzeitig: Der ESP
+        # beantwortet sonst eine der beiden Anfragen nicht.
+        self._sperre = asyncio.Lock()
 
     @property
     def _auth(self) -> aiohttp.BasicAuth | None:
@@ -40,9 +50,12 @@ class HeishamonAPI:
 
         HeishaMon liefert:
         {"heatpump":[{"Topic":"TOP0","Name":"...","Value":1,"Description":"On"}, ...],
-         "heatpump extra":[{"Topic":"XTOP0",...}], "1wire":[...], "s0":[...]}
+         "heatpump extra":[{"Topic":"XTOP0",...}],
+         "heatpump optional":[{"Topic":"OPT0",...}],
+         "1wire":[{"Sensor":"28...","Temperature":21.5,"Alias":"...","Present":true}],
+         "s0":[{"S0 port":1,"Watt":0,"Watthour":0,"WatthourTotal":0}]}
 
-        Ergebnis: {"TOP0": 1, "TOP0_desc": "On", "XTOP0": ...}
+        Ergebnis: {"TOP0": 1, "TOP0_desc": "On", "XTOP0": ..., "1W_28..": 21.5, ...}
         """
         session = async_get_clientsession(self._hass)
         url = f"{self.base_url}/json"
@@ -50,16 +63,16 @@ class HeishamonAPI:
 
         for versuch in range(1, VERSUCHE + 1):
             try:
-                async with session.get(
-                    url,
-                    auth=self._auth,
-                    timeout=aiohttp.ClientTimeout(total=ZEITLIMIT_SEKUNDEN),
-                ) as response:
-                    response.raise_for_status()
-                    # HeishaMon sendet application/json, wir erzwingen das
-                    # Parsen unabhaengig vom Content-Type, damit aeltere
-                    # Firmware nicht scheitert.
-                    raw = await response.json(content_type=None)
+                async with self._sperre:
+                    async with session.get(
+                        url,
+                        auth=self._auth,
+                        timeout=aiohttp.ClientTimeout(total=ZEITLIMIT_SEKUNDEN),
+                    ) as response:
+                        response.raise_for_status()
+                        # Parsen unabhaengig vom Content-Type, damit aeltere
+                        # Firmware nicht scheitert.
+                        raw = await response.json(content_type=None)
                 if versuch > 1:
                     _LOGGER.debug(
                         "Heishamon %s antwortete erst im %d. Versuch",
@@ -76,13 +89,10 @@ class HeishamonAPI:
                     versuch,
                     err,
                 )
-                if versuch < VERSUCHE:
-                    await asyncio.sleep(PAUSE_SEKUNDEN)
-                continue
             except (aiohttp.ClientError, asyncio.TimeoutError) as err:
                 letzter_fehler = err
-                if versuch < VERSUCHE:
-                    await asyncio.sleep(PAUSE_SEKUNDEN)
+            if versuch < VERSUCHE:
+                await asyncio.sleep(PAUSE_SEKUNDEN)
 
         raise letzter_fehler if letzter_fehler else RuntimeError("Abfrage fehlgeschlagen")
 
@@ -99,6 +109,12 @@ class HeishamonAPI:
         for section, entries in raw.items():
             if not isinstance(entries, list):
                 continue
+            if section == "1wire":
+                HeishamonAPI._einwire(entries, result)
+                continue
+            if section == "s0":
+                HeishamonAPI._s0(entries, result)
+                continue
             for entry in entries:
                 if not isinstance(entry, dict):
                     continue
@@ -107,9 +123,8 @@ class HeishamonAPI:
                     continue
                 wert = entry.get("Value")
                 if wert is None:
-                    # Laut Firmware liefert jedes Topic immer eine Zahl.
-                    # Fehlt sie, stimmt etwas mit der Antwort nicht. Das
-                    # wird festgehalten, damit die Ursache belegbar wird.
+                    # Laut Firmware liefert jedes Topic immer einen Wert.
+                    # Fehlt er, stimmt etwas mit der Antwort nicht.
                     fehlende.append(topic)
                 result[topic] = wert
                 description = entry.get("Description")
@@ -131,23 +146,54 @@ class HeishamonAPI:
             )
         return result
 
-    async def async_set_value(self, command: str, value: Any) -> bool:
-        """Sendet /command?Kommando=Wert."""
+    @staticmethod
+    def _einwire(entries: list, result: dict) -> None:
+        """1-Wire-Fuehler, Schluessel ist die Sensor-ID."""
+        for entry in entries:
+            if not isinstance(entry, dict) or not entry.get("Sensor"):
+                continue
+            kennung = str(entry["Sensor"])
+            result[f"{EINWIRE_PRAEFIX}{kennung}"] = entry.get("Temperature")
+            result[f"{EINWIRE_PRAEFIX}{kennung}_alias"] = entry.get("Alias") or ""
+            # Aeltere Firmware kennt "Present" nicht, dann gilt der Fuehler
+            # als vorhanden.
+            result[f"{EINWIRE_PRAEFIX}{kennung}_present"] = entry.get("Present", True)
+
+    @staticmethod
+    def _s0(entries: list, result: dict) -> None:
+        """S0-Zaehler, Schluessel ist die Portnummer."""
+        for entry in entries:
+            if not isinstance(entry, dict) or entry.get("S0 port") is None:
+                continue
+            port = entry["S0 port"]
+            result[f"{S0_PRAEFIX}{port}_watt"] = entry.get("Watt")
+            result[f"{S0_PRAEFIX}{port}_wh_total"] = entry.get("WatthourTotal")
+
+    async def async_set_value(self, command: str, value: Any) -> None:
+        """Sendet /command?Kommando=Wert.
+
+        Wirft HeishamonBefehlFehler, wenn die Platine nicht erreichbar ist
+        oder mit einem Fehlercode antwortet. Achtung: Einen verworfenen Wert
+        meldet die Platine nicht zurueck, sie antwortet trotzdem mit 200.
+        """
         session = async_get_clientsession(self._hass)
         url = f"{self.base_url}/command"
         try:
-            async with session.get(
-                url, params={command: value}, auth=self._auth,
-                timeout=aiohttp.ClientTimeout(total=20),
-            ) as response:
-                if response.status != 200:
-                    _LOGGER.error("%s=%s fehlgeschlagen: HTTP %s",
-                                  command, value, response.status)
-                    return False
-                return True
+            async with self._sperre:
+                async with session.get(
+                    url,
+                    params={command: str(value)},
+                    auth=self._auth,
+                    timeout=aiohttp.ClientTimeout(total=ZEITLIMIT_BEFEHL_SEKUNDEN),
+                ) as response:
+                    antwort = await response.text()
+                    if response.status != 200:
+                        raise HeishamonBefehlFehler(
+                            f"{command}={value}: HTTP {response.status}"
+                        )
         except (aiohttp.ClientError, asyncio.TimeoutError) as err:
-            _LOGGER.error("Fehler beim Senden von %s=%s: %s", command, value, err)
-            return False
+            raise HeishamonBefehlFehler(f"{command}={value}: {err}") from err
+        _LOGGER.debug("%s=%s gesendet, Antwort: %s", command, value, antwort.strip())
 
     async def test_connection(self) -> bool:
         """Prueft, ob /json erreichbar ist und Topics liefert."""

@@ -463,6 +463,72 @@
       },
       "cop_dhw": {
         "name": "COP 給湯"
+      },
+      "xtop0": {
+        "name": "XTOP0 暖房消費電力（高精度）"
+      },
+      "xtop1": {
+        "name": "XTOP1 冷房消費電力（高精度）"
+      },
+      "xtop2": {
+        "name": "XTOP2 給湯消費電力（高精度）"
+      },
+      "xtop3": {
+        "name": "XTOP3 暖房出力（高精度）"
+      },
+      "xtop4": {
+        "name": "XTOP4 冷房出力（高精度）"
+      },
+      "xtop5": {
+        "name": "XTOP5 給湯出力（高精度）"
+      },
+      "opt0": {
+        "name": "OPT0 ゾーン1 ポンプ要求"
+      },
+      "opt1": {
+        "name": "OPT1 ゾーン1 混合弁要求"
+      },
+      "opt2": {
+        "name": "OPT2 ゾーン2 ポンプ要求"
+      },
+      "opt3": {
+        "name": "OPT3 ゾーン2 混合弁要求"
+      },
+      "opt4": {
+        "name": "OPT4 プールポンプ要求"
+      },
+      "opt5": {
+        "name": "OPT5 ソーラーポンプ要求"
+      },
+      "opt6": {
+        "name": "OPT6 アラーム"
+      },
+      "s0_power": {
+        "name": "S0 {port} 電力"
+      },
+      "s0_energy": {
+        "name": "S0 {port} 積算電力量"
+      },
+      "top9": {
+        "name": "TOP9 給湯目標温度"
+      },
+      "top27": {
+        "name": "TOP27 ゾーン1 暖房設定温度"
+      },
+      "top28": {
+        "name": "TOP28 ゾーン1 冷房設定温度"
+      },
+      "top34": {
+        "name": "TOP34 ゾーン2 暖房設定温度"
+      },
+      "top35": {
+        "name": "TOP35 ゾーン2 冷房設定温度"
+      },
+      "top77": {
+        "name": "TOP77 暖房停止外気温"
+      },
+      "top78": {
+        "name": "TOP78 ヒーター作動外気温"
       }
     },
     "number": {
@@ -486,6 +552,117 @@
       },
       "top78": {
         "name": "TOP78 ヒーター作動外気温"
+      },
+      "top95": {
+        "name": "TOP95 ポンプ最大出力"
+      },
+      "top23": {
+        "name": "TOP23 暖房温度差"
+      },
+      "top24": {
+        "name": "TOP24 冷房温度差"
+      },
+      "top22": {
+        "name": "TOP22 給湯温度差"
+      },
+      "top96": {
+        "name": "TOP96 ヒーター遅延時間"
+      },
+      "top97": {
+        "name": "TOP97 ヒーター起動温度差"
+      },
+      "top98": {
+        "name": "TOP98 ヒーター停止温度差"
+      },
+      "top113": {
+        "name": "TOP113 バッファタンク温度差"
+      },
+      "top131": {
+        "name": "TOP131 バイバレント起動温度"
+      },
+      "top134": {
+        "name": "TOP134 バイバレント詳細 起動温度"
+      },
+      "top135": {
+        "name": "TOP135 バイバレント詳細 停止温度"
+      },
+      "top70": {
+        "name": "TOP70 殺菌温度"
+      },
+      "top71": {
+        "name": "TOP71 殺菌最大時間"
+      },
+      "top29": {
+        "name": "TOP29 ゾーン1 暖房曲線 高温側水温"
+      },
+      "top30": {
+        "name": "TOP30 ゾーン1 暖房曲線 低温側水温"
+      },
+      "top31": {
+        "name": "TOP31 ゾーン1 暖房曲線 高外気温"
+      },
+      "top32": {
+        "name": "TOP32 ゾーン1 暖房曲線 低外気温"
+      },
+      "top72": {
+        "name": "TOP72 ゾーン1 冷房曲線 高温側水温"
+      },
+      "top73": {
+        "name": "TOP73 ゾーン1 冷房曲線 低温側水温"
+      },
+      "top74": {
+        "name": "TOP74 ゾーン1 冷房曲線 高外気温"
+      },
+      "top75": {
+        "name": "TOP75 ゾーン1 冷房曲線 低外気温"
+      },
+      "top82": {
+        "name": "TOP82 ゾーン2 暖房曲線 高温側水温"
+      },
+      "top83": {
+        "name": "TOP83 ゾーン2 暖房曲線 低温側水温"
+      },
+      "top84": {
+        "name": "TOP84 ゾーン2 暖房曲線 高外気温"
+      },
+      "top85": {
+        "name": "TOP85 ゾーン2 暖房曲線 低外気温"
+      },
+      "top86": {
+        "name": "TOP86 ゾーン2 冷房曲線 高温側水温"
+      },
+      "top87": {
+        "name": "TOP87 ゾーン2 冷房曲線 低温側水温"
+      },
+      "top88": {
+        "name": "TOP88 ゾーン2 冷房曲線 高外気温"
+      },
+      "top89": {
+        "name": "TOP89 ゾーン2 冷房曲線 低外気温"
+      },
+      "setdemandcontrol": {
+        "name": "オプション基板 デマンド制御（43〜234）"
+      },
+      "setpooltemp": {
+        "name": "オプション基板 プール温度"
+      },
+      "setbuffertemp": {
+        "name": "オプション基板 バッファ温度"
+      },
+      "setz1roomtemp": {
+        "name": "オプション基板 ゾーン1 室温"
+      },
+      "setz1watertemp": {
+        "name": "オプション基板 ゾーン1 水温"
+      },
+      "setz2roomtemp": {
+        "name": "オプション基板 ゾーン2 室温"
+      },
+      "setz2watertemp": {
+        "name": "オプション基板 ゾーン2 水温"
+      },
+      "setsolartemp": {
+        "name": "オプション基板 ソーラー温度"
       }
     },
     "switch": {
@@ -536,6 +713,15 @@
       },
       "setroomheaterstate": {
         "name": "室内ヒーター"
+      },
+      "setexternalheatcoolcontrol": {
+        "name": "外部暖房冷房切替"
+      },
+      "setheatcoolmode": {
+        "name": "オプション基板 暖房/冷房スイッチ"
+      },
+      "setcompressorstate": {
+        "name": "オプション基板 圧縮機スイッチ"
       }
     },
     "select": {
@@ -583,6 +769,89 @@
           "heat_pump": "ヒートポンプ",
           "measured": "実測（電力計）"
         }
+      },
+      "setexternalpadheater": {
+        "name": "外部パッドヒーター",
+        "state": {
+          "mode_0": "オフ",
+          "mode_1": "タイプA",
+          "mode_2": "タイプB"
+        }
+      },
+      "setbivalentmode": {
+        "name": "バイバレントモード",
+        "state": {
+          "mode_0": "代替",
+          "mode_1": "並列",
+          "mode_2": "高度並列"
+        }
+      },
+      "setheatingcontrol": {
+        "name": "暖房制御",
+        "state": {
+          "mode_0": "快適",
+          "mode_1": "効率"
+        }
+      },
+      "setsmartdhw": {
+        "name": "スマート給湯",
+        "state": {
+          "mode_0": "可変",
+          "mode_1": "標準"
+        }
+      },
+      "setquietmodepriority": {
+        "name": "静音モード優先",
+        "state": {
+          "mode_0": "騒音",
+          "mode_1": "能力"
+        }
+      },
+      "setpumpflowratemode": {
+        "name": "流量制御モード",
+        "state": {
+          "mode_0": "温度差",
+          "mode_1": "最大流量"
+        }
+      },
+      "setdhwsensorselection": {
+        "name": "給湯センサー選択",
+        "state": {
+          "mode_0": "上部",
+          "mode_1": "中央"
+        }
+      },
+      "setsmartgridmode": {
+        "name": "オプション基板 SG Ready",
+        "state": {
+          "mode_0": "通常",
+          "mode_1": "能力1",
+          "mode_2": "ヒートポンプと給湯オフ",
+          "mode_3": "能力2"
+        }
+      },
+      "setexternalthermostat1state": {
+        "name": "オプション基板 サーモスタット1",
+        "state": {
+          "mode_0": "要求なし",
+          "mode_1": "冷房",
+          "mode_2": "暖房",
+          "mode_3": "暖房と冷房"
+        }
+      },
+      "setexternalthermostat2state": {
+        "name": "オプション基板 サーモスタット2",
+        "state": {
+          "mode_0": "要求なし",
+          "mode_1": "冷房",
+          "mode_2": "暖房",
+          "mode_3": "暖房と冷房"
+        }
+      }
+    },
+    "button": {
+      "setreset": {
+        "name": "エラーリセット"
       }
     }
   },

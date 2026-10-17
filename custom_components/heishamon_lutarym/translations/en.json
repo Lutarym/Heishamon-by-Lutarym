@@ -463,6 +463,72 @@
       },
       "cop_dhw": {
         "name": "COP hot water"
+      },
+      "xtop0": {
+        "name": "XTOP0 Power input heating (precise)"
+      },
+      "xtop1": {
+        "name": "XTOP1 Power input cooling (precise)"
+      },
+      "xtop2": {
+        "name": "XTOP2 Power input hot water (precise)"
+      },
+      "xtop3": {
+        "name": "XTOP3 Heat output heating (precise)"
+      },
+      "xtop4": {
+        "name": "XTOP4 Cooling output (precise)"
+      },
+      "xtop5": {
+        "name": "XTOP5 Heat output hot water (precise)"
+      },
+      "opt0": {
+        "name": "OPT0 Request zone 1 pump"
+      },
+      "opt1": {
+        "name": "OPT1 Request zone 1 mixing valve"
+      },
+      "opt2": {
+        "name": "OPT2 Request zone 2 pump"
+      },
+      "opt3": {
+        "name": "OPT3 Request zone 2 mixing valve"
+      },
+      "opt4": {
+        "name": "OPT4 Request pool pump"
+      },
+      "opt5": {
+        "name": "OPT5 Request solar pump"
+      },
+      "opt6": {
+        "name": "OPT6 Alarm"
+      },
+      "s0_power": {
+        "name": "S0 {port} power"
+      },
+      "s0_energy": {
+        "name": "S0 {port} meter reading"
+      },
+      "top9": {
+        "name": "TOP9 Hot water target temperature"
+      },
+      "top27": {
+        "name": "TOP27 Zone 1 heating setpoint"
+      },
+      "top28": {
+        "name": "TOP28 Zone 1 cooling setpoint"
+      },
+      "top34": {
+        "name": "TOP34 Zone 2 heating setpoint"
+      },
+      "top35": {
+        "name": "TOP35 Zone 2 cooling setpoint"
+      },
+      "top77": {
+        "name": "TOP77 Heating off above outdoor temp"
+      },
+      "top78": {
+        "name": "TOP78 Heater on below outdoor temp"
       }
     },
     "number": {
@@ -486,6 +552,117 @@
       },
       "top78": {
         "name": "TOP78 Heater on below outdoor temp"
+      },
+      "top95": {
+        "name": "TOP95 Maximum pump duty"
+      },
+      "top23": {
+        "name": "TOP23 Heating temperature delta"
+      },
+      "top24": {
+        "name": "TOP24 Cooling temperature delta"
+      },
+      "top22": {
+        "name": "TOP22 Hot water temperature delta"
+      },
+      "top96": {
+        "name": "TOP96 Heater delay time"
+      },
+      "top97": {
+        "name": "TOP97 Heater start delta"
+      },
+      "top98": {
+        "name": "TOP98 Heater stop delta"
+      },
+      "top113": {
+        "name": "TOP113 Buffer tank delta"
+      },
+      "top131": {
+        "name": "TOP131 Bivalent start temperature"
+      },
+      "top134": {
+        "name": "TOP134 Bivalent advanced start temperature"
+      },
+      "top135": {
+        "name": "TOP135 Bivalent advanced stop temperature"
+      },
+      "top70": {
+        "name": "TOP70 Sterilisation temperature"
+      },
+      "top71": {
+        "name": "TOP71 Sterilisation maximum time"
+      },
+      "top29": {
+        "name": "TOP29 Zone 1 curve water high"
+      },
+      "top30": {
+        "name": "TOP30 Zone 1 curve water low"
+      },
+      "top31": {
+        "name": "TOP31 Zone 1 curve outdoor high"
+      },
+      "top32": {
+        "name": "TOP32 Zone 1 curve outdoor low"
+      },
+      "top72": {
+        "name": "TOP72 Zone 1 cool curve water high"
+      },
+      "top73": {
+        "name": "TOP73 Zone 1 cool curve water low"
+      },
+      "top74": {
+        "name": "TOP74 Zone 1 cool curve outdoor high"
+      },
+      "top75": {
+        "name": "TOP75 Zone 1 cool curve outdoor low"
+      },
+      "top82": {
+        "name": "TOP82 Zone 2 curve water high"
+      },
+      "top83": {
+        "name": "TOP83 Zone 2 curve water low"
+      },
+      "top84": {
+        "name": "TOP84 Zone 2 curve outdoor high"
+      },
+      "top85": {
+        "name": "TOP85 Zone 2 curve outdoor low"
+      },
+      "top86": {
+        "name": "TOP86 Zone 2 cool curve water high"
+      },
+      "top87": {
+        "name": "TOP87 Zone 2 cool curve water low"
+      },
+      "top88": {
+        "name": "TOP88 Zone 2 cool curve outdoor high"
+      },
+      "top89": {
+        "name": "TOP89 Zone 2 cool curve outdoor low"
+      },
+      "setdemandcontrol": {
+        "name": "Optional PCB demand control (43 to 234)"
+      },
+      "setpooltemp": {
+        "name": "Optional PCB pool temperature"
+      },
+      "setbuffertemp": {
+        "name": "Optional PCB buffer temperature"
+      },
+      "setz1roomtemp": {
+        "name": "Optional PCB zone 1 room temperature"
+      },
+      "setz1watertemp": {
+        "name": "Optional PCB zone 1 water temperature"
+      },
+      "setz2roomtemp": {
+        "name": "Optional PCB zone 2 room temperature"
+      },
+      "setz2watertemp": {
+        "name": "Optional PCB zone 2 water temperature"
+      },
+      "setsolartemp": {
+        "name": "Optional PCB solar temperature"
       }
     },
     "switch": {
@@ -536,6 +713,15 @@
       },
       "setroomheaterstate": {
         "name": "Room heater"
+      },
+      "setexternalheatcoolcontrol": {
+        "name": "External heat/cool switching"
+      },
+      "setheatcoolmode": {
+        "name": "Optional PCB heat/cool switch"
+      },
+      "setcompressorstate": {
+        "name": "Optional PCB compressor switch"
       }
     },
     "select": {
@@ -583,6 +769,89 @@
           "heat_pump": "Heat pump",
           "measured": "Measured (power meter)"
         }
+      },
+      "setexternalpadheater": {
+        "name": "External pad heater",
+        "state": {
+          "mode_0": "Off",
+          "mode_1": "Type A",
+          "mode_2": "Type B"
+        }
+      },
+      "setbivalentmode": {
+        "name": "Bivalent mode",
+        "state": {
+          "mode_0": "Alternative",
+          "mode_1": "Parallel",
+          "mode_2": "Advanced parallel"
+        }
+      },
+      "setheatingcontrol": {
+        "name": "Heating control",
+        "state": {
+          "mode_0": "Comfort",
+          "mode_1": "Efficiency"
+        }
+      },
+      "setsmartdhw": {
+        "name": "Smart hot water",
+        "state": {
+          "mode_0": "Variable",
+          "mode_1": "Standard"
+        }
+      },
+      "setquietmodepriority": {
+        "name": "Quiet mode priority",
+        "state": {
+          "mode_0": "Sound",
+          "mode_1": "Capacity"
+        }
+      },
+      "setpumpflowratemode": {
+        "name": "Flow rate control mode",
+        "state": {
+          "mode_0": "Delta T",
+          "mode_1": "Maximum flow"
+        }
+      },
+      "setdhwsensorselection": {
+        "name": "Hot water sensor selection",
+        "state": {
+          "mode_0": "Top",
+          "mode_1": "Center"
+        }
+      },
+      "setsmartgridmode": {
+        "name": "Optional PCB SG Ready",
+        "state": {
+          "mode_0": "Normal",
+          "mode_1": "Capacity 1",
+          "mode_2": "Heat pump and hot water off",
+          "mode_3": "Capacity 2"
+        }
+      },
+      "setexternalthermostat1state": {
+        "name": "Optional PCB thermostat 1",
+        "state": {
+          "mode_0": "No demand",
+          "mode_1": "Cooling",
+          "mode_2": "Heating",
+          "mode_3": "Heating and cooling"
+        }
+      },
+      "setexternalthermostat2state": {
+        "name": "Optional PCB thermostat 2",
+        "state": {
+          "mode_0": "No demand",
+          "mode_1": "Cooling",
+          "mode_2": "Heating",
+          "mode_3": "Heating and cooling"
+        }
+      }
+    },
+    "button": {
+      "setreset": {
+        "name": "Reset error"
       }
     }
   },

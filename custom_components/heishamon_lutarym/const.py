@@ -43,7 +43,7 @@ HEISHAMON_TOPICS = {
     "TOP6": {"name": "Main_Outlet_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True},
     "TOP7": {"name": "Main_Target_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True},
     "TOP8": {"name": "Compressor_Freq", "type": "sensor", "unit": "Hz", "icon": "mdi:sine-wave", "device_class": None, "numeric": True},
-    "TOP9": {"name": "DHW_Target_Temp", "type": "number", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True, "set_command": "SetDHWTemp", "min": 40, "max": 75},
+    "TOP9": {"name": "DHW_Target_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True},
     "TOP10": {"name": "DHW_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True},
     "TOP11": {"name": "Operations_Hours", "type": "sensor", "unit": "h", "icon": "mdi:clock", "device_class": None, "numeric": True, "state_class": "total_increasing"},
     "TOP12": {"name": "Operations_Counter", "type": "sensor", "unit": None, "icon": "mdi:counter", "device_class": None, "numeric": True, "state_class": "total_increasing"},
@@ -61,15 +61,15 @@ HEISHAMON_TOPICS = {
     "TOP24": {"name": "Cool_Delta", "type": "sensor", "unit": "K", "icon": "mdi:delta", "device_class": None, "numeric": True},
     "TOP25": {"name": "DHW_Holiday_Shift_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP26": {"name": "Defrosting_State", "type": "sensor", "unit": None, "icon": "mdi:snowflake", "device_class": None, "numeric": True},
-    "TOP27": {"name": "Z1_Heat_Request_Temp", "type": "number", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True, "set_command": "SetZ1HeatRequestTemperature", "min": -5, "max": 50},
-    "TOP28": {"name": "Z1_Cool_Request_Temp", "type": "number", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True, "set_command": "SetZ1CoolRequestTemperature", "min": -5, "max": 20},
+    "TOP27": {"name": "Z1_Heat_Request_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
+    "TOP28": {"name": "Z1_Cool_Request_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP29": {"name": "Z1_Heat_Curve_Target_High_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP30": {"name": "Z1_Heat_Curve_Target_Low_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP31": {"name": "Z1_Heat_Curve_Outside_High_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP32": {"name": "Z1_Heat_Curve_Outside_Low_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP33": {"name": "Room_Thermostat_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True},
-    "TOP34": {"name": "Z2_Heat_Request_Temp", "type": "number", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True, "set_command": "SetZ2HeatRequestTemperature", "min": -5, "max": 50},
-    "TOP35": {"name": "Z2_Cool_Request_Temp", "type": "number", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True, "set_command": "SetZ2CoolRequestTemperature", "min": -5, "max": 20},
+    "TOP34": {"name": "Z2_Heat_Request_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
+    "TOP35": {"name": "Z2_Cool_Request_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP36": {"name": "Z1_Water_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True},
     "TOP37": {"name": "Z2_Water_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": "temperature", "numeric": True},
     "TOP38": {"name": "Cool_Power_Production", "type": "sensor", "unit": "W", "icon": "mdi:flash", "device_class": "power", "numeric": True},
@@ -111,8 +111,8 @@ HEISHAMON_TOPICS = {
     "TOP74": {"name": "Z1_Cool_Curve_Outside_High_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP75": {"name": "Z1_Cool_Curve_Outside_Low_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP76": {"name": "Heating_Mode", "type": "sensor", "unit": None, "icon": "mdi:thermometer", "device_class": None, "numeric": True},
-    "TOP77": {"name": "Heating_Off_Outdoor_Temp", "type": "number", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True, "set_command": "SetHeatingOffOutdoorTemp", "min": 5, "max": 35},
-    "TOP78": {"name": "Heater_On_Outdoor_Temp", "type": "number", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True, "set_command": "SetHeaterOnOutdoorTemp", "min": -15, "max": 20},
+    "TOP77": {"name": "Heating_Off_Outdoor_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
+    "TOP78": {"name": "Heater_On_Outdoor_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP79": {"name": "Heat_To_Cool_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP80": {"name": "Cool_To_Heat_Temp", "type": "sensor", "unit": "°C", "icon": "mdi:thermometer", "device_class": None, "numeric": True},
     "TOP81": {"name": "Cooling_Mode", "type": "sensor", "unit": None, "icon": "mdi:thermometer", "device_class": None, "numeric": True},
@@ -180,7 +180,12 @@ HEISHAMON_TOPICS = {
     "TOP143": {"name": "DHW_Sensor_Selection", "type": "sensor", "unit": None, "icon": "mdi:cog", "device_class": None, "numeric": True},
 }
 
-# SET-Kommandos, verifiziert aus HeishaMon commands.h.
+# Steuerbefehle, verifiziert aus HeishaMon commands.h, commands.cpp und
+# MQTT-Topics.md (github.com/heishamon/HeishaMon).
+#
+# Wichtig: Die Platine antwortet auf /command immer mit HTTP 200, auch wenn
+# sie einen Wert verwirft. Alle Werte werden deshalb vor dem Senden geprueft.
+
 SWITCH_COMMANDS = {
     "SetHeatpump": {"icon": "mdi:power"},
     "SetPump": {"icon": "mdi:pump"},
@@ -195,48 +200,11 @@ SWITCH_COMMANDS = {
     "SetExternalControl": {"icon": "mdi:remote"},
     "SetExternalError": {"icon": "mdi:alert"},
     "SetExternalCompressorControl": {"icon": "mdi:remote"},
+    "SetExternalHeatCoolControl": {"icon": "mdi:remote"},
     "SetBivalentControl": {"icon": "mdi:cog"},
     "SetDHWHeaterState": {"icon": "mdi:water-boiler"},
     "SetRoomHeaterState": {"icon": "mdi:radiator"},
 }
-
-SELECT_COMMANDS = {
-    "SetOperationMode": {
-        "icon": "mdi:cog",
-        "option_count": 7,
-        "state_topic": "TOP4",
-    },
-    "SetQuietMode": {
-        "icon": "mdi:volume-mute",
-        "option_count": 4,
-        "state_topic": "TOP18",
-    },
-    "SetPowerfulMode": {
-        "icon": "mdi:flash",
-        "option_count": 4,
-        "state_topic": "TOP17",
-    },
-    # Waehlt die aktiven Zonen. Laut commands.cpp sind nur drei Werte
-    # zulaessig: 0 nur Zone 1, 1 nur Zone 2, 2 beide Zonen.
-    # Beide Zonen gleichzeitig aus ist nicht vorgesehen.
-    "SetZones": {
-        "icon": "mdi:home-thermometer",
-        "option_count": 3,
-        "state_topic": "TOP94",
-    },
-}
-
-
-def slug_host(host: str) -> str:
-    """Macht aus der Adresse ein fuer Entity-IDs gueltiges Kuerzel.
-
-    Nur Kleinbuchstaben, Ziffern und Unterstriche sind in einer Entity-ID
-    erlaubt. Aus 192.168.1.50 wird 192_168_1_50, aus einem Hostnamen mit
-    Bindestrich ein Unterstrich. So bleibt die ID auch bei mehreren
-    HeishaMon-Geraeten eindeutig.
-    """
-    return re.sub(r"[^a-z0-9]+", "_", str(host).lower()).strip("_")
-
 
 # Schalter-Kommando -> Topic, das den Zustand zurueckmeldet.
 # SetPump fehlt bewusst: HeishaMon meldet fuer die Pumpe keinen
@@ -254,7 +222,159 @@ STATE_TOPICS = {
     "SetExternalControl": "TOP119",
     "SetExternalError": "TOP121",
     "SetExternalCompressorControl": "TOP122",
+    "SetExternalHeatCoolControl": "TOP120",
     "SetBivalentControl": "TOP129",
     "SetDHWHeaterState": "TOP58",
     "SetRoomHeaterState": "TOP59",
 }
+
+# Auswahllisten. Optionen sind mode_0, mode_1, ... in der Reihenfolge der
+# Befehlswerte. "zuordnung" bildet Rueckmeldewerte ab, die es als Befehl
+# nicht gibt: Die Waermepumpe meldet in TOP4 auch 7 = Auto (Kuehlen) und
+# 8 = Auto (Kuehlen) + Warmwasser, gesetzt werden beide als Auto.
+SELECT_COMMANDS = {
+    "SetOperationMode": {
+        "icon": "mdi:cog",
+        "option_count": 7,
+        "state_topic": "TOP4",
+        "zuordnung": {7: 2, 8: 6},
+    },
+    "SetQuietMode": {"icon": "mdi:volume-mute", "option_count": 4, "state_topic": "TOP18"},
+    "SetPowerfulMode": {"icon": "mdi:flash", "option_count": 4, "state_topic": "TOP17"},
+    # Laut commands.cpp nur drei Werte: 0 nur Zone 1, 1 nur Zone 2, 2 beide.
+    "SetZones": {"icon": "mdi:home-thermometer", "option_count": 3, "state_topic": "TOP94"},
+    "SetExternalPadHeater": {"icon": "mdi:radiator", "option_count": 3, "state_topic": "TOP114"},
+    "SetBivalentMode": {"icon": "mdi:cog", "option_count": 3, "state_topic": "TOP130"},
+    "SetHeatingControl": {"icon": "mdi:tune", "option_count": 2, "state_topic": "TOP139"},
+    "SetSmartDHW": {"icon": "mdi:water-boiler", "option_count": 2, "state_topic": "TOP140"},
+    "SetQuietModePriority": {"icon": "mdi:volume-mute", "option_count": 2, "state_topic": "TOP141"},
+    "SetPumpFlowrateMode": {"icon": "mdi:pump", "option_count": 2, "state_topic": "TOP106"},
+    "SetDHWSensorSelection": {"icon": "mdi:thermometer", "option_count": 2, "state_topic": "TOP143"},
+}
+
+# Einstellbare Werte, Schluessel ist das Topic mit der Rueckmeldung.
+# "undokumentiert": Die HeishaMon-Doku nennt keinen Bereich, die Grenzen
+# sind die der Kodierung in commands.cpp (Wert + 1 bzw. Wert + 128 in
+# einem Byte). Die zulaessigen Werte der Waermepumpe sind nicht bekannt.
+NUMBER_COMMANDS = {
+    "TOP9": {"command": "SetDHWTemp", "min": 40, "max": 75, "unit": "°C"},
+    # Zonen: Verschiebung -5 bis 5 bei Heizkurve, sonst direkte Temperatur.
+    # Welcher Fall gilt, melden TOP76 (Heizen) und TOP81 (Kuehlen).
+    "TOP27": {"command": "SetZ1HeatRequestTemperature", "zone": "heizen", "unit": "°C"},
+    "TOP28": {"command": "SetZ1CoolRequestTemperature", "zone": "kuehlen", "unit": "°C"},
+    "TOP34": {"command": "SetZ2HeatRequestTemperature", "zone": "heizen", "unit": "°C"},
+    "TOP35": {"command": "SetZ2CoolRequestTemperature", "zone": "kuehlen", "unit": "°C"},
+    "TOP77": {"command": "SetHeatingOffOutdoorTemp", "min": 5, "max": 35, "unit": "°C"},
+    "TOP78": {"command": "SetHeaterOnOutdoorTemp", "min": -15, "max": 20, "unit": "°C"},
+    "TOP95": {"command": "SetMaxPumpDuty", "min": 64, "max": 254, "unit": None, "box": True},
+    "TOP23": {"command": "SetFloorHeatDelta", "min": 1, "max": 15, "unit": "K"},
+    "TOP24": {"command": "SetFloorCoolDelta", "min": 1, "max": 15, "unit": "K"},
+    "TOP22": {"command": "SetDHWHeatDelta", "min": -12, "max": -2, "unit": "K"},
+    "TOP96": {"command": "SetHeaterDelayTime", "min": 0, "max": 254, "unit": "min", "box": True, "undokumentiert": True},
+    "TOP97": {"command": "SetHeaterStartDelta", "min": -127, "max": 127, "unit": "K", "box": True, "undokumentiert": True},
+    "TOP98": {"command": "SetHeaterStopDelta", "min": -127, "max": 127, "unit": "K", "box": True, "undokumentiert": True},
+    "TOP113": {"command": "SetBufferDelta", "min": 0, "max": 10, "unit": "K"},
+    "TOP131": {"command": "SetBivalentStartTemp", "min": -15, "max": 35, "unit": "°C"},
+    "TOP134": {"command": "SetBivalentAPStartTemp", "min": -15, "max": 35, "unit": "°C"},
+    "TOP135": {"command": "SetBivalentAPStopTemp", "min": -15, "max": 35, "unit": "°C"},
+    "TOP70": {"command": "SetSterilizationTemp", "min": 55, "max": 75, "unit": "°C"},
+    "TOP71": {"command": "SetSterilizationMaxTime", "min": 5, "max": 60, "step": 5, "unit": "min"},
+}
+
+# Heiz- und Kuehlkurven. Gesendet wird je Wert ein eigenes SetCurves mit
+# nur diesem Wert. Die kleine Platine (ESP8266) hat fuer eine Anfrage nur
+# 128 Byte Puffer, die ganze Kurve auf einmal passt nicht hinein.
+# Zuordnung Topic -> JSON-Pfad laut set_curves in commands.cpp und den
+# Bytes in decode.h.
+KURVEN = {
+    "TOP29": ("zone1", "heat", "target", "high"),
+    "TOP30": ("zone1", "heat", "target", "low"),
+    "TOP31": ("zone1", "heat", "outside", "high"),
+    "TOP32": ("zone1", "heat", "outside", "low"),
+    "TOP72": ("zone1", "cool", "target", "high"),
+    "TOP73": ("zone1", "cool", "target", "low"),
+    "TOP74": ("zone1", "cool", "outside", "high"),
+    "TOP75": ("zone1", "cool", "outside", "low"),
+    "TOP82": ("zone2", "heat", "target", "high"),
+    "TOP83": ("zone2", "heat", "target", "low"),
+    "TOP84": ("zone2", "heat", "outside", "high"),
+    "TOP85": ("zone2", "heat", "outside", "low"),
+    "TOP86": ("zone2", "cool", "target", "high"),
+    "TOP87": ("zone2", "cool", "target", "low"),
+    "TOP88": ("zone2", "cool", "outside", "high"),
+    "TOP89": ("zone2", "cool", "outside", "low"),
+}
+for _topic, _pfad in KURVEN.items():
+    NUMBER_COMMANDS[_topic] = {
+        "command": "SetCurves",
+        "kurve": _pfad,
+        "min": -127,
+        "max": 127,
+        "unit": "°C",
+        "box": True,
+        "undokumentiert": True,
+    }
+
+# Zonen-Sollwerte laut MQTT-Topics.md (TOP27, TOP28, SET5 bis SET8)
+ZONE_VERSCHIEBUNG = (-5, 5)
+ZONE_DIREKT = {
+    # 20 bis Maximum. Das Maximum nennt die Doku nicht. 75 ist der hoechste
+    # Wassersollwert, den HeishaMon dokumentiert (SetDHWTemp).
+    "heizen": (20, 75),
+    "kuehlen": (5, 20),
+}
+ZONE_MODUS_TOPIC = {"heizen": "TOP76", "kuehlen": "TOP81"}
+
+# Optional-Platine (nur wenn die Emulation in HeishaMon aktiv ist, erkennbar
+# an OPT0 bis OPT6 im JSON). Die Platine meldet die gesetzten Werte nicht
+# zurueck, die Entitaeten merken sich den zuletzt gesetzten Wert.
+OPTIONAL_SWITCHES = {
+    "SetHeatCoolMode": {"icon": "mdi:sun-snowflake"},
+    "SetCompressorState": {"icon": "mdi:engine"},
+}
+OPTIONAL_SELECTS = {
+    # SmartGrid: 0 normal, 1 Kapazitaet 1, 2 Waermepumpe/Warmwasser aus,
+    # 3 Kapazitaet 2 (Bits laut OptionalPCB.md)
+    "SetSmartGridMode": {"icon": "mdi:transmission-tower", "option_count": 4},
+    # Thermostat: 0 keine Anforderung, 1 Kuehlen, 2 Heizen, 3 beides
+    "SetExternalThermostat1State": {"icon": "mdi:thermostat", "option_count": 4},
+    "SetExternalThermostat2State": {"icon": "mdi:thermostat", "option_count": 4},
+}
+# Temperaturen: temp2hex in commands.cpp rechnet von -78 bis 120 °C.
+OPTIONAL_NUMBERS = {
+    "SetDemandControl": {"min": 43, "max": 234, "step": 1, "unit": None},
+    "SetPoolTemp": {"min": -78, "max": 120, "step": 0.5, "unit": "°C"},
+    "SetBufferTemp": {"min": -78, "max": 120, "step": 0.5, "unit": "°C"},
+    "SetZ1RoomTemp": {"min": -78, "max": 120, "step": 0.5, "unit": "°C"},
+    "SetZ1WaterTemp": {"min": -78, "max": 120, "step": 0.5, "unit": "°C"},
+    "SetZ2RoomTemp": {"min": -78, "max": 120, "step": 0.5, "unit": "°C"},
+    "SetZ2WaterTemp": {"min": -78, "max": 120, "step": 0.5, "unit": "°C"},
+    "SetSolarTemp": {"min": -78, "max": 120, "step": 0.5, "unit": "°C"},
+}
+
+# Genaue Leistungswerte (K/L-Serie und neuer) und Optional-Platine
+EXTRA_TOPICS = {
+    "XTOP0": {"unit": "W", "device_class": "power"},
+    "XTOP1": {"unit": "W", "device_class": "power"},
+    "XTOP2": {"unit": "W", "device_class": "power"},
+    "XTOP3": {"unit": "W", "device_class": "power"},
+    "XTOP4": {"unit": "W", "device_class": "power"},
+    "XTOP5": {"unit": "W", "device_class": "power"},
+}
+OPT_TOPICS = ("OPT0", "OPT1", "OPT2", "OPT3", "OPT4", "OPT5", "OPT6")
+
+# Schluessel fuer 1-Wire- und S0-Werte im flachen Datensatz
+EINWIRE_PRAEFIX = "1W_"
+S0_PRAEFIX = "S0_"
+
+
+def slug_host(host: str) -> str:
+    """Macht aus der Adresse ein fuer Entity-IDs gueltiges Kuerzel.
+
+    Nur Kleinbuchstaben, Ziffern und Unterstriche sind in einer Entity-ID
+    erlaubt. Aus 192.168.1.50 wird 192_168_1_50, aus einem Hostnamen mit
+    Bindestrich ein Unterstrich. So bleibt die ID auch bei mehreren
+    HeishaMon-Geraeten eindeutig.
+    """
+    return re.sub(r"[^a-z0-9]+", "_", str(host).lower()).strip("_")
+

@@ -4,7 +4,7 @@
 
 Home Assistant integration for Panasonic Aquarea heat pumps through HeishaMon, without MQTT, straight over the HTTP interface.
 
-Version 1.3.0
+Version 1.3.1
 
 ## What the integration does
 

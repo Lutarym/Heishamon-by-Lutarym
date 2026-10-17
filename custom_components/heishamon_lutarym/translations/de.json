@@ -207,16 +207,16 @@
         "name": "TOP57 Zone 2 Raumtemperatur"
       },
       "top58": {
-        "name": "TOP58 Heizstab Warmwasser aktiv"
+        "name": "TOP58 Heizstab Warmwasser freigegeben"
       },
       "top59": {
-        "name": "TOP59 Heizstab Heizung aktiv"
+        "name": "TOP59 Heizstab Heizung freigegeben"
       },
       "top60": {
-        "name": "TOP60 Interner Heizstab aktiv"
+        "name": "TOP60 Interner Heizstab läuft"
       },
       "top61": {
-        "name": "TOP61 Externer Heizstab aktiv"
+        "name": "TOP61 Externer Heizstab läuft"
       },
       "top62": {
         "name": "TOP62 Lüfter 1 Drehzahl"
@@ -709,10 +709,10 @@
         "name": "Bivalenzbetrieb"
       },
       "setdhwheaterstate": {
-        "name": "Heizstab Warmwasser"
+        "name": "Heizstab Warmwasser freigeben"
       },
       "setroomheaterstate": {
-        "name": "Heizstab Heizung"
+        "name": "Heizstab Heizung freigeben"
       },
       "setexternalheatcoolcontrol": {
         "name": "Externe Heiz/Kühl-Umschaltung"

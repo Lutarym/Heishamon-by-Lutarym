@@ -207,16 +207,16 @@
         "name": "TOP57 ゾーン2 室温"
       },
       "top58": {
-        "name": "TOP58 給湯ヒーター作動"
+        "name": "TOP58 給湯ヒーター許可"
       },
       "top59": {
-        "name": "TOP59 室内ヒーター作動"
+        "name": "TOP59 室内ヒーター許可"
       },
       "top60": {
-        "name": "TOP60 内部ヒーター作動"
+        "name": "TOP60 内部ヒーター運転中"
       },
       "top61": {
-        "name": "TOP61 外部ヒーター作動"
+        "name": "TOP61 外部ヒーター運転中"
       },
       "top62": {
         "name": "TOP62 ファン1回転数"
@@ -709,10 +709,10 @@
         "name": "バイバレント制御"
       },
       "setdhwheaterstate": {
-        "name": "給湯ヒーター"
+        "name": "給湯ヒーターを許可"
       },
       "setroomheaterstate": {
-        "name": "室内ヒーター"
+        "name": "室内ヒーターを許可"
       },
       "setexternalheatcoolcontrol": {
         "name": "外部暖房冷房切替"

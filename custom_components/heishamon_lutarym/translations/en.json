@@ -207,16 +207,16 @@
         "name": "TOP57 Zone 2 room temperature"
       },
       "top58": {
-        "name": "TOP58 Hot water heater active"
+        "name": "TOP58 Hot water heater allowed"
       },
       "top59": {
-        "name": "TOP59 Room heater active"
+        "name": "TOP59 Room heater allowed"
       },
       "top60": {
-        "name": "TOP60 Internal heater active"
+        "name": "TOP60 Internal heater running"
       },
       "top61": {
-        "name": "TOP61 External heater active"
+        "name": "TOP61 External heater running"
       },
       "top62": {
         "name": "TOP62 Fan 1 speed"
@@ -709,10 +709,10 @@
         "name": "Bivalent control"
       },
       "setdhwheaterstate": {
-        "name": "Hot water heater"
+        "name": "Allow hot water heater"
       },
       "setroomheaterstate": {
-        "name": "Room heater"
+        "name": "Allow room heater"
       },
       "setexternalheatcoolcontrol": {
         "name": "External heat/cool switching"

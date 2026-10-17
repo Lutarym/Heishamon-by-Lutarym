@@ -207,16 +207,16 @@
         "name": "TOP57 Zone 2 température ambiante"
       },
       "top58": {
-        "name": "TOP58 Appoint électrique eau chaude actif"
+        "name": "TOP58 Appoint électrique eau chaude autorisé"
       },
       "top59": {
-        "name": "TOP59 Appoint électrique chauffage actif"
+        "name": "TOP59 Appoint électrique chauffage autorisé"
       },
       "top60": {
-        "name": "TOP60 Appoint interne actif"
+        "name": "TOP60 Appoint interne en marche"
       },
       "top61": {
-        "name": "TOP61 Appoint externe actif"
+        "name": "TOP61 Appoint externe en marche"
       },
       "top62": {
         "name": "TOP62 Vitesse ventilateur 1"
@@ -709,10 +709,10 @@
         "name": "Fonctionnement bivalent"
       },
       "setdhwheaterstate": {
-        "name": "Appoint eau chaude"
+        "name": "Autoriser l'appoint eau chaude"
       },
       "setroomheaterstate": {
-        "name": "Appoint chauffage"
+        "name": "Autoriser l'appoint chauffage"
       },
       "setexternalheatcoolcontrol": {
         "name": "Commutation externe chaud/froid"

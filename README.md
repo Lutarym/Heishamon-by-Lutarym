@@ -191,7 +191,7 @@ The board does not report these values back. The last value set is shown and kep
 
 Optional. Often the hot water lasts 24 hours or longer, and the heat pump recharges it at a cold time, for example at night. This function forces the charge once a day at the hour with the highest outdoor temperature. The heat pump then works with a better efficiency.
 
-Setup: under "Configure" choose a weather entity with an hourly forecast (for example the "Met.no" integration, which uses the location of Home Assistant). Only works with control (read only off).
+Setup: under "Configure" choose a weather entity with an hourly forecast. The integration detects existing weather entities with an hourly forecast, lists them in the dialog and suggests one, Met.no preferred. If none is found, first add a weather integration, for example "Meteorologisk institutt (Met.no)", which uses the location of Home Assistant. Only works with control (read only off).
 
 How it works:
 

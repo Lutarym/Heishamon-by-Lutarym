@@ -11,7 +11,7 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.helpers import selector
+from homeassistant.helpers import entity_registry as er, selector
 
 from .api import HeishamonAPI
 from .const import (
@@ -87,6 +87,27 @@ def wetter_feld(aktuell: str | None):
     if aktuell:
         return vol.Optional(CONF_WEATHER_ENTITY, description={"suggested_value": aktuell})
     return vol.Optional(CONF_WEATHER_ENTITY)
+
+
+# Bit fuer stuendliche Vorhersage (WeatherEntityFeature.FORECAST_HOURLY)
+STUENDLICH = 2
+
+
+def wetter_mit_stundenvorhersage(hass) -> list[str]:
+    """Wetter-Entities mit stuendlicher Vorhersage, Met.no zuerst."""
+    register = er.async_get(hass)
+    gefunden = []
+    for zustand in hass.states.async_all("weather"):
+        try:
+            merkmale = int(zustand.attributes.get("supported_features") or 0)
+        except (TypeError, ValueError):
+            merkmale = 0
+        if not merkmale & STUENDLICH:
+            continue
+        eintrag = register.async_get(zustand.entity_id)
+        met = eintrag is not None and eintrag.platform == "met"
+        gefunden.append((not met, zustand.entity_id))
+    return [entity_id for _, entity_id in sorted(gefunden)]
 
 
 def einstellung(entry: config_entries.ConfigEntry, schluessel: str, standard):
@@ -245,6 +266,12 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
             )
 
         entry = self.config_entry
+        gefunden = wetter_mit_stundenvorhersage(self.hass)
+        wetter = einstellung(entry, CONF_WEATHER_ENTITY, None)
+        if CONF_WEATHER_ENTITY not in entry.options and gefunden:
+            # Noch nie eingestellt: erste passende Entity vorschlagen. Wer das
+            # Feld bewusst geleert hat, bekommt keinen Vorschlag mehr.
+            wetter = gefunden[0]
         schema = vol.Schema(
             {
                 vol.Optional(
@@ -272,7 +299,7 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
                 strommesser_feld(
                     einstellung(entry, CONF_POWER_ENTITY, None)
                 ): STROMMESSER,
-                wetter_feld(einstellung(entry, CONF_WEATHER_ENTITY, None)): WETTER,
+                wetter_feld(wetter): WETTER,
                 vol.Optional(
                     CONF_DHW_MAX_MINUTES,
                     default=einstellung(
@@ -281,4 +308,11 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
                 ): LADEDAUER,
             }
         )
-        return self.async_show_form(step_id="init", data_schema=schema)
+        return self.async_show_form(
+            step_id="init",
+            data_schema=schema,
+            description_placeholders={
+                "anzahl": str(len(gefunden)),
+                "wetter": ", ".join(gefunden),
+            },
+        )

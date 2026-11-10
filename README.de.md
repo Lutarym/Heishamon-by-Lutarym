@@ -191,7 +191,7 @@ Die Platine meldet diese Werte nicht zurück. Angezeigt wird der zuletzt gesetzt
 
 Optional. Oft hält das Warmwasser 24 Stunden oder länger, und die Wärmepumpe lädt zu einer kalten Zeit nach, zum Beispiel nachts. Diese Funktion erzwingt die Ladung einmal am Tag zu der Stunde mit der höchsten Außentemperatur. Die Wärmepumpe arbeitet dann mit besserem Wirkungsgrad.
 
-Einrichtung: unter „Konfigurieren“ eine Wetter-Entity mit stündlicher Vorhersage wählen (zum Beispiel die Integration „Met.no“, die den Standort von Home Assistant nutzt). Funktioniert nur mit Steuerung (Nur lesen aus).
+Einrichtung: unter „Konfigurieren“ eine Wetter-Entity mit stündlicher Vorhersage wählen. Die Integration erkennt vorhandene Wetter-Entities mit stündlicher Vorhersage, listet sie im Dialog auf und schlägt eine vor, Met.no bevorzugt. Wird keine gefunden, zuerst eine Wetter-Integration hinzufügen, zum Beispiel „Meteorologisk institutt (Met.no)“, die den Standort von Home Assistant nutzt. Funktioniert nur mit Steuerung (Nur lesen aus).
 
 Ablauf:
 

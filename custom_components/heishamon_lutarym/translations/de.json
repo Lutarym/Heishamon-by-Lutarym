@@ -868,7 +868,7 @@
     "step": {
       "init": {
         "title": "Heishamon anpassen",
-        "description": "Diese Einstellungen wirken sofort nach dem Speichern.",
+        "description": "Diese Einstellungen wirken sofort nach dem Speichern. Gefundene Wetter-Entities mit stündlicher Vorhersage ({anzahl}): {wetter}. Ist keine dabei, zuerst eine Wetter-Integration hinzufügen, etwa Meteorologisk institutt (Met.no).",
         "data": {
           "update_interval": "Aktualisierung in Sekunden, 1 bis 300",
           "listening_only": "Nur lesen (keine Steuerung anlegen)",
@@ -880,7 +880,7 @@
         },
         "data_description": {
           "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly. Damit kann der COP auch gemessen statt aus Wärmepumpenwerten berechnet werden. Umschalten über die Auswahl \"COP Quelle\" am Gerät. Leer lassen, wenn keiner vorhanden ist.",
-          "weather_entity": "Aus der stündlichen Vorhersage dieser Wetter-Entity wird die wärmste Stunde des Tages bestimmt. Zu dieser Stunde wird die Warmwasserladung erzwungen. Leer lassen, um die Funktion abzuschalten. Nur mit Steuerung (Nur lesen aus).",
+          "weather_entity": "Aus der stündlichen Vorhersage dieser Wetter-Entity wird die wärmste Stunde des Tages bestimmt. Zu dieser Stunde wird die Warmwasserladung erzwungen. Vorgeschlagen wird automatisch eine gefundene Wetter-Entity, Met.no bevorzugt. Leer lassen, um die Funktion abzuschalten. Nur mit Steuerung (Nur lesen aus).",
           "dhw_max_minutes": "Danach wird das Erzwingen beendet, auch wenn der Speicher den Sollwert noch nicht erreicht hat."
         }
       }

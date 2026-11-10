@@ -191,7 +191,7 @@ La carte ne renvoie pas ces valeurs. La dernière valeur réglée est affichée 
 
 Facultatif. Souvent l'eau chaude dure 24 heures ou plus, et la pompe à chaleur recharge à un moment froid, par exemple la nuit. Cette fonction force la charge une fois par jour à l'heure où la température extérieure est la plus élevée. La pompe à chaleur fonctionne alors avec un meilleur rendement.
 
-Configuration : dans « Configurer », choisir une entité météo avec une prévision horaire (par exemple l'intégration « Met.no », qui utilise la position de Home Assistant). Fonctionne uniquement avec commande (lecture seule désactivée).
+Configuration : dans « Configurer », choisir une entité météo avec une prévision horaire. L'intégration détecte les entités météo existantes avec prévision horaire, les liste dans la boîte de dialogue et en propose une, Met.no en priorité. Si aucune n'est trouvée, ajouter d'abord une intégration météo, par exemple « Meteorologisk institutt (Met.no) », qui utilise la position de Home Assistant. Fonctionne uniquement avec commande (lecture seule désactivée).
 
 Fonctionnement :
 

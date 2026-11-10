@@ -529,6 +529,12 @@
       },
       "top78": {
         "name": "TOP78 Appoint sous température extérieure"
+      },
+      "dhw_planned": {
+        "name": "Charge d'eau chaude prévue"
+      },
+      "dhw_last_charge": {
+        "name": "Dernière charge d'eau chaude"
       }
     },
     "number": {
@@ -722,6 +728,9 @@
       },
       "setcompressorstate": {
         "name": "Carte optionnelle commutateur compresseur"
+      },
+      "dhw_warmest_time": {
+        "name": "Eau chaude à l'heure la plus chaude"
       }
     },
     "select": {
@@ -865,10 +874,14 @@
           "listening_only": "Lecture seule (ne pas créer de commandes)",
           "stabilize": "Stabiliser les valeurs (supprimer les sauts)",
           "stabilize_count": "Répétitions nécessaires, 2 à 20",
-          "power_entity": "Compteur électrique externe (facultatif)"
+          "power_entity": "Compteur électrique externe (facultatif)",
+          "weather_entity": "Entité météo pour l'eau chaude à l'heure la plus chaude (facultatif)",
+          "dhw_max_minutes": "Durée maximale de la charge d'eau chaude forcée (minutes, 15 à 240)"
         },
         "data_description": {
-          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly. Le COP peut alors aussi être mesuré au lieu d'être calculé à partir des valeurs de la pompe à chaleur. Basculer avec la sélection \"Source du COP\" de l'appareil. Laisser vide si aucun n'est disponible."
+          "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly. Le COP peut alors aussi être mesuré au lieu d'être calculé à partir des valeurs de la pompe à chaleur. Basculer avec la sélection \"Source du COP\" de l'appareil. Laisser vide si aucun n'est disponible.",
+          "weather_entity": "L'heure la plus chaude de la journée est tirée de la prévision horaire de cette entité météo. À cette heure, la charge d'eau chaude est forcée. Laisser vide pour désactiver la fonction. Seulement avec commande (lecture seule désactivée).",
+          "dhw_max_minutes": "Ensuite, le forçage est arrêté, même si le ballon n'a pas encore atteint la consigne."
         }
       }
     }

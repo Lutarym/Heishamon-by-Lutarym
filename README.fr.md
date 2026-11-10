@@ -4,7 +4,7 @@
 
 Intégration Home Assistant pour les pompes à chaleur Panasonic Aquarea via HeishaMon, sans MQTT, directement par l'interface HTTP.
 
-Version 1.3.1
+Version 1.4.0
 
 ## Ce que fait l'intégration
 
@@ -40,6 +40,8 @@ Ajouter le projet comme dépôt personnalisé (Custom Repository) avec la catég
 | Lissage des valeurs | atténue les sauts des températures en nombres entiers |
 | Répétitions requises | combien de fois une nouvelle valeur doit être confirmée, 2 à 20 |
 | Compteur électrique externe | facultatif, capteur de puissance pour la pompe à chaleur seule, par exemple un Shelly |
+| Entité météo | facultatif, pour « Eau chaude à l'heure la plus chaude », réglable uniquement via « Configurer » |
+| Durée maximale de charge | pour la charge d'eau chaude forcée, minutes, par défaut 120, plage 15 à 240 |
 
 L'intervalle, le mode de commande, le lissage et le compteur électrique peuvent être modifiés ensuite via "Configurer". L'adresse, le nom d'utilisateur et le mot de passe via "Reconfigurer". Si l'adresse change, l'appareil, les entités et l'historique sont conservés.
 
@@ -185,6 +187,33 @@ Seulement si l'émulation de la carte optionnelle est activée dans HeishaMon. S
 
 La carte ne renvoie pas ces valeurs. La dernière valeur réglée est affichée et conservée après un redémarrage. `SetOptPCBByte9` n'est pas intégré, la documentation ne décrit pas sa signification.
 
+## Eau chaude à l'heure la plus chaude
+
+Facultatif. Souvent l'eau chaude dure 24 heures ou plus, et la pompe à chaleur recharge à un moment froid, par exemple la nuit. Cette fonction force la charge une fois par jour à l'heure où la température extérieure est la plus élevée. La pompe à chaleur fonctionne alors avec un meilleur rendement.
+
+Configuration : dans « Configurer », choisir une entité météo avec une prévision horaire (par exemple l'intégration « Met.no », qui utilise la position de Home Assistant). Fonctionne uniquement avec commande (lecture seule désactivée).
+
+Fonctionnement :
+
+1. Toutes les 30 minutes, la prévision horaire est lue. L'heure prévue est celle de la température la plus élevée entre maintenant et la fin de la journée. Si deux heures ont la même température, la plus tôt est retenue. Une fois la charge du jour terminée, ou s'il ne reste aucune heure aujourd'hui, le jour suivant est planifié, si la prévision va jusque là.
+2. À l'heure prévue, « Forcer l'eau chaude » (`SetForceDHW`) est activé, une fois par jour. Avant cela, on vérifie :
+   - Le mode de fonctionnement comprend il l'eau chaude ? Selon la documentation HeishaMon, le forçage n'agit qu'alors. Sinon, la journée est sautée.
+   - Le ballon est il sous sa consigne ? Sinon, la journée est sautée.
+3. La charge se termine lorsque le ballon atteint la consigne, lorsque la pompe à chaleur arrête elle même le forçage ou lorsque la durée maximale est écoulée. Le forçage est alors désactivé.
+4. Si la pompe à chaleur ne confirme pas le forçage dans les 3 minutes, la tentative est considérée comme non acceptée.
+
+Entités :
+
+| Entité | Signification |
+|---|---|
+| Interrupteur « Eau chaude à l'heure la plus chaude » | active ou désactive la fonction. Désactiver arrête une charge en cours. Conservé après un redémarrage |
+| Capteur « Charge d'eau chaude prévue » | date et heure prévues, après la charge du jour déjà celles du lendemain. Attributs : statut, température maximale, jour traité, début, durée maximale, entité météo |
+| Capteur « Dernière charge d'eau chaude » | date et heure du début de la dernière charge forcée. Conservé après un redémarrage |
+
+Valeurs de l'attribut `status` : `geplant` (prévu), `laeuft` (en cours), `erledigt` (terminé), `uebersprungen_speicher_voll` (ballon plein), `uebersprungen_modus_ohne_warmwasser` (mode sans eau chaude), `nicht_angenommen` (non accepté), `beendet_hoechstdauer` (durée maximale atteinte), `keine_vorhersage` (pas de prévision), `aus` (désactivé), `fehler_befehl` (commande échouée, répétée chaque minute).
+
+Remarque : la documentation HeishaMon ne précise pas si la pompe à chaleur utilise la résistance d'appoint lors du forçage de l'eau chaude. À vérifier sur votre installation. C'est pourquoi la fin de la charge est surveillée et limitée par la durée maximale.
+
 ## Limitations connues
 
 - Les zones sont représentées par Number et Select, il n'y a pas d'entité Climate.
@@ -192,6 +221,7 @@ La carte ne renvoie pas ces valeurs. La dernière valeur réglée est affichée 
 - Les plages de valeurs proviennent de la documentation HeishaMon et peuvent varier selon le modèle de pompe à chaleur.
 - Les commandes de la carte optionnelle et la correspondance SmartGrid suivent la documentation HeishaMon mais n'ont pas été testées sur une pompe à chaleur.
 - Les traductions française et japonaise n'ont pas été vérifiées par des locuteurs natifs.
+- « Eau chaude à l'heure la plus chaude » a été testée avec des données simulées, pas encore sur une pompe à chaleur.
 
 ## Licence
 

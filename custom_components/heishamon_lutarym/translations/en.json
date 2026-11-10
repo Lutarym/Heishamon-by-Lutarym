@@ -529,6 +529,12 @@
       },
       "top78": {
         "name": "TOP78 Heater on below outdoor temp"
+      },
+      "dhw_planned": {
+        "name": "Planned hot water charge"
+      },
+      "dhw_last_charge": {
+        "name": "Last hot water charge"
       }
     },
     "number": {
@@ -722,6 +728,9 @@
       },
       "setcompressorstate": {
         "name": "Optional PCB compressor switch"
+      },
+      "dhw_warmest_time": {
+        "name": "Hot water at the warmest time of day"
       }
     },
     "select": {
@@ -865,10 +874,14 @@
           "listening_only": "Read only (do not create controls)",
           "stabilize": "Steady readings (suppress temperature jitter)",
           "stabilize_count": "Required repetitions, 2 to 20",
-          "power_entity": "External power meter (optional)"
+          "power_entity": "External power meter (optional)",
+          "weather_entity": "Weather entity for hot water at the warmest time of day (optional)",
+          "dhw_max_minutes": "Maximum duration of the forced hot water charge (minutes, 15 to 240)"
         },
         "data_description": {
-          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly. With it the COP can also be measured instead of calculated from heat pump values. Switch with the \"COP source\" selection on the device. Leave empty if none is available."
+          "power_entity": "Power sensor that measures only the heat pump, for example a Shelly. With it the COP can also be measured instead of calculated from heat pump values. Switch with the \"COP source\" selection on the device. Leave empty if none is available.",
+          "weather_entity": "The warmest hour of the day is taken from the hourly forecast of this weather entity. At that hour the hot water charge is forced. Leave empty to turn the function off. Only with control (read only off).",
+          "dhw_max_minutes": "After that the forcing is ended, even if the tank has not reached the setpoint yet."
         }
       }
     }

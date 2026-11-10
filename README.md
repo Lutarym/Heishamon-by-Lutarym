@@ -4,7 +4,7 @@
 
 Home Assistant integration for Panasonic Aquarea heat pumps through HeishaMon, without MQTT, straight over the HTTP interface.
 
-Version 1.3.1
+Version 1.4.0
 
 ## What the integration does
 
@@ -40,6 +40,8 @@ Add the project as a Custom Repository with category **Integration**, then insta
 | Steady readings | smooths the jitter of integer temperature values |
 | Required repetitions | how often a new value must be confirmed, 2 to 20 |
 | External power meter | optional, power sensor for the heat pump only, for example a Shelly |
+| Weather entity | optional, for "Hot water at the warmest time of day", can only be set through "Configure" |
+| Maximum charge duration | for the forced hot water charge, minutes, default 120, range 15 to 240 |
 
 Interval, control mode, steady readings and power meter can be changed later through "Configure". Address, username and password through "Reconfigure". If the address changes, device, entities and history are kept.
 
@@ -185,6 +187,33 @@ Only if optional PCB emulation is enabled in HeishaMon. According to the HeishaM
 
 The board does not report these values back. The last value set is shown and kept after a restart. `SetOptPCBByte9` is not included, the documentation does not describe its meaning.
 
+## Hot water at the warmest time of day
+
+Optional. Often the hot water lasts 24 hours or longer, and the heat pump recharges it at a cold time, for example at night. This function forces the charge once a day at the hour with the highest outdoor temperature. The heat pump then works with a better efficiency.
+
+Setup: under "Configure" choose a weather entity with an hourly forecast (for example the "Met.no" integration, which uses the location of Home Assistant). Only works with control (read only off).
+
+How it works:
+
+1. Every 30 minutes the hourly forecast is read. Planned is the hour with the highest temperature from now until the end of the day. If two hours have the same temperature, the earlier one counts. Once today's charge is done, or no hour of today is left, the next day is planned, if the forecast reaches that far.
+2. At the planned hour "Force hot water" (`SetForceDHW`) is switched on, once a day. Before that it is checked:
+   - Does the operating mode include hot water? According to the HeishaMon documentation forcing only works then. If not, the day is skipped.
+   - Is the tank below its setpoint? If not, the day is skipped.
+3. The charge ends when the tank reaches the setpoint, when the heat pump ends the forcing by itself, or when the maximum charge duration has passed. Then forcing is switched off.
+4. If the heat pump does not report the forcing within 3 minutes, the attempt counts as not accepted.
+
+Entities:
+
+| Entity | Meaning |
+|---|---|
+| Switch "Hot water at the warmest time of day" | switches the function on or off. Off ends a running charge. Kept after a restart |
+| Sensor "Planned hot water charge" | planned date and time, after today's charge already the one for tomorrow. Attributes: status, highest temperature, day done, start, maximum duration, weather entity |
+| Sensor "Last hot water charge" | date and time of the start of the last forced charge. Kept after a restart |
+
+Values of the attribute `status`: `geplant` (planned), `laeuft` (running), `erledigt` (done), `uebersprungen_speicher_voll` (tank full), `uebersprungen_modus_ohne_warmwasser` (mode without hot water), `nicht_angenommen` (not accepted), `beendet_hoechstdauer` (maximum duration reached), `keine_vorhersage` (no forecast), `aus` (off), `fehler_befehl` (command failed, retried every minute).
+
+Note: the HeishaMon documentation does not say whether the heat pump uses the backup heater while forcing hot water. Check this on your system. Because of that the end of the charge is monitored and limited by the maximum duration.
+
 ## Known limitations
 
 - The zones are represented as Number and Select, there is no Climate entity.
@@ -192,6 +221,7 @@ The board does not report these values back. The last value set is shown and kep
 - The value ranges come from the HeishaMon documentation and may differ depending on the heat pump model.
 - The optional PCB commands and the SmartGrid mapping follow the HeishaMon documentation but have not been tested on a heat pump.
 - The French and Japanese translations have not been checked by native speakers.
+- "Hot water at the warmest time of day" has been tested with simulated data, not yet on a heat pump.
 
 ## License
 

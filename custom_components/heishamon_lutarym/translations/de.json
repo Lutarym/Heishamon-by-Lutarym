@@ -529,6 +529,12 @@
       },
       "top78": {
         "name": "TOP78 Heizstab ab Außentemperatur"
+      },
+      "dhw_planned": {
+        "name": "Geplante Warmwasserladung"
+      },
+      "dhw_last_charge": {
+        "name": "Letzte Warmwasserladung"
       }
     },
     "number": {
@@ -722,6 +728,9 @@
       },
       "setcompressorstate": {
         "name": "Optional-Platine Verdichter-Schalter"
+      },
+      "dhw_warmest_time": {
+        "name": "Warmwasser zur wärmsten Tageszeit"
       }
     },
     "select": {
@@ -865,10 +874,14 @@
           "listening_only": "Nur lesen (keine Steuerung anlegen)",
           "stabilize": "Werte beruhigen (Temperatursprünge unterdrücken)",
           "stabilize_count": "Nötige Wiederholungen, 2 bis 20",
-          "power_entity": "Externer Strommesser (optional)"
+          "power_entity": "Externer Strommesser (optional)",
+          "weather_entity": "Wetter-Entity für Warmwasser zur wärmsten Tageszeit (optional)",
+          "dhw_max_minutes": "Höchstdauer der erzwungenen Warmwasserladung (Minuten, 15 bis 240)"
         },
         "data_description": {
-          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly. Damit kann der COP auch gemessen statt aus Wärmepumpenwerten berechnet werden. Umschalten über die Auswahl \"COP Quelle\" am Gerät. Leer lassen, wenn keiner vorhanden ist."
+          "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly. Damit kann der COP auch gemessen statt aus Wärmepumpenwerten berechnet werden. Umschalten über die Auswahl \"COP Quelle\" am Gerät. Leer lassen, wenn keiner vorhanden ist.",
+          "weather_entity": "Aus der stündlichen Vorhersage dieser Wetter-Entity wird die wärmste Stunde des Tages bestimmt. Zu dieser Stunde wird die Warmwasserladung erzwungen. Leer lassen, um die Funktion abzuschalten. Nur mit Steuerung (Nur lesen aus).",
+          "dhw_max_minutes": "Danach wird das Erzwingen beendet, auch wenn der Speicher den Sollwert noch nicht erreicht hat."
         }
       }
     }

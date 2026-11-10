@@ -94,6 +94,12 @@ async def async_setup_entry(
             entities.append(HeishamonS0Sensor(coordinator, geraet, port, energie=False))
             entities.append(HeishamonS0Sensor(coordinator, geraet, port, energie=True))
 
+    if data.get("warmwasser") is not None:
+        entities.append(HeishamonWarmwasserSensor(coordinator, geraet, data["warmwasser"]))
+        entities.append(
+            HeishamonWarmwasserLetzteSensor(coordinator, geraet, data["warmwasser"])
+        )
+
     for betriebsart, kennung in COP_KENNUNG.items():
         entities.append(
             HeishamonCopSensor(
@@ -331,3 +337,65 @@ class HeishamonCopSensor(HeishamonEntity, SensorEntity):
         else:
             attribute["werte"] = self._art
         return attribute
+
+
+class HeishamonWarmwasserSensor(HeishamonEntity, SensorEntity):
+    """Geplanter Start der Warmwasserladung zur waermsten Tageszeit."""
+
+    _attr_translation_key = "dhw_planned"
+    _attr_device_class = SensorDeviceClass.TIMESTAMP
+    _attr_icon = "mdi:water-boiler-auto"
+
+    def __init__(self, coordinator, geraet: Geraet, planer) -> None:
+        super().__init__(coordinator, geraet)
+        self._planer = planer
+        self._ids("sensor", "dhw_planned")
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        self.async_on_remove(self._planer.abonnieren(self.async_write_ha_state))
+
+    @property
+    def available(self) -> bool:
+        return True
+
+    @property
+    def native_value(self):
+        return self._planer.geplant
+
+    @property
+    def extra_state_attributes(self):
+        p = self._planer
+        return {
+            "status": p.status,
+            "hoechsttemperatur": p.hoechsttemperatur,
+            "tag_erledigt": p.letzte_ladung.isoformat() if p.letzte_ladung else None,
+            "gestartet": p.gestartet.isoformat() if p.gestartet else None,
+            "hoechstdauer_min": int(p.hoechstdauer.total_seconds() // 60),
+            "wetter_entity": p.wetter_entity,
+        }
+
+
+class HeishamonWarmwasserLetzteSensor(HeishamonEntity, SensorEntity):
+    """Start der letzten erzwungenen Warmwasserladung."""
+
+    _attr_translation_key = "dhw_last_charge"
+    _attr_device_class = SensorDeviceClass.TIMESTAMP
+    _attr_icon = "mdi:water-boiler"
+
+    def __init__(self, coordinator, geraet: Geraet, planer) -> None:
+        super().__init__(coordinator, geraet)
+        self._planer = planer
+        self._ids("sensor", "dhw_last_charge")
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        self.async_on_remove(self._planer.abonnieren(self.async_write_ha_state))
+
+    @property
+    def available(self) -> bool:
+        return True
+
+    @property
+    def native_value(self):
+        return self._planer.letzter_start

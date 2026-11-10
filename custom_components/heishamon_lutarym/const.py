@@ -13,6 +13,10 @@ CONF_STABILIZE = "stabilize"
 CONF_STABILIZE_COUNT = "stabilize_count"
 # Optionaler externer Strommesser (etwa Shelly PM) fuer den gemessenen COP
 CONF_POWER_ENTITY = "power_entity"
+# Warmwasser zur waermsten Tageszeit
+CONF_WEATHER_ENTITY = "weather_entity"
+CONF_DHW_MAX_MINUTES = "dhw_max_minutes"
+DEFAULT_DHW_MAX_MINUTES = 120
 
 # Standardtakt. HeishaMon fragt die Waermepumpe selbst etwa alle fuenf
 # Sekunden ab, schneller liefert sie keine neuen Werte.

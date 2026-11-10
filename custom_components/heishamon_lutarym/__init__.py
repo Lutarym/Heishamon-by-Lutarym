@@ -7,6 +7,7 @@ from datetime import timedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import HeishamonAPI
@@ -27,6 +28,9 @@ from .const import (
     CONF_STABILIZE_COUNT,
     CONF_UPDATE_INTERVAL,
     CONF_USERNAME,
+    CONF_DHW_MAX_MINUTES,
+    CONF_WEATHER_ENTITY,
+    DEFAULT_DHW_MAX_MINUTES,
     DEFAULT_LISTENING_ONLY,
     DEFAULT_STABILIZE,
     DEFAULT_STABILIZE_COUNT,
@@ -36,6 +40,7 @@ from .const import (
     OPT_TOPICS,
 )
 from .entity import Geraet
+from .warmwasser import WarmwasserPlaner
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -206,7 +211,38 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         ),
     }
 
+    # Warmwasser zur waermsten Tageszeit: nur mit Steuerung und Wetter-Entity
+    wetter_entity = einstellung(entry, CONF_WEATHER_ENTITY, None) or None
+    planer = None
+    if wetter_entity and not listening_only:
+        planer = WarmwasserPlaner(
+            hass,
+            entry.entry_id,
+            api,
+            coordinator,
+            wetter_entity,
+            int(einstellung(entry, CONF_DHW_MAX_MINUTES, DEFAULT_DHW_MAX_MINUTES)),
+        )
+    hass.data[DOMAIN][entry.entry_id]["warmwasser"] = planer
+    if planer is None:
+        # Funktion abgeschaltet: verwaiste Entities nicht stehen lassen
+        register = er.async_get(hass)
+        kennung = entry.unique_id or host
+        for plattform, schluessel in (
+            ("switch", "dhw_warmest_time"),
+            ("sensor", "dhw_planned"),
+            ("sensor", "dhw_last_charge"),
+        ):
+            entity_id = register.async_get_entity_id(
+                plattform, DOMAIN, f"heishamon_{kennung}_{schluessel}"
+            )
+            if entity_id:
+                register.async_remove(entity_id)
+
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    if planer is not None:
+        await planer.async_start()
+        entry.async_on_unload(planer.async_stop)
     entry.async_on_unload(entry.add_update_listener(_async_reload_entry))
     return True
 

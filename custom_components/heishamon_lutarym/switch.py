@@ -8,7 +8,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import DOMAIN, OPTIONAL_SWITCHES, STATE_TOPICS, SWITCH_COMMANDS
-from .entity import Geraet, HeishamonBefehlEntity
+from .entity import Geraet, HeishamonBefehlEntity, HeishamonEntity
 
 
 async def async_setup_entry(
@@ -27,6 +27,10 @@ async def async_setup_entry(
         entities.extend(
             HeishamonOptionalSwitch(data["coordinator"], geraet, data["api"], cmd, info)
             for cmd, info in OPTIONAL_SWITCHES.items()
+        )
+    if data.get("warmwasser") is not None:
+        entities.append(
+            HeishamonWarmwasserSchalter(data["coordinator"], geraet, data["warmwasser"])
         )
     async_add_entities(entities)
 
@@ -95,3 +99,37 @@ class HeishamonOptionalSwitch(HeishamonBefehlEntity, SwitchEntity, RestoreEntity
 
     async def async_turn_off(self, **kwargs) -> None:
         await self._setze(False)
+
+
+class HeishamonWarmwasserSchalter(HeishamonEntity, SwitchEntity):
+    """Schaltet "Warmwasser zur waermsten Tageszeit" ein oder aus.
+
+    Der Zustand wird vom Planer gespeichert und bleibt nach einem Neustart
+    erhalten. Ausschalten beendet eine laufende erzwungene Ladung.
+    """
+
+    _attr_translation_key = "dhw_warmest_time"
+    _attr_icon = "mdi:weather-sunny"
+
+    def __init__(self, coordinator, geraet: Geraet, planer) -> None:
+        super().__init__(coordinator, geraet)
+        self._planer = planer
+        self._ids("switch", "dhw_warmest_time")
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        self.async_on_remove(self._planer.abonnieren(self.async_write_ha_state))
+
+    @property
+    def available(self) -> bool:
+        return True
+
+    @property
+    def is_on(self) -> bool:
+        return self._planer.aktiv
+
+    async def async_turn_on(self, **kwargs) -> None:
+        await self._planer.async_setze_aktiv(True)
+
+    async def async_turn_off(self, **kwargs) -> None:
+        await self._planer.async_setze_aktiv(False)

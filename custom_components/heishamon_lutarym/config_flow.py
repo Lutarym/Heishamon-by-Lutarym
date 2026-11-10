@@ -23,6 +23,9 @@ from .const import (
     CONF_STABILIZE_COUNT,
     CONF_UPDATE_INTERVAL,
     CONF_USERNAME,
+    CONF_DHW_MAX_MINUTES,
+    CONF_WEATHER_ENTITY,
+    DEFAULT_DHW_MAX_MINUTES,
     DEFAULT_LISTENING_ONLY,
     DEFAULT_STABILIZE,
     DEFAULT_STABILIZE_COUNT,
@@ -71,6 +74,19 @@ def strommesser_wert(user_input: dict) -> str:
     der Ersteinrichtung gewaehlter Strommesser aktiv.
     """
     return user_input.get(CONF_POWER_ENTITY) or ""
+
+
+# Wetter-Entity fuer "Warmwasser zur waermsten Tageszeit"
+WETTER = selector.EntitySelector(selector.EntitySelectorConfig(domain="weather"))
+# Hoechstdauer einer erzwungenen Warmwasserladung in Minuten
+LADEDAUER = vol.All(vol.Coerce(int), vol.Range(min=15, max=240))
+
+
+def wetter_feld(aktuell: str | None):
+    """Optionales Feld, vorbelegt aber leerbar (wie beim Strommesser)."""
+    if aktuell:
+        return vol.Optional(CONF_WEATHER_ENTITY, description={"suggested_value": aktuell})
+    return vol.Optional(CONF_WEATHER_ENTITY)
 
 
 def einstellung(entry: config_entries.ConfigEntry, schluessel: str, standard):
@@ -220,7 +236,12 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
         if user_input is not None:
             return self.async_create_entry(
                 title="",
-                data={**user_input, CONF_POWER_ENTITY: strommesser_wert(user_input)},
+                data={
+                    **user_input,
+                    CONF_POWER_ENTITY: strommesser_wert(user_input),
+                    # Leer speichern, damit das Abwaehlen wirkt
+                    CONF_WEATHER_ENTITY: user_input.get(CONF_WEATHER_ENTITY) or "",
+                },
             )
 
         entry = self.config_entry
@@ -251,6 +272,13 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
                 strommesser_feld(
                     einstellung(entry, CONF_POWER_ENTITY, None)
                 ): STROMMESSER,
+                wetter_feld(einstellung(entry, CONF_WEATHER_ENTITY, None)): WETTER,
+                vol.Optional(
+                    CONF_DHW_MAX_MINUTES,
+                    default=einstellung(
+                        entry, CONF_DHW_MAX_MINUTES, DEFAULT_DHW_MAX_MINUTES
+                    ),
+                ): LADEDAUER,
             }
         )
         return self.async_show_form(step_id="init", data_schema=schema)

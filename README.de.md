@@ -4,7 +4,7 @@
 
 Home Assistant Integration für Panasonic Aquarea Wärmepumpen über HeishaMon, ohne MQTT, direkt über die HTTP-Schnittstelle.
 
-Version 1.3.1
+Version 1.4.0
 
 ## Was die Integration macht
 
@@ -40,6 +40,8 @@ Als eigenes Repository (Custom Repository) mit der Kategorie **Integration** hin
 | Werte beruhigen | glättet das Zappeln ganzzahliger Temperaturwerte |
 | Nötige Wiederholungen | wie oft ein neuer Wert bestätigt sein muss, 2 bis 20 |
 | Externer Strommesser | optional, Leistungssensor nur für die Wärmepumpe, etwa ein Shelly |
+| Wetter-Entity | optional, für „Warmwasser zur wärmsten Tageszeit“, nur über „Konfigurieren“ einstellbar |
+| Höchstdauer der Ladung | für die erzwungene Warmwasserladung, Minuten, Standard 120, Bereich 15 bis 240 |
 
 Takt, Steuerbarkeit, Beruhigung und Strommesser lassen sich später über "Konfigurieren" ändern. Adresse, Benutzer und Passwort über "Neu konfigurieren". Ändert sich die Adresse, bleiben Gerät, Entities und Verlauf erhalten.
 
@@ -185,6 +187,33 @@ Nur wenn in HeishaMon die Emulation der Optional-Platine aktiv ist. Laut HeishaM
 
 Die Platine meldet diese Werte nicht zurück. Angezeigt wird der zuletzt gesetzte Wert, er bleibt nach einem Neustart erhalten. `SetOptPCBByte9` ist nicht eingebaut, die Doku beschreibt seine Bedeutung nicht.
 
+## Warmwasser zur wärmsten Tageszeit
+
+Optional. Oft hält das Warmwasser 24 Stunden oder länger, und die Wärmepumpe lädt zu einer kalten Zeit nach, zum Beispiel nachts. Diese Funktion erzwingt die Ladung einmal am Tag zu der Stunde mit der höchsten Außentemperatur. Die Wärmepumpe arbeitet dann mit besserem Wirkungsgrad.
+
+Einrichtung: unter „Konfigurieren“ eine Wetter-Entity mit stündlicher Vorhersage wählen (zum Beispiel die Integration „Met.no“, die den Standort von Home Assistant nutzt). Funktioniert nur mit Steuerung (Nur lesen aus).
+
+Ablauf:
+
+1. Alle 30 Minuten wird die stündliche Vorhersage gelesen. Geplant wird die Stunde mit der höchsten Temperatur von jetzt bis Tagesende. Haben zwei Stunden die gleiche Temperatur, gilt die frühere. Ist die heutige Ladung erledigt oder bleibt heute keine Stunde mehr, wird der nächste Tag geplant, sofern die Vorhersage so weit reicht.
+2. Zur geplanten Stunde wird „Warmwasser erzwingen“ (`SetForceDHW`) eingeschaltet, einmal am Tag. Vorher wird geprüft:
+   - Enthält der Betriebsmodus Warmwasser? Laut HeishaMon-Doku wirkt das Erzwingen nur dann. Wenn nicht, wird der Tag übersprungen.
+   - Liegt der Speicher unter dem Sollwert? Wenn nicht, wird der Tag übersprungen.
+3. Die Ladung endet, wenn der Speicher den Sollwert erreicht, die Wärmepumpe das Erzwingen selbst beendet oder die Höchstdauer abgelaufen ist. Dann wird das Erzwingen ausgeschaltet.
+4. Meldet die Wärmepumpe das Erzwingen nicht innerhalb von 3 Minuten zurück, gilt der Versuch als nicht angenommen.
+
+Entities:
+
+| Entity | Bedeutung |
+|---|---|
+| Schalter „Warmwasser zur wärmsten Tageszeit“ | schaltet die Funktion ein oder aus. Aus beendet eine laufende Ladung. Bleibt nach einem Neustart erhalten |
+| Sensor „Geplante Warmwasserladung“ | geplantes Datum und Uhrzeit, nach der heutigen Ladung schon die von morgen. Attribute: Status, Höchsttemperatur, Tag erledigt, Start, Höchstdauer, Wetter-Entity |
+| Sensor „Letzte Warmwasserladung“ | Datum und Uhrzeit des Starts der letzten erzwungenen Ladung. Bleibt nach einem Neustart erhalten |
+
+Werte des Attributs `status`: `geplant`, `laeuft`, `erledigt`, `uebersprungen_speicher_voll`, `uebersprungen_modus_ohne_warmwasser`, `nicht_angenommen`, `beendet_hoechstdauer`, `keine_vorhersage`, `aus`, `fehler_befehl` (Befehl fehlgeschlagen, wird jede Minute wiederholt).
+
+Hinweis: Die HeishaMon-Doku sagt nicht, ob die Wärmepumpe beim Erzwingen von Warmwasser den Heizstab nutzt. Bitte an der eigenen Anlage prüfen. Deshalb wird das Ende der Ladung überwacht und durch die Höchstdauer begrenzt.
+
 ## Bekannte Einschränkungen
 
 - Die Zonen sind als Number und Select abgebildet, es gibt keine Climate-Entity.
@@ -192,6 +221,7 @@ Die Platine meldet diese Werte nicht zurück. Angezeigt wird der zuletzt gesetzt
 - Die Wertebereiche stammen aus der HeishaMon-Dokumentation und können je nach Wärmepumpenmodell abweichen.
 - Die Optional-Platine-Befehle und die SmartGrid-Zuordnung sind nach der HeishaMon-Doku gebaut, aber nicht an einer Wärmepumpe getestet.
 - Die Übersetzungen ins Französische und Japanische sind nicht von Muttersprachlern geprüft.
+- „Warmwasser zur wärmsten Tageszeit“ ist mit simulierten Daten getestet, noch nicht an einer Wärmepumpe.
 
 ## Lizenz
 

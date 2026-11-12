@@ -44,6 +44,11 @@ VORHERSAGE_TAKT = timedelta(minutes=30)
 # So lange darf die Waermepumpe brauchen, bis sie das Erzwingen in TOP2
 # zurueckmeldet. Danach gilt der Befehl als nicht angenommen.
 ANNAHME_FRIST = timedelta(minutes=3)
+# Ab so viel vor dem geplanten Start wird der Plan nicht mehr verschoben
+FESTGELEGT_VOR = timedelta(minutes=60)
+# Erst wenn eine andere Stunde um so viel waermer vorhergesagt wird, wird
+# umgeplant. Verhindert das Hin und Her bei Zehntelgrad-Aenderungen.
+UMPLANEN_AB_KELVIN = 0.5
 
 # Betriebsmodi mit Warmwasser laut TOP4 (MQTT-Topics.md):
 # 3 Warmwasser, 4 Heizen + WW, 5 Kuehlen + WW, 6 Auto + WW, 8 Auto (Kuehlen) + WW
@@ -60,6 +65,7 @@ ABGEBROCHEN_DAUER = "beendet_hoechstdauer"
 KEINE_VORHERSAGE = "keine_vorhersage"
 AUS = "aus"
 FEHLER = "fehler_befehl"
+BEENDEN_FEHLT = "beenden_nicht_bestaetigt"
 
 
 def _zahl(wert) -> float | None:
@@ -69,6 +75,26 @@ def _zahl(wert) -> float | None:
         return float(wert)
     except (TypeError, ValueError):
         return None
+
+
+def _eintraege(vorhersage: list[dict[str, Any]]):
+    """Liefert (Ortszeit, Temperatur) fuer alle lesbaren Eintraege."""
+    for eintrag in vorhersage:
+        zeit = eintrag.get("datetime")
+        if isinstance(zeit, str):
+            zeit = dt_util.parse_datetime(zeit)
+        temperatur = _zahl(eintrag.get("temperature"))
+        if zeit is None or temperatur is None:
+            continue
+        yield dt_util.as_local(zeit), temperatur
+
+
+def temperatur_um(vorhersage: list[dict[str, Any]], zeit: datetime) -> float | None:
+    """Vorhergesagte Temperatur fuer genau diese Stunde, sonst None."""
+    for eintrag_zeit, temperatur in _eintraege(vorhersage):
+        if eintrag_zeit == zeit:
+            return temperatur
+    return None
 
 
 def waermste_stunde(
@@ -82,14 +108,7 @@ def waermste_stunde(
     heute = tag or dt_util.as_local(jetzt).date()
     stundenbeginn = dt_util.as_local(jetzt).replace(minute=0, second=0, microsecond=0)
     beste: tuple[datetime, float] | None = None
-    for eintrag in vorhersage:
-        zeit = eintrag.get("datetime")
-        if isinstance(zeit, str):
-            zeit = dt_util.parse_datetime(zeit)
-        temperatur = _zahl(eintrag.get("temperature"))
-        if zeit is None or temperatur is None:
-            continue
-        zeit = dt_util.as_local(zeit)
+    for zeit, temperatur in _eintraege(vorhersage):
         if zeit.date() != heute or zeit < stundenbeginn:
             continue
         if beste is None or temperatur > beste[1]:
@@ -132,6 +151,9 @@ class WarmwasserPlaner:
         self.letzter_start: datetime | None = None
         self.gestartet: datetime | None = None
         self.bestaetigt = False
+        # Waehrend des Beendens: Zielstatus und Zeit des letzten Aus-Befehls
+        self.ende_status: str | None = None
+        self.ende_gesendet: datetime | None = None
 
     # ------------------------------------------------------------ Ablauf
 
@@ -143,12 +165,23 @@ class WarmwasserPlaner:
             self.letzte_ladung = date.fromisoformat(gespeichert["letzte_ladung"])
         if gespeichert.get("letzter_start"):
             self.letzter_start = dt_util.parse_datetime(gespeichert["letzter_start"])
+        if gespeichert.get("geplant"):
+            # Plan ueber einen Neustart retten. Sonst fehlt nach einem
+            # Neustart in der geplanten Stunde diese Stunde in der Vorhersage.
+            self.geplant = dt_util.parse_datetime(gespeichert["geplant"])
+            self.hoechsttemperatur = gespeichert.get("hoechsttemperatur")
+            if self.geplant is not None:
+                self.geplant = dt_util.as_local(self.geplant)
+                self.status = GEPLANT
         if gespeichert.get("gestartet"):
             # Home Assistant wurde waehrend einer Ladung neu gestartet:
             # weiter ueberwachen, damit sie sauber beendet wird.
             self.gestartet = dt_util.parse_datetime(gespeichert["gestartet"])
             self.bestaetigt = gespeichert.get("bestaetigt", False)
             self.status = LAEUFT
+            if gespeichert.get("ende_status"):
+                # Neustart waehrend des Beendens: Aus-Befehl sofort erneut senden
+                self.ende_status = gespeichert["ende_status"]
         self._abmelden.append(
             async_track_time_interval(self.hass, self._takt, PRUEF_TAKT)
         )
@@ -183,6 +216,9 @@ class WarmwasserPlaner:
                     self.letzter_start.isoformat() if self.letzter_start else None
                 ),
                 "bestaetigt": self.bestaetigt,
+                "ende_status": self.ende_status,
+                "geplant": self.geplant.isoformat() if self.geplant else None,
+                "hoechsttemperatur": self.hoechsttemperatur,
             }
         )
 
@@ -229,6 +265,14 @@ class WarmwasserPlaner:
             self.status = AUS
             return
 
+        # Zuerst pruefen, ob die geplante Stunde erreicht ist. Erst danach
+        # die Vorhersage lesen: Manche Wetterdienste (etwa Open-Meteo in Home
+        # Assistant) lassen die laufende Stunde aus der Vorhersage fallen,
+        # sobald sie begonnen hat. Ein Neulesen genau dann wuerde die
+        # Ladung auf die naechste Stunde verschieben.
+        if await self._faellig_starten(jetzt):
+            return
+
         if (
             self._letzte_vorhersage is None
             or jetzt - self._letzte_vorhersage >= VORHERSAGE_TAKT
@@ -242,12 +286,19 @@ class WarmwasserPlaner:
         ):
             await self._vorhersage_lesen(jetzt)
 
-        if self.letzte_ladung == jetzt.date():
-            return
-        if self.geplant is None:
-            return
-        if jetzt >= self.geplant:
-            await self._starten(jetzt)
+        await self._faellig_starten(jetzt)
+
+    async def _faellig_starten(self, jetzt: datetime) -> bool:
+        """Startet die Ladung, wenn die geplante Zeit heute erreicht ist."""
+        if (
+            self.geplant is None
+            or self.letzte_ladung == jetzt.date()
+            or self.geplant.date() != jetzt.date()
+            or jetzt < self.geplant
+        ):
+            return False
+        await self._starten(jetzt)
+        return True
 
     async def _vorhersage_lesen(self, jetzt: datetime) -> None:
         self._letzte_vorhersage = jetzt
@@ -264,10 +315,12 @@ class WarmwasserPlaner:
             _LOGGER.warning(
                 "Stuendliche Vorhersage von %s nicht lesbar: %s", self.wetter_entity, err
             )
-            self.geplant = None
-            self.hoechsttemperatur = None
-            if self.letzte_ladung != jetzt.date():
-                self.status = KEINE_VORHERSAGE
+            # Einen gueltigen Plan wegen eines Aussetzers nicht verwerfen
+            if self.geplant is None or self.geplant.date() < jetzt.date():
+                self.geplant = None
+                self.hoechsttemperatur = None
+                if self.letzte_ladung != jetzt.date():
+                    self.status = KEINE_VORHERSAGE
             return
         heute = jetzt.date()
         beste = None
@@ -280,8 +333,23 @@ class WarmwasserPlaner:
             # Vorhersage reicht nicht bis morgen
             self.geplant = None
             self.hoechsttemperatur = None
+            await self._speichern()
             return
+        alt = self.geplant
+        if alt is not None and alt.date() == beste[0].date() and alt >= jetzt:
+            if alt - jetzt <= FESTGELEGT_VOR:
+                # Kurz vor dem Start: Plan bleibt fest
+                return
+            alt_temperatur = temperatur_um(vorhersage, alt)
+            if (
+                alt_temperatur is not None
+                and beste[1] < alt_temperatur + UMPLANEN_AB_KELVIN
+            ):
+                # Neue Stunde nicht deutlich waermer: Plan behalten
+                self.hoechsttemperatur = alt_temperatur
+                return
         self.geplant, self.hoechsttemperatur = beste
+        await self._speichern()
         if self.letzte_ladung != heute:
             self.status = GEPLANT
 
@@ -317,6 +385,9 @@ class WarmwasserPlaner:
         await self._coordinator.async_request_refresh()
 
     async def _ueberwachen(self, jetzt: datetime) -> None:
+        if self.ende_status is not None:
+            await self._beenden_pruefen(jetzt)
+            return
         data = self._coordinator.data or {}
         erzwungen = _zahl(data.get("TOP2"))
         ist = _zahl(data.get("TOP10"))
@@ -340,16 +411,41 @@ class WarmwasserPlaner:
             await self._beenden(ABGEBROCHEN_DAUER)
 
     async def _beenden(self, status: str) -> None:
+        """Beendet das Erzwingen und prueft danach, ob es wirklich aus ist.
+
+        HeishaMon bestaetigt jeden Befehl, auch wenn die Waermepumpe ihn
+        nicht umsetzt. Deshalb gilt die Ladung erst als beendet, wenn TOP2
+        wieder 0 meldet. Bis dahin wird der Aus-Befehl wiederholt.
+        """
+        self.ende_status = status
+        self.ende_gesendet = None
+        await self._beenden_pruefen(dt_util.now())
+
+    async def _beenden_pruefen(self, jetzt: datetime) -> None:
         erzwungen = _zahl((self._coordinator.data or {}).get("TOP2"))
-        if erzwungen is None or erzwungen > 0:
-            try:
-                await self._api.async_set_value("SetForceDHW", 0)
-            except HeishamonBefehlFehler as err:
-                # Im naechsten Takt erneut versuchen
-                _LOGGER.warning("Erzwungenes Warmwasser nicht beendbar: %s", err)
-                return
-        self.gestartet = None
-        self.bestaetigt = False
-        self.status = status
+        if erzwungen is not None and erzwungen == 0:
+            self.gestartet = None
+            self.bestaetigt = False
+            self.status = self.ende_status
+            self.ende_status = None
+            self.ende_gesendet = None
+            await self._speichern()
+            return
+        if self.ende_gesendet is not None and jetzt - self.ende_gesendet < ANNAHME_FRIST:
+            return  # Rueckmeldung abwarten
+        if self.ende_gesendet is not None:
+            # Aus-Befehl wurde nicht umgesetzt: sichtbar machen und wiederholen
+            _LOGGER.warning(
+                "Waermepumpe meldet nach SetForceDHW=0 weiter erzwungenes Warmwasser, "
+                "sende erneut"
+            )
+            self.status = BEENDEN_FEHLT
+        try:
+            await self._api.async_set_value("SetForceDHW", 0)
+        except HeishamonBefehlFehler as err:
+            _LOGGER.warning("Erzwungenes Warmwasser nicht beendbar: %s", err)
+            self.status = BEENDEN_FEHLT
+            return  # naechster Versuch im naechsten Takt
+        self.ende_gesendet = jetzt
         await self._speichern()
         await self._coordinator.async_request_refresh()

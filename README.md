@@ -4,7 +4,7 @@
 
 Home Assistant integration for Panasonic Aquarea heat pumps through HeishaMon, without MQTT, straight over the HTTP interface.
 
-Version 1.4.0
+Version 1.4.1
 
 ## What the integration does
 
@@ -195,11 +195,11 @@ Setup: under "Configure" choose a weather entity with an hourly forecast. The in
 
 How it works:
 
-1. Every 30 minutes the hourly forecast is read. Planned is the hour with the highest temperature from now until the end of the day. If two hours have the same temperature, the earlier one counts. Once today's charge is done, or no hour of today is left, the next day is planned, if the forecast reaches that far.
+1. Every 30 minutes the hourly forecast is read. Planned is the hour with the highest temperature from now until the end of the day. If two hours have the same temperature, the earlier one counts. Once today's charge is done, or no hour of today is left, the next day is planned, if the forecast reaches that far. The plan only moves to another hour if that hour is forecast at least 0.5 °C warmer. From 60 minutes before the planned start the plan is fixed.
 2. At the planned hour "Force hot water" (`SetForceDHW`) is switched on, once a day. Before that it is checked:
    - Does the operating mode include hot water? According to the HeishaMon documentation forcing only works then. If not, the day is skipped.
    - Is the tank below its setpoint? If not, the day is skipped.
-3. The charge ends when the tank reaches the setpoint, when the heat pump ends the forcing by itself, or when the maximum charge duration has passed. Then forcing is switched off.
+3. The charge ends when the tank reaches the setpoint, when the heat pump ends the forcing by itself, or when the maximum charge duration has passed. Then forcing is switched off. The charge only counts as ended once the heat pump reports forcing as off. Until then the off command is repeated every 3 minutes.
 4. If the heat pump does not report the forcing within 3 minutes, the attempt counts as not accepted.
 
 Entities:
@@ -210,7 +210,7 @@ Entities:
 | Sensor "Planned hot water charge" | planned date and time, after today's charge already the one for tomorrow. Attributes: status, highest temperature, day done, start, maximum duration, weather entity |
 | Sensor "Last hot water charge" | date and time of the start of the last forced charge. Kept after a restart |
 
-Values of the attribute `status`: `geplant` (planned), `laeuft` (running), `erledigt` (done), `uebersprungen_speicher_voll` (tank full), `uebersprungen_modus_ohne_warmwasser` (mode without hot water), `nicht_angenommen` (not accepted), `beendet_hoechstdauer` (maximum duration reached), `keine_vorhersage` (no forecast), `aus` (off), `fehler_befehl` (command failed, retried every minute).
+Values of the attribute `status`: `geplant` (planned), `laeuft` (running), `erledigt` (done), `uebersprungen_speicher_voll` (tank full), `uebersprungen_modus_ohne_warmwasser` (mode without hot water), `nicht_angenommen` (not accepted), `beendet_hoechstdauer` (maximum duration reached), `keine_vorhersage` (no forecast), `aus` (off), `fehler_befehl` (command failed, retried every minute), `beenden_nicht_bestaetigt` (heat pump still reports forcing after the off command, repeated every 3 minutes).
 
 Note: the HeishaMon documentation does not say whether the heat pump uses the backup heater while forcing hot water. Check this on your system. Because of that the end of the charge is monitored and limited by the maximum duration.
 

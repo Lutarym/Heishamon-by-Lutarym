@@ -4,7 +4,7 @@
 
 Intégration Home Assistant pour les pompes à chaleur Panasonic Aquarea via HeishaMon, sans MQTT, directement par l'interface HTTP.
 
-Version 1.4.0
+Version 1.4.1
 
 ## Ce que fait l'intégration
 
@@ -195,11 +195,11 @@ Configuration : dans « Configurer », choisir une entité météo avec une pré
 
 Fonctionnement :
 
-1. Toutes les 30 minutes, la prévision horaire est lue. L'heure prévue est celle de la température la plus élevée entre maintenant et la fin de la journée. Si deux heures ont la même température, la plus tôt est retenue. Une fois la charge du jour terminée, ou s'il ne reste aucune heure aujourd'hui, le jour suivant est planifié, si la prévision va jusque là.
+1. Toutes les 30 minutes, la prévision horaire est lue. L'heure prévue est celle de la température la plus élevée entre maintenant et la fin de la journée. Si deux heures ont la même température, la plus tôt est retenue. Une fois la charge du jour terminée, ou s'il ne reste aucune heure aujourd'hui, le jour suivant est planifié, si la prévision va jusque là. Le plan ne passe à une autre heure que si celle ci est prévue au moins 0,5 °C plus chaude. À partir de 60 minutes avant le début prévu, le plan est fixé.
 2. À l'heure prévue, « Forcer l'eau chaude » (`SetForceDHW`) est activé, une fois par jour. Avant cela, on vérifie :
    - Le mode de fonctionnement comprend il l'eau chaude ? Selon la documentation HeishaMon, le forçage n'agit qu'alors. Sinon, la journée est sautée.
    - Le ballon est il sous sa consigne ? Sinon, la journée est sautée.
-3. La charge se termine lorsque le ballon atteint la consigne, lorsque la pompe à chaleur arrête elle même le forçage ou lorsque la durée maximale est écoulée. Le forçage est alors désactivé.
+3. La charge se termine lorsque le ballon atteint la consigne, lorsque la pompe à chaleur arrête elle même le forçage ou lorsque la durée maximale est écoulée. Le forçage est alors désactivé. La charge n'est considérée comme terminée que lorsque la pompe à chaleur signale le forçage comme désactivé. D'ici là, la commande d'arrêt est répétée toutes les 3 minutes.
 4. Si la pompe à chaleur ne confirme pas le forçage dans les 3 minutes, la tentative est considérée comme non acceptée.
 
 Entités :
@@ -210,7 +210,7 @@ Entités :
 | Capteur « Charge d'eau chaude prévue » | date et heure prévues, après la charge du jour déjà celles du lendemain. Attributs : statut, température maximale, jour traité, début, durée maximale, entité météo |
 | Capteur « Dernière charge d'eau chaude » | date et heure du début de la dernière charge forcée. Conservé après un redémarrage |
 
-Valeurs de l'attribut `status` : `geplant` (prévu), `laeuft` (en cours), `erledigt` (terminé), `uebersprungen_speicher_voll` (ballon plein), `uebersprungen_modus_ohne_warmwasser` (mode sans eau chaude), `nicht_angenommen` (non accepté), `beendet_hoechstdauer` (durée maximale atteinte), `keine_vorhersage` (pas de prévision), `aus` (désactivé), `fehler_befehl` (commande échouée, répétée chaque minute).
+Valeurs de l'attribut `status` : `geplant` (prévu), `laeuft` (en cours), `erledigt` (terminé), `uebersprungen_speicher_voll` (ballon plein), `uebersprungen_modus_ohne_warmwasser` (mode sans eau chaude), `nicht_angenommen` (non accepté), `beendet_hoechstdauer` (durée maximale atteinte), `keine_vorhersage` (pas de prévision), `aus` (désactivé), `fehler_befehl` (commande échouée, répétée chaque minute), `beenden_nicht_bestaetigt` (la pompe à chaleur signale encore le forçage après la commande d'arrêt, répétée toutes les 3 minutes).
 
 Remarque : la documentation HeishaMon ne précise pas si la pompe à chaleur utilise la résistance d'appoint lors du forçage de l'eau chaude. À vérifier sur votre installation. C'est pourquoi la fin de la charge est surveillée et limitée par la durée maximale.
 

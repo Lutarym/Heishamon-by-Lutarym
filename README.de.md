@@ -4,7 +4,7 @@
 
 Home Assistant Integration für Panasonic Aquarea Wärmepumpen über HeishaMon, ohne MQTT, direkt über die HTTP-Schnittstelle.
 
-Version 1.4.0
+Version 1.4.1
 
 ## Was die Integration macht
 
@@ -195,11 +195,11 @@ Einrichtung: unter „Konfigurieren“ eine Wetter-Entity mit stündlicher Vorhe
 
 Ablauf:
 
-1. Alle 30 Minuten wird die stündliche Vorhersage gelesen. Geplant wird die Stunde mit der höchsten Temperatur von jetzt bis Tagesende. Haben zwei Stunden die gleiche Temperatur, gilt die frühere. Ist die heutige Ladung erledigt oder bleibt heute keine Stunde mehr, wird der nächste Tag geplant, sofern die Vorhersage so weit reicht.
+1. Alle 30 Minuten wird die stündliche Vorhersage gelesen. Geplant wird die Stunde mit der höchsten Temperatur von jetzt bis Tagesende. Haben zwei Stunden die gleiche Temperatur, gilt die frühere. Ist die heutige Ladung erledigt oder bleibt heute keine Stunde mehr, wird der nächste Tag geplant, sofern die Vorhersage so weit reicht. Auf eine andere Stunde wird nur umgeplant, wenn diese mindestens 0,5 °C wärmer vorhergesagt wird. Ab 60 Minuten vor dem geplanten Start steht der Plan fest.
 2. Zur geplanten Stunde wird „Warmwasser erzwingen“ (`SetForceDHW`) eingeschaltet, einmal am Tag. Vorher wird geprüft:
    - Enthält der Betriebsmodus Warmwasser? Laut HeishaMon-Doku wirkt das Erzwingen nur dann. Wenn nicht, wird der Tag übersprungen.
    - Liegt der Speicher unter dem Sollwert? Wenn nicht, wird der Tag übersprungen.
-3. Die Ladung endet, wenn der Speicher den Sollwert erreicht, die Wärmepumpe das Erzwingen selbst beendet oder die Höchstdauer abgelaufen ist. Dann wird das Erzwingen ausgeschaltet.
+3. Die Ladung endet, wenn der Speicher den Sollwert erreicht, die Wärmepumpe das Erzwingen selbst beendet oder die Höchstdauer abgelaufen ist. Dann wird das Erzwingen ausgeschaltet. Als beendet gilt die Ladung erst, wenn die Wärmepumpe das Erzwingen als aus meldet. Bis dahin wird der Aus-Befehl alle 3 Minuten wiederholt.
 4. Meldet die Wärmepumpe das Erzwingen nicht innerhalb von 3 Minuten zurück, gilt der Versuch als nicht angenommen.
 
 Entities:
@@ -210,7 +210,7 @@ Entities:
 | Sensor „Geplante Warmwasserladung“ | geplantes Datum und Uhrzeit, nach der heutigen Ladung schon die von morgen. Attribute: Status, Höchsttemperatur, Tag erledigt, Start, Höchstdauer, Wetter-Entity |
 | Sensor „Letzte Warmwasserladung“ | Datum und Uhrzeit des Starts der letzten erzwungenen Ladung. Bleibt nach einem Neustart erhalten |
 
-Werte des Attributs `status`: `geplant`, `laeuft`, `erledigt`, `uebersprungen_speicher_voll`, `uebersprungen_modus_ohne_warmwasser`, `nicht_angenommen`, `beendet_hoechstdauer`, `keine_vorhersage`, `aus`, `fehler_befehl` (Befehl fehlgeschlagen, wird jede Minute wiederholt).
+Werte des Attributs `status`: `geplant`, `laeuft`, `erledigt`, `uebersprungen_speicher_voll`, `uebersprungen_modus_ohne_warmwasser`, `nicht_angenommen`, `beendet_hoechstdauer`, `keine_vorhersage`, `aus`, `fehler_befehl` (Befehl fehlgeschlagen, wird jede Minute wiederholt), `beenden_nicht_bestaetigt` (Wärmepumpe meldet nach dem Aus-Befehl weiter Erzwingen, wird alle 3 Minuten wiederholt).
 
 Hinweis: Die HeishaMon-Doku sagt nicht, ob die Wärmepumpe beim Erzwingen von Warmwasser den Heizstab nutzt. Bitte an der eigenen Anlage prüfen. Deshalb wird das Ende der Ladung überwacht und durch die Höchstdauer begrenzt.
 

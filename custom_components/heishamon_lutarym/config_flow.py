@@ -24,6 +24,10 @@ from .const import (
     CONF_UPDATE_INTERVAL,
     CONF_USERNAME,
     CONF_DHW_MAX_MINUTES,
+    CONF_DHW_WINDOW_END,
+    CONF_DHW_WINDOW_START,
+    DEFAULT_DHW_WINDOW_END,
+    DEFAULT_DHW_WINDOW_START,
     CONF_WEATHER_ENTITY,
     DEFAULT_DHW_MAX_MINUTES,
     DEFAULT_LISTENING_ONLY,
@@ -80,6 +84,8 @@ def strommesser_wert(user_input: dict) -> str:
 WETTER = selector.EntitySelector(selector.EntitySelectorConfig(domain="weather"))
 # Hoechstdauer einer erzwungenen Warmwasserladung in Minuten
 LADEDAUER = vol.All(vol.Coerce(int), vol.Range(min=15, max=240))
+# Volle Stunde fuer das Startfenster der Warmwasserladung
+STUNDE = vol.All(vol.Coerce(int), vol.Range(min=0, max=23))
 
 
 def wetter_feld(aktuell: str | None):
@@ -254,7 +260,12 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
 
     async def async_step_init(self, user_input=None) -> FlowResult:
         """Einziger Schritt."""
-        if user_input is not None:
+        errors: dict[str, str] = {}
+        if user_input is not None and int(
+            user_input.get(CONF_DHW_WINDOW_START, DEFAULT_DHW_WINDOW_START)
+        ) > int(user_input.get(CONF_DHW_WINDOW_END, DEFAULT_DHW_WINDOW_END)):
+            errors["base"] = "fenster_ungueltig"
+        if user_input is not None and not errors:
             return self.async_create_entry(
                 title="",
                 data={
@@ -306,11 +317,27 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
                         entry, CONF_DHW_MAX_MINUTES, DEFAULT_DHW_MAX_MINUTES
                     ),
                 ): LADEDAUER,
+                vol.Optional(
+                    CONF_DHW_WINDOW_START,
+                    default=einstellung(
+                        entry, CONF_DHW_WINDOW_START, DEFAULT_DHW_WINDOW_START
+                    ),
+                ): STUNDE,
+                vol.Optional(
+                    CONF_DHW_WINDOW_END,
+                    default=einstellung(
+                        entry, CONF_DHW_WINDOW_END, DEFAULT_DHW_WINDOW_END
+                    ),
+                ): STUNDE,
             }
         )
+        if user_input is not None:
+            # Eingaben bei einem Fehler nicht verlieren
+            schema = self.add_suggested_values_to_schema(schema, user_input)
         return self.async_show_form(
             step_id="init",
             data_schema=schema,
+            errors=errors,
             description_placeholders={
                 "anzahl": str(len(gefunden)),
                 "wetter": ", ".join(gefunden),

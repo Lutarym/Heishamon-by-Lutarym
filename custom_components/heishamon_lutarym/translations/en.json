@@ -876,14 +876,21 @@
           "stabilize_count": "Required repetitions, 2 to 20",
           "power_entity": "External power meter (optional)",
           "weather_entity": "Weather entity for hot water at the warmest time of day (optional)",
-          "dhw_max_minutes": "Maximum duration of the forced hot water charge (minutes, 15 to 240)"
+          "dhw_max_minutes": "Maximum duration of the forced hot water charge (minutes, 15 to 240)",
+          "dhw_window_start": "Earliest start of the hot water charge (full hour, 0 to 23)",
+          "dhw_window_end": "Latest start of the hot water charge (full hour, 0 to 23)"
         },
         "data_description": {
           "power_entity": "Power sensor that measures only the heat pump, for example a Shelly. With it the COP can also be measured instead of calculated from heat pump values. Switch with the \"COP source\" selection on the device. Leave empty if none is available.",
           "weather_entity": "The warmest hour of the day is taken from the hourly forecast of this weather entity. At that hour the hot water charge is forced. A weather entity found is suggested automatically, Met.no preferred. Leave empty to turn the function off. Only with control (read only off).",
-          "dhw_max_minutes": "After that the forcing is ended, even if the tank has not reached the setpoint yet."
+          "dhw_max_minutes": "After that the forcing is ended, even if the tank has not reached the setpoint yet.",
+          "dhw_window_start": "The warmest hour is only searched within this time window. This keeps the gap between two charges about the same. Default 11.",
+          "dhw_window_end": "This hour still counts. Default 17."
         }
       }
+    },
+    "error": {
+      "fenster_ungueltig": "The earliest start must be before or equal to the latest start."
     }
   }
 }

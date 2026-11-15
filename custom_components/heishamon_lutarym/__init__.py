@@ -29,6 +29,10 @@ from .const import (
     CONF_UPDATE_INTERVAL,
     CONF_USERNAME,
     CONF_DHW_MAX_MINUTES,
+    CONF_DHW_WINDOW_END,
+    CONF_DHW_WINDOW_START,
+    DEFAULT_DHW_WINDOW_END,
+    DEFAULT_DHW_WINDOW_START,
     CONF_WEATHER_ENTITY,
     DEFAULT_DHW_MAX_MINUTES,
     DEFAULT_LISTENING_ONLY,
@@ -222,6 +226,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             coordinator,
             wetter_entity,
             int(einstellung(entry, CONF_DHW_MAX_MINUTES, DEFAULT_DHW_MAX_MINUTES)),
+            int(einstellung(entry, CONF_DHW_WINDOW_START, DEFAULT_DHW_WINDOW_START)),
+            int(einstellung(entry, CONF_DHW_WINDOW_END, DEFAULT_DHW_WINDOW_END)),
         )
     hass.data[DOMAIN][entry.entry_id]["warmwasser"] = planer
     if planer is None:

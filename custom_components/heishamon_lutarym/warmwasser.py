@@ -7,7 +7,8 @@ Waermepumpe arbeitet dann mit dem besten Wirkungsgrad.
 Ablauf:
 1. Die stuendliche Vorhersage der gewaehlten Wetter-Entity wird alle
    30 Minuten neu gelesen. Geplant wird die Stunde mit der hoechsten
-   Temperatur von jetzt bis Tagesende. Ist heute schon erledigt oder
+   Temperatur innerhalb des eingestellten Zeitfensters (Standard 11 bis
+   17 Uhr), damit der Abstand zwischen zwei Ladungen nicht zu gross wird. Ist heute schon erledigt oder
    bleibt heute keine Stunde mehr, wird der naechste Tag geplant, sofern
    die Vorhersage so weit reicht.
 2. Ist diese Stunde erreicht und heute noch nicht geladen, wird
@@ -95,18 +96,26 @@ def temperatur_um(vorhersage: list[dict[str, Any]], zeit: datetime) -> float | N
 
 
 def waermste_stunde(
-    vorhersage: list[dict[str, Any]], jetzt: datetime, tag: date | None = None
+    vorhersage: list[dict[str, Any]],
+    jetzt: datetime,
+    tag: date | None = None,
+    beginn: int = 0,
+    ende: int = 23,
 ) -> tuple[datetime, float] | None:
     """Stunde mit der hoechsten Temperatur am angegebenen Tag (Standard heute).
 
-    Fuer heute zaehlen nur Stunden ab der aktuellen Stunde. Bei gleicher
-    Temperatur gilt die fruehere Stunde. Liefert Ortszeit.
+    Beruecksichtigt werden nur Stunden von beginn bis einschliesslich ende
+    (Zeitfenster fuer den Start). Fuer heute zaehlen nur Stunden ab der
+    aktuellen Stunde. Bei gleicher Temperatur gilt die fruehere Stunde.
+    Liefert Ortszeit.
     """
     heute = tag or dt_util.as_local(jetzt).date()
     stundenbeginn = dt_util.as_local(jetzt).replace(minute=0, second=0, microsecond=0)
     beste: tuple[datetime, float] | None = None
     for zeit, temperatur in _eintraege(vorhersage):
         if zeit.date() != heute or zeit < stundenbeginn:
+            continue
+        if not beginn <= zeit.hour <= ende:
             continue
         if beste is None or temperatur > beste[1]:
             beste = (zeit, temperatur)
@@ -124,12 +133,17 @@ class WarmwasserPlaner:
         coordinator,
         wetter_entity: str,
         hoechstdauer_minuten: int,
+        fenster_beginn: int = 0,
+        fenster_ende: int = 23,
     ) -> None:
         self.hass = hass
         self._api = api
         self._coordinator = coordinator
         self.wetter_entity = wetter_entity
         self.hoechstdauer = timedelta(minutes=hoechstdauer_minuten)
+        # Zeitfenster fuer den Start, volle Stunden, ende einschliesslich
+        self.fenster_beginn = fenster_beginn
+        self.fenster_ende = fenster_ende
         self._store: Store = Store(hass, 1, f"heishamon_lutarym.warmwasser.{entry_id}")
         self._hoerer: list = []
         self._abmelden: list = []
@@ -169,7 +183,12 @@ class WarmwasserPlaner:
             self.hoechsttemperatur = gespeichert.get("hoechsttemperatur")
             if self.geplant is not None:
                 self.geplant = dt_util.as_local(self.geplant)
-                self.status = GEPLANT
+                if not self.fenster_beginn <= self.geplant.hour <= self.fenster_ende:
+                    # Zeitfenster wurde geaendert: neu planen
+                    self.geplant = None
+                    self.hoechsttemperatur = None
+                else:
+                    self.status = GEPLANT
         if gespeichert.get("gestartet"):
             # Home Assistant wurde waehrend einer Ladung neu gestartet:
             # weiter ueberwachen, damit sie sauber beendet wird.
@@ -322,10 +341,18 @@ class WarmwasserPlaner:
         heute = jetzt.date()
         beste = None
         if self.letzte_ladung != heute:
-            beste = waermste_stunde(vorhersage, jetzt)
+            beste = waermste_stunde(
+                vorhersage, jetzt, None, self.fenster_beginn, self.fenster_ende
+            )
         if beste is None:
-            # Heute erledigt oder keine Stunde mehr uebrig: morgen planen
-            beste = waermste_stunde(vorhersage, jetzt, heute + timedelta(days=1))
+            # Heute erledigt oder Zeitfenster vorbei: morgen planen
+            beste = waermste_stunde(
+                vorhersage,
+                jetzt,
+                heute + timedelta(days=1),
+                self.fenster_beginn,
+                self.fenster_ende,
+            )
         if beste is None:
             # Vorhersage reicht nicht bis morgen
             self.geplant = None

@@ -876,14 +876,21 @@
           "stabilize_count": "Nötige Wiederholungen, 2 bis 20",
           "power_entity": "Externer Strommesser (optional)",
           "weather_entity": "Wetter-Entity für Warmwasser zur wärmsten Tageszeit (optional)",
-          "dhw_max_minutes": "Höchstdauer der erzwungenen Warmwasserladung (Minuten, 15 bis 240)"
+          "dhw_max_minutes": "Höchstdauer der erzwungenen Warmwasserladung (Minuten, 15 bis 240)",
+          "dhw_window_start": "Frühester Start der Warmwasserladung (volle Stunde, 0 bis 23)",
+          "dhw_window_end": "Spätester Start der Warmwasserladung (volle Stunde, 0 bis 23)"
         },
         "data_description": {
           "power_entity": "Leistungssensor, der nur die Wärmepumpe misst, etwa ein Shelly. Damit kann der COP auch gemessen statt aus Wärmepumpenwerten berechnet werden. Umschalten über die Auswahl \"COP Quelle\" am Gerät. Leer lassen, wenn keiner vorhanden ist.",
           "weather_entity": "Aus der stündlichen Vorhersage dieser Wetter-Entity wird die wärmste Stunde des Tages bestimmt. Zu dieser Stunde wird die Warmwasserladung erzwungen. Vorgeschlagen wird automatisch eine gefundene Wetter-Entity, Met.no bevorzugt. Leer lassen, um die Funktion abzuschalten. Nur mit Steuerung (Nur lesen aus).",
-          "dhw_max_minutes": "Danach wird das Erzwingen beendet, auch wenn der Speicher den Sollwert noch nicht erreicht hat."
+          "dhw_max_minutes": "Danach wird das Erzwingen beendet, auch wenn der Speicher den Sollwert noch nicht erreicht hat.",
+          "dhw_window_start": "Gesucht wird die wärmste Stunde nur in diesem Zeitfenster. So bleibt der Abstand zwischen zwei Ladungen etwa gleich. Standard 11 Uhr.",
+          "dhw_window_end": "Diese Stunde zählt noch mit. Standard 17 Uhr."
         }
       }
+    },
+    "error": {
+      "fenster_ungueltig": "Der früheste Start muss vor dem spätesten Start liegen oder gleich sein."
     }
   }
 }

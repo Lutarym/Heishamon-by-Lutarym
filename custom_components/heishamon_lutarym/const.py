@@ -17,6 +17,10 @@ CONF_POWER_ENTITY = "power_entity"
 CONF_WEATHER_ENTITY = "weather_entity"
 CONF_DHW_MAX_MINUTES = "dhw_max_minutes"
 DEFAULT_DHW_MAX_MINUTES = 120
+CONF_DHW_WINDOW_START = "dhw_window_start"
+CONF_DHW_WINDOW_END = "dhw_window_end"
+DEFAULT_DHW_WINDOW_START = 11
+DEFAULT_DHW_WINDOW_END = 17
 
 # Standardtakt. HeishaMon fragt die Waermepumpe selbst etwa alle fuenf
 # Sekunden ab, schneller liefert sie keine neuen Werte.

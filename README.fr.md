@@ -4,7 +4,7 @@
 
 Intégration Home Assistant pour les pompes à chaleur Panasonic Aquarea via HeishaMon, sans MQTT, directement par l'interface HTTP.
 
-Version 1.4.2
+Version 1.4.3
 
 ## Ce que fait l'intégration
 
@@ -42,6 +42,7 @@ Ajouter le projet comme dépôt personnalisé (Custom Repository) avec la catég
 | Compteur électrique externe | facultatif, capteur de puissance pour la pompe à chaleur seule, par exemple un Shelly |
 | Entité météo | facultatif, pour « Eau chaude à l'heure la plus chaude », réglable uniquement via « Configurer » |
 | Durée maximale de charge | pour la charge d'eau chaude forcée, minutes, par défaut 120, plage 15 à 240 |
+| Début au plus tôt et au plus tard | plage horaire pour le début de la charge d'eau chaude, heures pleines, par défaut 11 h à 17 h, la dernière heure est incluse |
 
 L'intervalle, le mode de commande, le lissage et le compteur électrique peuvent être modifiés ensuite via "Configurer". L'adresse, le nom d'utilisateur et le mot de passe via "Reconfigurer". Si l'adresse change, l'appareil, les entités et l'historique sont conservés.
 
@@ -195,7 +196,7 @@ Configuration : dans « Configurer », choisir une entité météo avec une pré
 
 Fonctionnement :
 
-1. Toutes les 30 minutes, la prévision horaire est lue. L'heure prévue est celle de la température la plus élevée entre maintenant et la fin de la journée. Si deux heures ont la même température, la plus tôt est retenue. Une fois la charge du jour terminée, ou s'il ne reste aucune heure aujourd'hui, le jour suivant est planifié, si la prévision va jusque là. Le plan ne passe à une autre heure que si celle ci est prévue au moins 0,5 °C plus chaude. À partir de 60 minutes avant le début prévu, le plan est fixé.
+1. Toutes les 30 minutes, la prévision horaire est lue. L'heure prévue est celle de la température la plus élevée dans la plage horaire (par défaut 11 h à 17 h), à partir de maintenant. L'écart entre deux charges reste ainsi à peu près le même, même si l'heure la plus chaude d'une journée est tard le soir. Si deux heures ont la même température, la plus tôt est retenue. Une fois la charge du jour terminée, ou si la plage horaire du jour est passée, le jour suivant est planifié, si la prévision va jusque là. Le plan ne passe à une autre heure que si celle ci est prévue au moins 0,5 °C plus chaude. À partir de 60 minutes avant le début prévu, le plan est fixé.
 2. À l'heure prévue, « Forcer l'eau chaude » (`SetForceDHW`) est activé, une fois par jour. Avant cela, on vérifie :
    - Le mode de fonctionnement comprend il l'eau chaude ? Selon la documentation HeishaMon, le forçage n'agit qu'alors. Sinon, la journée est sautée.
    - Le ballon est il sous sa consigne ? Sinon, la journée est sautée.

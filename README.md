@@ -4,7 +4,7 @@
 
 Home Assistant integration for Panasonic Aquarea heat pumps through HeishaMon, without MQTT, straight over the HTTP interface.
 
-Version 1.4.2
+Version 1.4.3
 
 ## What the integration does
 
@@ -42,6 +42,7 @@ Add the project as a Custom Repository with category **Integration**, then insta
 | External power meter | optional, power sensor for the heat pump only, for example a Shelly |
 | Weather entity | optional, for "Hot water at the warmest time of day", can only be set through "Configure" |
 | Maximum charge duration | for the forced hot water charge, minutes, default 120, range 15 to 240 |
+| Earliest and latest start | time window for the start of the hot water charge, full hours, default 11 to 17, the latest hour still counts |
 
 Interval, control mode, steady readings and power meter can be changed later through "Configure". Address, username and password through "Reconfigure". If the address changes, device, entities and history are kept.
 
@@ -195,7 +196,7 @@ Setup: under "Configure" choose a weather entity with an hourly forecast. The in
 
 How it works:
 
-1. Every 30 minutes the hourly forecast is read. Planned is the hour with the highest temperature from now until the end of the day. If two hours have the same temperature, the earlier one counts. Once today's charge is done, or no hour of today is left, the next day is planned, if the forecast reaches that far. The plan only moves to another hour if that hour is forecast at least 0.5 °C warmer. From 60 minutes before the planned start the plan is fixed.
+1. Every 30 minutes the hourly forecast is read. Planned is the hour with the highest temperature within the time window (default 11 to 17), from now on. This keeps the gap between two charges about the same, even if the warmest hour of a day is late in the evening. If two hours have the same temperature, the earlier one counts. Once today's charge is done, or the time window of today has passed, the next day is planned, if the forecast reaches that far. The plan only moves to another hour if that hour is forecast at least 0.5 °C warmer. From 60 minutes before the planned start the plan is fixed.
 2. At the planned hour "Force hot water" (`SetForceDHW`) is switched on, once a day. Before that it is checked:
    - Does the operating mode include hot water? According to the HeishaMon documentation forcing only works then. If not, the day is skipped.
    - Is the tank below its setpoint? If not, the day is skipped.

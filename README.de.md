@@ -4,7 +4,7 @@
 
 Home Assistant Integration für Panasonic Aquarea Wärmepumpen über HeishaMon, ohne MQTT, direkt über die HTTP-Schnittstelle.
 
-Version 1.4.2
+Version 1.4.3
 
 ## Was die Integration macht
 
@@ -42,6 +42,7 @@ Als eigenes Repository (Custom Repository) mit der Kategorie **Integration** hin
 | Externer Strommesser | optional, Leistungssensor nur für die Wärmepumpe, etwa ein Shelly |
 | Wetter-Entity | optional, für „Warmwasser zur wärmsten Tageszeit“, nur über „Konfigurieren“ einstellbar |
 | Höchstdauer der Ladung | für die erzwungene Warmwasserladung, Minuten, Standard 120, Bereich 15 bis 240 |
+| Frühester und spätester Start | Zeitfenster für den Start der Warmwasserladung, volle Stunden, Standard 11 bis 17 Uhr, die späteste Stunde zählt noch mit |
 
 Takt, Steuerbarkeit, Beruhigung und Strommesser lassen sich später über "Konfigurieren" ändern. Adresse, Benutzer und Passwort über "Neu konfigurieren". Ändert sich die Adresse, bleiben Gerät, Entities und Verlauf erhalten.
 
@@ -195,7 +196,7 @@ Einrichtung: unter „Konfigurieren“ eine Wetter-Entity mit stündlicher Vorhe
 
 Ablauf:
 
-1. Alle 30 Minuten wird die stündliche Vorhersage gelesen. Geplant wird die Stunde mit der höchsten Temperatur von jetzt bis Tagesende. Haben zwei Stunden die gleiche Temperatur, gilt die frühere. Ist die heutige Ladung erledigt oder bleibt heute keine Stunde mehr, wird der nächste Tag geplant, sofern die Vorhersage so weit reicht. Auf eine andere Stunde wird nur umgeplant, wenn diese mindestens 0,5 °C wärmer vorhergesagt wird. Ab 60 Minuten vor dem geplanten Start steht der Plan fest.
+1. Alle 30 Minuten wird die stündliche Vorhersage gelesen. Geplant wird die Stunde mit der höchsten Temperatur innerhalb des Zeitfensters (Standard 11 bis 17 Uhr), ab jetzt. So bleibt der Abstand zwischen zwei Ladungen etwa gleich, auch wenn die wärmste Stunde eines Tages spät am Abend liegt. Haben zwei Stunden die gleiche Temperatur, gilt die frühere. Ist die heutige Ladung erledigt oder ist das Zeitfenster für heute vorbei, wird der nächste Tag geplant, sofern die Vorhersage so weit reicht. Auf eine andere Stunde wird nur umgeplant, wenn diese mindestens 0,5 °C wärmer vorhergesagt wird. Ab 60 Minuten vor dem geplanten Start steht der Plan fest.
 2. Zur geplanten Stunde wird „Warmwasser erzwingen“ (`SetForceDHW`) eingeschaltet, einmal am Tag. Vorher wird geprüft:
    - Enthält der Betriebsmodus Warmwasser? Laut HeishaMon-Doku wirkt das Erzwingen nur dann. Wenn nicht, wird der Tag übersprungen.
    - Liegt der Speicher unter dem Sollwert? Wenn nicht, wird der Tag übersprungen.

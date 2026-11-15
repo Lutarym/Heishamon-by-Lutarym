@@ -4,7 +4,7 @@
 
 Home Assistant integration for Panasonic Aquarea heat pumps through HeishaMon, without MQTT, straight over the HTTP interface.
 
-Version 1.4.1
+Version 1.4.2
 
 ## What the integration does
 
@@ -199,7 +199,7 @@ How it works:
 2. At the planned hour "Force hot water" (`SetForceDHW`) is switched on, once a day. Before that it is checked:
    - Does the operating mode include hot water? According to the HeishaMon documentation forcing only works then. If not, the day is skipped.
    - Is the tank below its setpoint? If not, the day is skipped.
-3. The charge ends when the tank reaches the setpoint, when the heat pump ends the forcing by itself, or when the maximum charge duration has passed. Then forcing is switched off. The charge only counts as ended once the heat pump reports forcing as off. Until then the off command is repeated every 3 minutes.
+3. The heat pump ends the forcing by itself once the tank reaches its switch off temperature. According to the Panasonic service manual this is, without backup heater, setpoint + 1 °C for 20 seconds. The integration does not interrupt the charge. It only switches forcing off when the maximum charge duration has passed or the switch is turned off. The charge only counts as ended once the heat pump reports forcing as off. Until then the off command is repeated every 3 minutes.
 4. If the heat pump does not report the forcing within 3 minutes, the attempt counts as not accepted.
 
 Entities:

@@ -4,7 +4,7 @@
 
 Intégration Home Assistant pour les pompes à chaleur Panasonic Aquarea via HeishaMon, sans MQTT, directement par l'interface HTTP.
 
-Version 1.4.1
+Version 1.4.2
 
 ## Ce que fait l'intégration
 
@@ -199,7 +199,7 @@ Fonctionnement :
 2. À l'heure prévue, « Forcer l'eau chaude » (`SetForceDHW`) est activé, une fois par jour. Avant cela, on vérifie :
    - Le mode de fonctionnement comprend il l'eau chaude ? Selon la documentation HeishaMon, le forçage n'agit qu'alors. Sinon, la journée est sautée.
    - Le ballon est il sous sa consigne ? Sinon, la journée est sautée.
-3. La charge se termine lorsque le ballon atteint la consigne, lorsque la pompe à chaleur arrête elle même le forçage ou lorsque la durée maximale est écoulée. Le forçage est alors désactivé. La charge n'est considérée comme terminée que lorsque la pompe à chaleur signale le forçage comme désactivé. D'ici là, la commande d'arrêt est répétée toutes les 3 minutes.
+3. La pompe à chaleur arrête elle même le forçage dès que le ballon atteint sa température d'arrêt. Selon le manuel de service Panasonic, c'est, sans résistance d'appoint, la consigne + 1 °C pendant 20 secondes. L'intégration n'interrompt pas la charge. Elle ne désactive le forçage que lorsque la durée maximale est écoulée ou que l'interrupteur est désactivé. La charge n'est considérée comme terminée que lorsque la pompe à chaleur signale le forçage comme désactivé. D'ici là, la commande d'arrêt est répétée toutes les 3 minutes.
 4. Si la pompe à chaleur ne confirme pas le forçage dans les 3 minutes, la tentative est considérée comme non acceptée.
 
 Entités :

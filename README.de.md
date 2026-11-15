@@ -4,7 +4,7 @@
 
 Home Assistant Integration für Panasonic Aquarea Wärmepumpen über HeishaMon, ohne MQTT, direkt über die HTTP-Schnittstelle.
 
-Version 1.4.1
+Version 1.4.2
 
 ## Was die Integration macht
 
@@ -199,7 +199,7 @@ Ablauf:
 2. Zur geplanten Stunde wird „Warmwasser erzwingen“ (`SetForceDHW`) eingeschaltet, einmal am Tag. Vorher wird geprüft:
    - Enthält der Betriebsmodus Warmwasser? Laut HeishaMon-Doku wirkt das Erzwingen nur dann. Wenn nicht, wird der Tag übersprungen.
    - Liegt der Speicher unter dem Sollwert? Wenn nicht, wird der Tag übersprungen.
-3. Die Ladung endet, wenn der Speicher den Sollwert erreicht, die Wärmepumpe das Erzwingen selbst beendet oder die Höchstdauer abgelaufen ist. Dann wird das Erzwingen ausgeschaltet. Als beendet gilt die Ladung erst, wenn die Wärmepumpe das Erzwingen als aus meldet. Bis dahin wird der Aus-Befehl alle 3 Minuten wiederholt.
+3. Die Wärmepumpe beendet das Erzwingen selbst, sobald der Speicher ihre Abschalttemperatur erreicht. Laut Panasonic-Service-Anleitung ist das ohne Heizstab Sollwert + 1 °C für 20 Sekunden. Die Integration unterbricht die Ladung nicht. Sie schaltet das Erzwingen nur aus, wenn die Höchstdauer abgelaufen ist oder der Schalter ausgeschaltet wird. Als beendet gilt die Ladung erst, wenn die Wärmepumpe das Erzwingen als aus meldet. Bis dahin wird der Aus-Befehl alle 3 Minuten wiederholt.
 4. Meldet die Wärmepumpe das Erzwingen nicht innerhalb von 3 Minuten zurück, gilt der Versuch als nicht angenommen.
 
 Entities:

@@ -14,14 +14,11 @@ Ablauf:
    SetForceDHW=1 gesendet. Vorher wird geprueft, ob der Betriebsmodus
    Warmwasser enthaelt (laut HeishaMon-Doku Voraussetzung) und ob der
    Speicher den Sollwert noch nicht erreicht hat.
-3. Beendet wird die Ladung, sobald der Speicher den Sollwert erreicht,
-   die Waermepumpe das Erzwingen selbst beendet oder die eingestellte
-   Hoechstdauer abgelaufen ist. Dann wird SetForceDHW=0 gesendet, falls
-   die Waermepumpe es noch meldet.
-
-Die HeishaMon-Doku beschreibt nicht, ob die Waermepumpe beim Erzwingen
-den Heizstab nutzt und ob sie selbst beim Sollwert aufhoert. Deshalb wird
-das Ende hier ueberwacht und eine Hoechstdauer erzwungen.
+3. Die Waermepumpe beendet das Erzwingen selbst, sobald der Speicher
+   ihre Abschalttemperatur erreicht (Panasonic Service-Anleitung, Force
+   DHW). Die Integration greift nur ein, wenn die eingestellte
+   Hoechstdauer ablaeuft oder der Schalter ausgeschaltet wird. Dann wird
+   SetForceDHW=0 gesendet und so lange wiederholt, bis TOP2 0 meldet.
 """
 from __future__ import annotations
 
@@ -390,8 +387,6 @@ class WarmwasserPlaner:
             return
         data = self._coordinator.data or {}
         erzwungen = _zahl(data.get("TOP2"))
-        ist = _zahl(data.get("TOP10"))
-        soll = _zahl(data.get("TOP9"))
 
         if erzwungen is not None and erzwungen > 0:
             self.bestaetigt = True
@@ -404,9 +399,10 @@ class WarmwasserPlaner:
             # Die Waermepumpe hat das Erzwingen selbst beendet
             await self._beenden(ERLEDIGT)
             return
-        if ist is not None and soll is not None and ist >= soll:
-            await self._beenden(ERLEDIGT)
-            return
+        # Bewusst kein Abbruch bei Erreichen des Sollwerts: Laut Panasonic
+        # beendet die Waermepumpe das Erzwingen selbst, sobald der Speicher
+        # die Abschalttemperatur erreicht (ohne Heizstab Sollwert + 1 Grad
+        # fuer 20 Sekunden). Ein Abbruch vorher unterbricht ihre Ladung.
         if jetzt - self.gestartet >= self.hoechstdauer:
             await self._beenden(ABGEBROCHEN_DAUER)
 

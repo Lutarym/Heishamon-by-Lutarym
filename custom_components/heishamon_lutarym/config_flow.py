@@ -26,6 +26,9 @@ from .const import (
     CONF_DHW_MAX_MINUTES,
     CONF_DHW_WINDOW_END,
     CONF_DHW_WINDOW_START,
+    CONF_GRID_ENTITY,
+    CONF_PRICE,
+    DEFAULT_PRICE,
     DEFAULT_DHW_WINDOW_END,
     DEFAULT_DHW_WINDOW_START,
     CONF_WEATHER_ENTITY,
@@ -79,6 +82,16 @@ def strommesser_wert(user_input: dict) -> str:
     """
     return user_input.get(CONF_POWER_ENTITY) or ""
 
+
+def netzbezug_feld(aktuell: str | None):
+    """Netzbezugs-Sensor, vorbelegt aber leerbar (wie der Strommesser)."""
+    if aktuell:
+        return vol.Optional(CONF_GRID_ENTITY, description={"suggested_value": aktuell})
+    return vol.Optional(CONF_GRID_ENTITY)
+
+
+# Strompreis in Cent je kWh, 0 = keine Kostenberechnung
+PREIS = vol.All(vol.Coerce(float), vol.Range(min=0, max=200))
 
 # Wetter-Entity fuer "Warmwasser zur waermsten Tageszeit"
 WETTER = selector.EntitySelector(selector.EntitySelectorConfig(domain="weather"))
@@ -273,6 +286,7 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
                     CONF_POWER_ENTITY: strommesser_wert(user_input),
                     # Leer speichern, damit das Abwaehlen wirkt
                     CONF_WEATHER_ENTITY: user_input.get(CONF_WEATHER_ENTITY) or "",
+                    CONF_GRID_ENTITY: user_input.get(CONF_GRID_ENTITY) or "",
                 },
             )
 
@@ -310,6 +324,10 @@ class HeishamonOptionsFlow(config_entries.OptionsFlow):
                 strommesser_feld(
                     einstellung(entry, CONF_POWER_ENTITY, None)
                 ): STROMMESSER,
+                netzbezug_feld(einstellung(entry, CONF_GRID_ENTITY, None)): STROMMESSER,
+                vol.Optional(
+                    CONF_PRICE, default=einstellung(entry, CONF_PRICE, DEFAULT_PRICE)
+                ): PREIS,
                 wetter_feld(wetter): WETTER,
                 vol.Optional(
                     CONF_DHW_MAX_MINUTES,

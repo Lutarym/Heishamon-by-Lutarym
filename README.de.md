@@ -4,7 +4,7 @@
 
 Home Assistant Integration für Panasonic Aquarea Wärmepumpen über HeishaMon, ohne MQTT, direkt über die HTTP-Schnittstelle.
 
-Version 1.4.3
+Version 1.6.0
 
 ## Was die Integration macht
 
@@ -187,6 +187,60 @@ Nur wenn in HeishaMon die Emulation der Optional-Platine aktiv ist. Laut HeishaM
 | SetPoolTemp, SetBufferTemp, SetZ1RoomTemp, SetZ1WaterTemp, SetZ2RoomTemp, SetZ2WaterTemp, SetSolarTemp | Temperatur -78 bis 120 °C |
 
 Die Platine meldet diese Werte nicht zurück. Angezeigt wird der zuletzt gesetzte Wert, er bleibt nach einem Neustart erhalten. `SetOptPCBByte9` ist nicht eingebaut, die Doku beschreibt seine Bedeutung nicht.
+
+## Betriebsanalyse
+
+Immer aktiv, auch im Nur-lesen-Modus. Den Strom liefert der externe Strommesser, wenn eingestellt, sonst die Werte der Wärmepumpe. Aufbewahrt werden 8 Wochen. Zu jedem Wert steht, was er bedeutet und was man damit anfangen kann.
+
+| Entity | Was sie zeigt | Was man damit anfängt |
+|---|---|---|
+| Verdichterstarts 24 h | wie oft der Verdichter in den letzten 24 Stunden gestartet ist. Attribute: Starts pro Tag über 7 Tage, längster Lauf, Starts für Warmwasser, Zähler der Wärmepumpe (TOP12) | Jeder Start kostet Effizienz und Verschleiß. Viele Starts am Tag sind ein Zeichen, dass die Wärmepumpe mehr Wärme liefert, als das Haus abnimmt, zum Beispiel weil die Heizkurve zu hoch oder der Durchfluss zu klein ist. |
+| Mittlere Laufzeit je Start | wie lange ein Verdichterlauf im Mittel dauert | Lange Läufe sind besser als viele kurze. |
+| Kurze Verdichterläufe 24 h | Läufe unter 10 Minuten | Ist die Zahl hoch, Heizkurve, Hysterese und Puffer prüfen. |
+| COP letzte Warmwasserladung | Wärme geteilt durch Strom der letzten Ladung. Attribute: Start, Dauer, Außentemperatur, kWh, PV-Anteil | Je höher, desto günstiger das Warmwasser. |
+| Effizienteste Warmwasser-Startstunde | Startstunde mit dem besten mittleren COP (mindestens 2 Ladungen). Attribute: COP je Startstunde und je Außentemperatur | Zeigt mit deinen eigenen Daten, ob sich die Ladung zur wärmsten Stunde lohnt. |
+| Kosten letzte Warmwasserladung, Warmwasserkosten pro Tag | Strom mal Preis (Option „Strompreis“). Mit Netzbezug-Sensor zählt nur der Strom aus dem Netz | Grundlage für Entscheidungen wie eine niedrigere Speichertemperatur. |
+| Abtauvorgänge 24 h | Anzahl, Dauer und Strom der Abtauvorgänge. Attribut: Anzahl der letzten 7 Tage je Außentemperatur | Abtauen ist bei feuchter Kälte normal. Häufen sich Abtauvorgänge bei einer Temperatur, bei der es vorher nicht so war, die Außeneinheit prüfen (freie Luftführung, Eis). |
+| Vorlauf über Soll | um wie viel Grad der Vorlauf beim Heizen über seinem Soll liegt (7 Tage). Attribut: Ist- und Soll-Vorlauf je Außentemperatur | Zeigt, wie sich die Heizkurve verhält. Jedes Grad weniger Vorlauf verbessert die Effizienz. Bleiben die Räume warm genug, kann die Kurve schrittweise abgesenkt werden. |
+| Spreizung Heizen, Spreizung Warmwasser | Unterschied zwischen Vor- und Rücklauf bei laufendem Verdichter (7 Tage), mit Durchfluss | Eine deutlich zu kleine oder zu große Spreizung deutet auf eine unpassende Pumpeneinstellung hin. Änderungen mit dem Installateur besprechen. |
+| PV-Anteil Wärmepumpe heute | Anteil des Wärmepumpenstroms, der nicht aus dem Netz kam (PV oder Batterie). Braucht die Option „Netzbezug-Sensor“. Attribut: 7 Tage | Grundlage, um Ladungen auf PV-Überschuss zu legen. |
+| Heizstab Laufzeit heute | Minuten mit aktivem Heizstab (TOP60 oder TOP61). Attribute: zuletzt aktiv, 7 Tage, Betriebsstunden Heizstab Warmwasser (TOP91) | Bei jedem Einschalten des Heizstabs zeigt Home Assistant eine Benachrichtigung. |
+
+Neue Optionen unter „Konfigurieren“:
+
+| Option | Bedeutung |
+|---|---|
+| Netzbezug-Sensor | Leistung aus dem Netz, positiv = Bezug, negativ = Einspeisung. Nötig für den PV-Anteil |
+| Strompreis | Cent je kWh, 0 = keine Kostenberechnung |
+
+## Warmwasser-Auswertung
+
+Immer aktiv, auch im Nur-lesen-Modus. Grundlage sind TOP10 (Speichertemperatur), TOP20 (Dreiwegeventil, 1 = Warmwasser), TOP2 (Zwangsladung) und TOP9 (Sollwert). Beim Start übernimmt die Integration ältere Daten aus dem Verlauf von Home Assistant (meist 10 Tage), danach sammelt sie selbst. Aufbewahrt werden 8 Wochen.
+
+| Entity | Bedeutung |
+|---|---|
+| Warmwasserladungen 24 h | Anzahl der Ladungen in den letzten 24 Stunden. Attribute: davon erzwungen, gesamt, typische Ladedauer, Daten ab |
+| Haltedauer letzte volle Ladung | Stunden vom Ende der letzten vollen Ladung bis zum Start der nächsten regulären Ladung. Attribute: Ladetemperatur, Nachladetemperatur, Zeiten |
+| Haltedauer Durchschnitt | Mittel über alle ausgewerteten Zeiträume. Attribute: Median, Anzahl, mittlere Haltedauer je Ladetemperatur, mittlere Nachladetemperatur |
+| Nachladetemperatur Warmwasser | Speichertemperatur beim Start der letzten regulären Ladung |
+| Optimaler Ladezeitpunkt Montag bis Sonntag | 7 Entities, empfohlener Ladestart je Wochentag |
+
+Begriffe:
+- Ladung: Das Dreiwegeventil steht auf Warmwasser. Unterbrechungen unter 10 Minuten (zum Beispiel Abtauen) zählen als eine Ladung.
+- Volle Ladung: Die Speichertemperatur erreicht den Sollwert.
+- Haltedauer: vom Ende einer vollen Ladung bis zur nächsten regulären Ladung (keine Zwangsladung). Ist die nächste Ladung eine Zwangsladung, wird der Zeitraum nicht gewertet, weil die Wärmepumpe von selbst noch nicht nachgeladen hätte.
+- Verbrauch: Abfall der Speichertemperatur außerhalb von Ladungen. Die erste Stunde nach einer Ladung zählt nicht, der Speicher durchmischt sich dann noch.
+
+Optimaler Ladezeitpunkt: Die Ladung soll kurz vor dem Hauptverbrauch des Wochentags fertig sein, unabhängig von der Außentemperatur. Hauptverbrauch sind die zwei aufeinanderfolgenden Stunden mit dem größten durchschnittlichen Verbrauch an diesem Wochentag. Ladestart = Beginn des Hauptverbrauchs minus typische Ladedauer (Median der vollen Ladungen), abgerundet auf 15 Minuten. Nötig sind mindestens 2 ausgewertete Tage dieses Wochentags und 1 K Verbrauch, sonst ist der Wert unbekannt. Das Attribut `verbrauch_k_je_stunde` zeigt den mittleren Verbrauch je Stunde in Kelvin. Die Tagesladung wird dadurch nicht verändert, der Wert dient nur zur Anzeige.
+
+## Prüfung auf Firmware-Updates
+
+Die Entity „Firmware“ (`update.heishamon_<IP>_firmware`) zeigt die installierte HeishaMon-Firmware und die neueste Produktionsversion. Geprüft wird alle 6 Stunden.
+
+- Installiert: gelesen von der Startseite des HeishaMon.
+- Neueste: Die HeishaMon-Entwickler markieren alle GitHub-Releases als Vorabversion. Die gültige Produktionsversion wird deshalb aus dem Satz „The latest production release is ...“ in [binaries/README.md](https://github.com/heishamon/HeishaMon/tree/main/binaries) gelesen, den das Projekt bei jeder Veröffentlichung pflegt.
+- Nightly-, Alpha- oder selbst gebaute Firmware hat keine vergleichbare Versionsnummer und löst keine Update-Meldung aus.
+- Die Integration installiert nichts. Die Firmware ist für die kleine Platine (ESP8266) und die große Platine (ESP32-S3) verschieden, eine falsche Datei macht die Platine unbrauchbar. Aktualisieren über die Weboberfläche von HeishaMon (Menü Firmware) mit der Datei für deine Platine.
 
 ## Warmwasser zur wärmsten Tageszeit
 

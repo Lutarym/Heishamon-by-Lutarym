@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 from typing import Any
 
 import aiohttp
@@ -11,6 +12,8 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .const import EINWIRE_PRAEFIX, S0_PRAEFIX
 
 _LOGGER = logging.getLogger(__name__)
+
+_VERSION_MUSTER = re.compile(rb"id=['\"]sideVersion['\"]>([^<]*)<")
 
 # Der Webserver auf dem ESP bearbeitet nur eine Anfrage gleichzeitig und
 # antwortet gelegentlich nicht. Ein einzelner Fehlschlag darf deshalb nicht
@@ -194,6 +197,31 @@ class HeishamonAPI:
         except (aiohttp.ClientError, asyncio.TimeoutError) as err:
             raise HeishamonBefehlFehler(f"{command}={value}: {err}") from err
         _LOGGER.debug("%s=%s gesendet, Antwort: %s", command, value, antwort.strip())
+
+    async def async_get_firmware_version(self) -> str | None:
+        """Liest die installierte Firmware-Version von der Startseite.
+
+        HeishaMon gibt die Version ueber HTTP nur im Seitenmenue der
+        Startseite aus: <p id='sideVersion'>v4.2.3</p> (seit mindestens
+        Firmware 4.2.3). Gelesen wird nur bis zu dieser Stelle.
+        """
+        session = async_get_clientsession(self._hass)
+        gelesen = b""
+        async with self._sperre:
+            async with session.get(
+                f"{self.base_url}/",
+                auth=self._auth,
+                timeout=aiohttp.ClientTimeout(total=ZEITLIMIT_SEKUNDEN),
+            ) as response:
+                response.raise_for_status()
+                async for stueck in response.content.iter_chunked(4096):
+                    gelesen += stueck
+                    treffer = _VERSION_MUSTER.search(gelesen)
+                    if treffer:
+                        return treffer.group(1).decode("utf-8", "replace").strip()
+                    if len(gelesen) > 400_000:
+                        break
+        return None
 
     async def test_connection(self) -> bool:
         """Prueft, ob /json erreichbar ist und Topics liefert."""

@@ -4,7 +4,7 @@
 
 Intégration Home Assistant pour les pompes à chaleur Panasonic Aquarea via HeishaMon, sans MQTT, directement par l'interface HTTP.
 
-Version 1.4.3
+Version 1.6.0
 
 ## Ce que fait l'intégration
 
@@ -187,6 +187,60 @@ Seulement si l'émulation de la carte optionnelle est activée dans HeishaMon. S
 | SetPoolTemp, SetBufferTemp, SetZ1RoomTemp, SetZ1WaterTemp, SetZ2RoomTemp, SetZ2WaterTemp, SetSolarTemp | Température -78 à 120 °C |
 
 La carte ne renvoie pas ces valeurs. La dernière valeur réglée est affichée et conservée après un redémarrage. `SetOptPCBByte9` n'est pas intégré, la documentation ne décrit pas sa signification.
+
+## Analyse de fonctionnement
+
+Toujours active, aussi en lecture seule. L'électricité vient du compteur externe s'il est défini, sinon des valeurs de la pompe à chaleur. Conservation 8 semaines. Pour chaque valeur, il est expliqué ce qu'elle signifie et ce qu'on peut en faire.
+
+| Entité | Ce qu'elle montre | Ce qu'on en fait |
+|---|---|---|
+| Démarrages du compresseur 24 h | nombre de démarrages du compresseur sur les dernières 24 heures. Attributs : démarrages par jour sur 7 jours, cycle le plus long, démarrages pour l'eau chaude, compteur de la pompe à chaleur (TOP12) | Chaque démarrage coûte du rendement et de l'usure. Beaucoup de démarrages par jour indiquent que la pompe à chaleur produit plus de chaleur que la maison n'en prend, par exemple courbe de chauffe trop haute ou débit trop faible. |
+| Durée moyenne par démarrage | durée moyenne d'un cycle du compresseur | Des cycles longs valent mieux que beaucoup de cycles courts. |
+| Cycles courts du compresseur 24 h | cycles de moins de 10 minutes | Si ce nombre est élevé, vérifier courbe de chauffe, hystérésis et ballon tampon. |
+| COP dernière charge d'eau chaude | chaleur divisée par électricité de la dernière charge. Attributs : début, durée, température extérieure, kWh, part PV | Plus il est élevé, moins l'eau chaude coûte. |
+| Heure de départ eau chaude la plus efficace | heure de départ avec le meilleur COP moyen (au moins 2 charges). Attributs : COP par heure de départ et par température extérieure | Montre avec vos propres données si la charge à l'heure la plus chaude est rentable. |
+| Coût dernière charge d'eau chaude, coût de l'eau chaude par jour | électricité fois prix (option « Prix de l'électricité »). Avec un capteur de soutirage, seule l'électricité du réseau compte | Base pour des décisions comme une température de ballon plus basse. |
+| Dégivrages 24 h | nombre, durée et électricité des dégivrages. Attribut : nombre sur 7 jours par température extérieure | Le dégivrage est normal par froid humide. Si les dégivrages se multiplient à une température où ce n'était pas le cas avant, vérifier l'unité extérieure (circulation d'air libre, glace). |
+| Départ au dessus de la consigne | de combien de degrés la température de départ dépasse sa consigne en chauffage (7 jours). Attribut : départ réel et consigne par température extérieure | Montre le comportement de la courbe de chauffe. Chaque degré de départ en moins améliore le rendement. Si les pièces restent assez chaudes, la courbe peut être abaissée progressivement. |
+| Écart de température chauffage, écart de température eau chaude | différence entre départ et retour, compresseur en marche (7 jours), avec débit | Un écart nettement trop petit ou trop grand indique un réglage de pompe inadapté. Discuter des changements avec l'installateur. |
+| Part PV de la pompe à chaleur aujourd'hui | part de l'électricité de la pompe à chaleur qui ne vient pas du réseau (PV ou batterie). Nécessite l'option « Capteur de soutirage réseau ». Attribut : 7 jours | Base pour placer les charges sur le surplus PV. |
+| Durée résistance d'appoint aujourd'hui | minutes avec résistance active (TOP60 ou TOP61). Attributs : dernière activité, 7 jours, heures de fonctionnement de la résistance eau chaude (TOP91) | À chaque mise en marche de la résistance, Home Assistant affiche une notification. |
+
+Nouvelles options dans « Configurer » :
+
+| Option | Signification |
+|---|---|
+| Capteur de soutirage réseau | puissance du réseau, positif = soutirage, négatif = injection. Nécessaire pour la part PV |
+| Prix de l'électricité | centimes par kWh, 0 = pas de calcul des coûts |
+
+## Analyse de l'eau chaude
+
+Toujours active, aussi en lecture seule. Basée sur TOP10 (température du ballon), TOP20 (vanne trois voies, 1 = eau chaude), TOP2 (charge forcée) et TOP9 (consigne). Au démarrage, l'intégration reprend les données plus anciennes de l'historique de Home Assistant (souvent 10 jours), ensuite elle collecte elle même. Conservation 8 semaines.
+
+| Entité | Signification |
+|---|---|
+| Charges d'eau chaude 24 h | nombre de charges des dernières 24 heures. Attributs : dont forcées, total, durée de charge typique, données depuis |
+| Durée de tenue dernière charge complète | heures entre la fin de la dernière charge complète et le début de la charge régulière suivante. Attributs : température de charge, température de recharge, heures |
+| Durée de tenue moyenne | moyenne sur toutes les périodes évaluées. Attributs : médiane, nombre, durée moyenne par température de charge, température de recharge moyenne |
+| Température de recharge eau chaude | température du ballon au début de la dernière charge régulière |
+| Heure de charge optimale lundi à dimanche | 7 entités, début de charge recommandé par jour de la semaine |
+
+Termes :
+- Charge : la vanne trois voies est sur eau chaude. Les interruptions de moins de 10 minutes (par exemple dégivrage) comptent comme une seule charge.
+- Charge complète : la température du ballon atteint la consigne.
+- Durée de tenue : de la fin d'une charge complète jusqu'à la charge régulière suivante (pas une charge forcée). Si la charge suivante est forcée, la période n'est pas comptée, car la pompe à chaleur n'aurait pas encore rechargé d'elle même.
+- Consommation : baisse de la température du ballon en dehors des charges. La première heure après une charge ne compte pas, le ballon se mélange encore.
+
+Heure de charge optimale : la charge doit être terminée peu avant la consommation principale du jour de la semaine, indépendamment de la température extérieure. La consommation principale correspond aux deux heures consécutives avec la consommation moyenne la plus élevée ce jour là. Début de charge = début de la consommation principale moins la durée de charge typique (médiane des charges complètes), arrondi vers le bas à 15 minutes. Il faut au moins 2 jours évalués de ce jour de la semaine et 1 K de consommation, sinon la valeur est inconnue. L'attribut `verbrauch_k_je_stunde` indique la consommation moyenne par heure en kelvin. La charge quotidienne n'est pas modifiée, la valeur sert uniquement à l'affichage.
+
+## Vérification des mises à jour du micrologiciel
+
+L'entité « Micrologiciel » (`update.heishamon_<IP>_firmware`) affiche le micrologiciel HeishaMon installé et la dernière version de production. Vérification toutes les 6 heures.
+
+- Installé : lu sur la page d'accueil du HeishaMon.
+- Dernière : les développeurs de HeishaMon marquent toutes les versions GitHub comme préversion. La version de production valide est donc lue dans la phrase « The latest production release is ... » de [binaries/README.md](https://github.com/heishamon/HeishaMon/tree/main/binaries), que le projet met à jour à chaque publication.
+- Un micrologiciel nightly, alpha ou compilé soi même n'a pas de numéro de version comparable et ne déclenche pas de message de mise à jour.
+- L'intégration n'installe rien. Le micrologiciel diffère pour la petite carte (ESP8266) et la grande carte (ESP32-S3), un mauvais fichier rend la carte inutilisable. Mettre à jour via l'interface web de HeishaMon (menu Firmware) avec le fichier de votre carte.
 
 ## Eau chaude à l'heure la plus chaude
 

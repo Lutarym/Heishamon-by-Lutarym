@@ -535,6 +535,78 @@
       },
       "dhw_last_charge": {
         "name": "Dernière charge d'eau chaude"
+      },
+      "dhw_charges_24h": {
+        "name": "Charges d'eau chaude 24 h"
+      },
+      "dhw_hold_last": {
+        "name": "Durée de tenue dernière charge complète"
+      },
+      "dhw_hold_avg": {
+        "name": "Durée de tenue moyenne"
+      },
+      "dhw_reheat_temp": {
+        "name": "Température de recharge eau chaude"
+      },
+      "dhw_optimal_monday": {
+        "name": "Heure de charge optimale lundi"
+      },
+      "dhw_optimal_tuesday": {
+        "name": "Heure de charge optimale mardi"
+      },
+      "dhw_optimal_wednesday": {
+        "name": "Heure de charge optimale mercredi"
+      },
+      "dhw_optimal_thursday": {
+        "name": "Heure de charge optimale jeudi"
+      },
+      "dhw_optimal_friday": {
+        "name": "Heure de charge optimale vendredi"
+      },
+      "dhw_optimal_saturday": {
+        "name": "Heure de charge optimale samedi"
+      },
+      "dhw_optimal_sunday": {
+        "name": "Heure de charge optimale dimanche"
+      },
+      "compressor_starts_24h": {
+        "name": "Démarrages du compresseur 24 h"
+      },
+      "compressor_runtime_avg": {
+        "name": "Durée moyenne par démarrage"
+      },
+      "compressor_short_runs_24h": {
+        "name": "Cycles courts du compresseur 24 h"
+      },
+      "dhw_cop_last": {
+        "name": "COP dernière charge d'eau chaude"
+      },
+      "dhw_best_hour": {
+        "name": "Heure de départ eau chaude la plus efficace"
+      },
+      "dhw_cost_last": {
+        "name": "Coût dernière charge d'eau chaude"
+      },
+      "dhw_cost_per_day": {
+        "name": "Coût de l'eau chaude par jour"
+      },
+      "defrost_24h": {
+        "name": "Dégivrages 24 h"
+      },
+      "flow_over_target": {
+        "name": "Départ au dessus de la consigne"
+      },
+      "spread_heating": {
+        "name": "Écart de température chauffage"
+      },
+      "spread_dhw": {
+        "name": "Écart de température eau chaude"
+      },
+      "pv_share_today": {
+        "name": "Part PV de la pompe à chaleur aujourd'hui"
+      },
+      "heater_runtime_today": {
+        "name": "Durée résistance d'appoint aujourd'hui"
       }
     },
     "number": {
@@ -862,6 +934,11 @@
       "setreset": {
         "name": "Réinitialiser le défaut"
       }
+    },
+    "update": {
+      "firmware": {
+        "name": "Micrologiciel"
+      }
     }
   },
   "options": {
@@ -878,14 +955,18 @@
           "weather_entity": "Entité météo pour l'eau chaude à l'heure la plus chaude (facultatif)",
           "dhw_max_minutes": "Durée maximale de la charge d'eau chaude forcée (minutes, 15 à 240)",
           "dhw_window_start": "Début au plus tôt de la charge d'eau chaude (heure pleine, 0 à 23)",
-          "dhw_window_end": "Début au plus tard de la charge d'eau chaude (heure pleine, 0 à 23)"
+          "dhw_window_end": "Début au plus tard de la charge d'eau chaude (heure pleine, 0 à 23)",
+          "grid_entity": "Capteur de soutirage réseau pour la part PV (facultatif)",
+          "electricity_price": "Prix de l'électricité en centimes par kWh (0 = pas de calcul des coûts)"
         },
         "data_description": {
           "power_entity": "Capteur de puissance qui mesure uniquement la pompe à chaleur, par exemple un Shelly. Le COP peut alors aussi être mesuré au lieu d'être calculé à partir des valeurs de la pompe à chaleur. Basculer avec la sélection \"Source du COP\" de l'appareil. Laisser vide si aucun n'est disponible.",
           "weather_entity": "L'heure la plus chaude de la journée est tirée de la prévision horaire de cette entité météo. À cette heure, la charge d'eau chaude est forcée. Une entité météo trouvée est proposée automatiquement, Met.no en priorité. Laisser vide pour désactiver la fonction. Seulement avec commande (lecture seule désactivée).",
           "dhw_max_minutes": "Ensuite, le forçage est arrêté, même si le ballon n'a pas encore atteint la consigne.",
           "dhw_window_start": "L'heure la plus chaude n'est cherchée que dans cette plage horaire. L'écart entre deux charges reste ainsi à peu près le même. Par défaut 11 h.",
-          "dhw_window_end": "Cette heure est encore incluse. Par défaut 17 h."
+          "dhw_window_end": "Cette heure est encore incluse. Par défaut 17 h.",
+          "grid_entity": "Puissance actuellement soutirée du réseau. Positif = soutirage, négatif = injection. La part de la puissance de la pompe à chaleur qui ne vient pas du réseau compte comme puissance PV ou batterie.",
+          "electricity_price": "Pour le coût des charges d'eau chaude. Avec un capteur de soutirage, seule l'électricité du réseau compte."
         }
       }
     },

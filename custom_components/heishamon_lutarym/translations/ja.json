@@ -535,6 +535,78 @@
       },
       "dhw_last_charge": {
         "name": "前回の給湯運転"
+      },
+      "dhw_charges_24h": {
+        "name": "給湯運転回数 24時間"
+      },
+      "dhw_hold_last": {
+        "name": "前回満タン運転の持続時間"
+      },
+      "dhw_hold_avg": {
+        "name": "平均持続時間"
+      },
+      "dhw_reheat_temp": {
+        "name": "給湯再加熱温度"
+      },
+      "dhw_optimal_monday": {
+        "name": "最適な給湯開始時刻 月曜日"
+      },
+      "dhw_optimal_tuesday": {
+        "name": "最適な給湯開始時刻 火曜日"
+      },
+      "dhw_optimal_wednesday": {
+        "name": "最適な給湯開始時刻 水曜日"
+      },
+      "dhw_optimal_thursday": {
+        "name": "最適な給湯開始時刻 木曜日"
+      },
+      "dhw_optimal_friday": {
+        "name": "最適な給湯開始時刻 金曜日"
+      },
+      "dhw_optimal_saturday": {
+        "name": "最適な給湯開始時刻 土曜日"
+      },
+      "dhw_optimal_sunday": {
+        "name": "最適な給湯開始時刻 日曜日"
+      },
+      "compressor_starts_24h": {
+        "name": "圧縮機の起動回数 24時間"
+      },
+      "compressor_runtime_avg": {
+        "name": "起動あたりの平均運転時間"
+      },
+      "compressor_short_runs_24h": {
+        "name": "圧縮機の短時間運転 24時間"
+      },
+      "dhw_cop_last": {
+        "name": "前回給湯運転の COP"
+      },
+      "dhw_best_hour": {
+        "name": "最も効率の良い給湯開始時刻"
+      },
+      "dhw_cost_last": {
+        "name": "前回給湯運転の費用"
+      },
+      "dhw_cost_per_day": {
+        "name": "1日あたりの給湯費用"
+      },
+      "defrost_24h": {
+        "name": "除霜回数 24時間"
+      },
+      "flow_over_target": {
+        "name": "往き温度の設定超過"
+      },
+      "spread_heating": {
+        "name": "暖房の温度差"
+      },
+      "spread_dhw": {
+        "name": "給湯の温度差"
+      },
+      "pv_share_today": {
+        "name": "今日のヒートポンプ PV 比率"
+      },
+      "heater_runtime_today": {
+        "name": "今日のヒーター運転時間"
       }
     },
     "number": {
@@ -862,6 +934,11 @@
       "setreset": {
         "name": "エラーリセット"
       }
+    },
+    "update": {
+      "firmware": {
+        "name": "ファームウェア"
+      }
     }
   },
   "options": {
@@ -878,14 +955,18 @@
           "weather_entity": "最も暖かい時間帯の給湯用の天気エンティティ（任意）",
           "dhw_max_minutes": "給湯強制運転の最大時間（分、15〜240）",
           "dhw_window_start": "給湯運転の最も早い開始（正時、0〜23）",
-          "dhw_window_end": "給湯運転の最も遅い開始（正時、0〜23）"
+          "dhw_window_end": "給湯運転の最も遅い開始（正時、0〜23）",
+          "grid_entity": "PV 比率用の系統受電センサー（任意）",
+          "electricity_price": "電気料金（kWh あたりのセント、0 = 費用計算なし）"
         },
         "data_description": {
           "power_entity": "ヒートポンプのみを計測する電力センサー（例：Shelly）。これを使うと、ヒートポンプの値からではなく実測で COP を求めることもできます。デバイスの「COP の算出元」で切り替えます。ない場合は空欄のままにしてください。",
           "weather_entity": "この天気エンティティの時間別予報から、その日で最も暖かい時間を求めます。その時間に給湯を強制運転します。見つかった天気エンティティが自動で提案されます（Met.no を優先）。機能をオフにするには空欄のままにしてください。制御が有効な場合のみ（読み取り専用オフ）。",
           "dhw_max_minutes": "この時間を過ぎると、タンクが設定温度に達していなくても強制運転を終了します。",
           "dhw_window_start": "最も暖かい時間はこの時間帯の中だけで探します。これにより2回の運転の間隔がほぼ一定になります。初期値 11時。",
-          "dhw_window_end": "この時刻も含まれます。初期値 17時。"
+          "dhw_window_end": "この時刻も含まれます。初期値 17時。",
+          "grid_entity": "現在系統から受電している電力。正 = 受電、負 = 売電。ヒートポンプの電力のうち系統から来ない分を PV またはバッテリーの電力とみなします。",
+          "electricity_price": "給湯運転の費用に使います。系統受電センサーがある場合は、系統からの電力のみを計算します。"
         }
       }
     },

@@ -31,6 +31,9 @@ from .const import (
     CONF_DHW_MAX_MINUTES,
     CONF_DHW_WINDOW_END,
     CONF_DHW_WINDOW_START,
+    CONF_GRID_ENTITY,
+    CONF_PRICE,
+    DEFAULT_PRICE,
     DEFAULT_DHW_WINDOW_END,
     DEFAULT_DHW_WINDOW_START,
     CONF_WEATHER_ENTITY,
@@ -44,6 +47,9 @@ from .const import (
     OPT_TOPICS,
 )
 from .entity import Geraet
+from .firmware import FirmwareCoordinator
+from .statistik import Warmwasserstatistik
+from .analyse import Betriebsanalyse
 from .warmwasser import WarmwasserPlaner
 
 _LOGGER = logging.getLogger(__name__)
@@ -58,6 +64,7 @@ PLATFORMS = [
     Platform.SWITCH,
     Platform.SELECT,
     Platform.BUTTON,
+    Platform.UPDATE,
 ]
 
 
@@ -245,7 +252,56 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             if entity_id:
                 register.async_remove(entity_id)
 
+    # Warmwasser-Auswertung: laeuft immer, auch im Nur-lesen-Modus
+    statistik = Warmwasserstatistik(
+        hass, entry.entry_id, coordinator, entry.unique_id or host
+    )
+    hass.data[DOMAIN][entry.entry_id]["statistik"] = statistik
+
+    # Betriebsanalyse: Takten, Effizienz, Kosten, Abtauen, Heizkreis, PV, Heizstab
+    def _heizstab_melden(zeit: str) -> None:
+        from homeassistant.components import persistent_notification
+
+        texte = {
+            "de": ("Heizstab aktiv", "Der Heizstab der Wärmepumpe {host} ist seit {zeit} aktiv."),
+            "fr": ("Résistance d'appoint active", "La résistance d'appoint de la pompe à chaleur {host} est active depuis {zeit}."),
+            "ja": ("ヒーター作動中", "ヒートポンプ {host} のヒーターが {zeit} から作動しています。"),
+        }
+        titel, text = texte.get(
+            (hass.config.language or "en")[:2],
+            ("Backup heater active", "The backup heater of heat pump {host} has been active since {zeit}."),
+        )
+        persistent_notification.async_create(
+            hass,
+            text.format(host=host, zeit=zeit),
+            title=titel,
+            notification_id=f"heishamon_heizstab_{entry.entry_id}",
+        )
+
+    analyse = Betriebsanalyse(
+        hass,
+        entry.entry_id,
+        coordinator,
+        hass.data[DOMAIN][entry.entry_id]["cop_quelle"],
+        power_entity,
+        einstellung(entry, CONF_GRID_ENTITY, None) or None,
+        float(einstellung(entry, CONF_PRICE, DEFAULT_PRICE) or 0),
+        _heizstab_melden,
+    )
+    hass.data[DOMAIN][entry.entry_id]["analyse"] = analyse
+
+    # Firmware-Pruefung: im Hintergrund, damit die Einrichtung nicht wartet
+    firmware = FirmwareCoordinator(hass, api, entry)
+    hass.data[DOMAIN][entry.entry_id]["firmware"] = firmware
+
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    await statistik.async_start()
+    entry.async_on_unload(statistik.async_stop)
+    await analyse.async_start()
+    entry.async_on_unload(analyse.async_stop)
+    entry.async_create_background_task(
+        hass, firmware.async_refresh(), f"heishamon_firmware_{entry.entry_id}"
+    )
     if planer is not None:
         await planer.async_start()
         entry.async_on_unload(planer.async_stop)

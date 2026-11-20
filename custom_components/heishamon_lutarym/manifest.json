@@ -1,6 +1,9 @@
 {
   "domain": "heishamon_lutarym",
   "name": "Heishamon by Lutarym",
+  "after_dependencies": [
+    "recorder"
+  ],
   "codeowners": [
     "@Lutarym"
   ],
@@ -10,5 +13,5 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/Lutarym/Heishamon-by-Lutarym/issues",
   "requirements": [],
-  "version": "1.4.3"
+  "version": "1.6.0"
 }

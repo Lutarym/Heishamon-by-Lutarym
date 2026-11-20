@@ -4,7 +4,7 @@
 
 Home Assistant integration for Panasonic Aquarea heat pumps through HeishaMon, without MQTT, straight over the HTTP interface.
 
-Version 1.4.3
+Version 1.6.0
 
 ## What the integration does
 
@@ -187,6 +187,60 @@ Only if optional PCB emulation is enabled in HeishaMon. According to the HeishaM
 | SetPoolTemp, SetBufferTemp, SetZ1RoomTemp, SetZ1WaterTemp, SetZ2RoomTemp, SetZ2WaterTemp, SetSolarTemp | Temperature -78 to 120 °C |
 
 The board does not report these values back. The last value set is shown and kept after a restart. `SetOptPCBByte9` is not included, the documentation does not describe its meaning.
+
+## Operating analysis
+
+Always active, also in read only mode. Electricity comes from the external power meter if set, otherwise from the heat pump values. Kept for 8 weeks. Each entry explains what the value means and what you can do with it.
+
+| Entity | What it shows | What to do with it |
+|---|---|---|
+| Compressor starts 24 h | how often the compressor started in the last 24 hours. Attributes: starts per day over 7 days, longest run, starts for hot water, counter of the heat pump (TOP12) | Every start costs efficiency and wear. Many starts per day are a sign that the heat pump produces more heat than the house takes, for example because the heating curve is too high or the flow rate is too low. |
+| Average run time per start | how long a compressor run lasts on average | Long runs are better than many short ones. |
+| Short compressor runs 24 h | runs shorter than 10 minutes | If this number is high, check heating curve, hysteresis and buffer. |
+| COP last hot water charge | heat divided by electricity of the last charge. Attributes: start, duration, outdoor temperature, kWh, PV share | The higher, the cheaper the hot water. |
+| Most efficient hot water start hour | start hour with the best average COP (at least 2 charges). Attributes: COP per start hour and per outdoor temperature | Shows with your own data whether charging at the warmest hour pays off. |
+| Cost last hot water charge, hot water cost per day | electricity times price (option "Electricity price"). With a grid import sensor only electricity from the grid counts | Basis for decisions like a lower tank temperature. |
+| Defrosts 24 h | number, duration and electricity of defrosts. Attribute: number in the last 7 days per outdoor temperature | Defrosting is normal in damp cold weather. If defrosts pile up at a temperature where they did not occur before, check the outdoor unit (free air flow, ice). |
+| Flow above target | how many degrees the flow temperature is above its target while heating (7 days). Attribute: actual and target flow per outdoor temperature | Shows how the heating curve behaves. Every degree less flow temperature improves the efficiency. If the rooms stay warm enough, the curve can be lowered step by step. |
+| Temperature spread heating, temperature spread hot water | difference between flow and return while the compressor runs (7 days), with flow rate | A spread that is clearly too small or too large points to an unsuitable pump setting. Discuss changes with your installer. |
+| Heat pump PV share today | share of the heat pump electricity that did not come from the grid (PV or battery). Needs the option "Grid import sensor". Attribute: 7 days | Basis for shifting charges to PV surplus. |
+| Backup heater run time today | minutes with the backup heater active (TOP60 or TOP61). Attributes: last active, 7 days, operating hours of the DHW heater (TOP91) | Each time the backup heater switches on, Home Assistant shows a notification. |
+
+New options under "Configure":
+
+| Option | Meaning |
+|---|---|
+| Grid import sensor | power from the grid, positive = import, negative = export. Needed for the PV share |
+| Electricity price | cent per kWh, 0 = no cost calculation |
+
+## Hot water analysis
+
+Always active, also in read only mode. Based on TOP10 (tank temperature), TOP20 (three way valve, 1 = hot water), TOP2 (forced charge) and TOP9 (setpoint). At start the integration takes over older data from the Home Assistant history (usually 10 days), then it collects itself. Kept for 8 weeks.
+
+| Entity | Meaning |
+|---|---|
+| Hot water charges 24 h | number of charges in the last 24 hours. Attributes: of which forced, total, typical charge duration, data since |
+| Hold time last full charge | hours from the end of the last full charge until the next regular charge started. Attributes: charge temperature, reheat temperature, times |
+| Hold time average | average over all evaluated periods. Attributes: median, number, average hold time per charge temperature, average reheat temperature |
+| Hot water reheat temperature | tank temperature at the start of the last regular charge |
+| Optimal charge time Monday to Sunday | 7 entities, recommended charge start per weekday |
+
+Terms:
+- Charge: the three way valve is on hot water. Interruptions shorter than 10 minutes (for example defrosting) count as one charge.
+- Full charge: the tank temperature reaches the setpoint.
+- Hold time: from the end of a full charge until the next regular charge (not a forced charge). If the next charge is a forced one, the period is not counted, because the heat pump would not have recharged yet by itself.
+- Consumption: drop of the tank temperature outside of charges. The first hour after a charge does not count, the tank is still mixing then.
+
+Optimal charge time: the charge should be finished shortly before the main consumption of that weekday, independent of the outdoor temperature. Main consumption are the two consecutive hours with the highest average consumption on that weekday. Charge start = start of the main consumption minus the typical charge duration (median of the full charges), rounded down to 15 minutes. At least 2 evaluated days of that weekday and 1 K of consumption are needed, otherwise the value is unknown. The attribute `verbrauch_k_je_stunde` shows the average consumption per hour in Kelvin. The daily charge is not changed by this, the value is for display only.
+
+## Firmware update check
+
+The entity "Firmware" (`update.heishamon_<IP>_firmware`) shows the installed HeishaMon firmware and the latest production release. Checked every 6 hours.
+
+- Installed: read from the HeishaMon start page.
+- Latest: the HeishaMon developers mark all GitHub releases as pre release. The valid production release is therefore taken from the sentence "The latest production release is ..." in [binaries/README.md](https://github.com/heishamon/HeishaMon/tree/main/binaries), which the project updates with every release.
+- Nightly, alpha or self built firmware has no comparable version number and does not trigger an update message.
+- The integration does not install anything. The firmware differs for the small board (ESP8266) and the large board (ESP32-S3), a wrong file makes the board unusable. Update through the HeishaMon web interface (menu Firmware) with the file for your board.
 
 ## Hot water at the warmest time of day
 

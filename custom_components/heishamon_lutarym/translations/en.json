@@ -535,6 +535,78 @@
       },
       "dhw_last_charge": {
         "name": "Last hot water charge"
+      },
+      "dhw_charges_24h": {
+        "name": "Hot water charges 24 h"
+      },
+      "dhw_hold_last": {
+        "name": "Hold time last full charge"
+      },
+      "dhw_hold_avg": {
+        "name": "Hold time average"
+      },
+      "dhw_reheat_temp": {
+        "name": "Hot water reheat temperature"
+      },
+      "dhw_optimal_monday": {
+        "name": "Optimal charge time Monday"
+      },
+      "dhw_optimal_tuesday": {
+        "name": "Optimal charge time Tuesday"
+      },
+      "dhw_optimal_wednesday": {
+        "name": "Optimal charge time Wednesday"
+      },
+      "dhw_optimal_thursday": {
+        "name": "Optimal charge time Thursday"
+      },
+      "dhw_optimal_friday": {
+        "name": "Optimal charge time Friday"
+      },
+      "dhw_optimal_saturday": {
+        "name": "Optimal charge time Saturday"
+      },
+      "dhw_optimal_sunday": {
+        "name": "Optimal charge time Sunday"
+      },
+      "compressor_starts_24h": {
+        "name": "Compressor starts 24 h"
+      },
+      "compressor_runtime_avg": {
+        "name": "Average run time per start"
+      },
+      "compressor_short_runs_24h": {
+        "name": "Short compressor runs 24 h"
+      },
+      "dhw_cop_last": {
+        "name": "COP last hot water charge"
+      },
+      "dhw_best_hour": {
+        "name": "Most efficient hot water start hour"
+      },
+      "dhw_cost_last": {
+        "name": "Cost last hot water charge"
+      },
+      "dhw_cost_per_day": {
+        "name": "Hot water cost per day"
+      },
+      "defrost_24h": {
+        "name": "Defrosts 24 h"
+      },
+      "flow_over_target": {
+        "name": "Flow above target"
+      },
+      "spread_heating": {
+        "name": "Temperature spread heating"
+      },
+      "spread_dhw": {
+        "name": "Temperature spread hot water"
+      },
+      "pv_share_today": {
+        "name": "Heat pump PV share today"
+      },
+      "heater_runtime_today": {
+        "name": "Backup heater run time today"
       }
     },
     "number": {
@@ -862,6 +934,11 @@
       "setreset": {
         "name": "Reset error"
       }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
+      }
     }
   },
   "options": {
@@ -878,14 +955,18 @@
           "weather_entity": "Weather entity for hot water at the warmest time of day (optional)",
           "dhw_max_minutes": "Maximum duration of the forced hot water charge (minutes, 15 to 240)",
           "dhw_window_start": "Earliest start of the hot water charge (full hour, 0 to 23)",
-          "dhw_window_end": "Latest start of the hot water charge (full hour, 0 to 23)"
+          "dhw_window_end": "Latest start of the hot water charge (full hour, 0 to 23)",
+          "grid_entity": "Grid import sensor for the PV share (optional)",
+          "electricity_price": "Electricity price in cent per kWh (0 = no cost calculation)"
         },
         "data_description": {
           "power_entity": "Power sensor that measures only the heat pump, for example a Shelly. With it the COP can also be measured instead of calculated from heat pump values. Switch with the \"COP source\" selection on the device. Leave empty if none is available.",
           "weather_entity": "The warmest hour of the day is taken from the hourly forecast of this weather entity. At that hour the hot water charge is forced. A weather entity found is suggested automatically, Met.no preferred. Leave empty to turn the function off. Only with control (read only off).",
           "dhw_max_minutes": "After that the forcing is ended, even if the tank has not reached the setpoint yet.",
           "dhw_window_start": "The warmest hour is only searched within this time window. This keeps the gap between two charges about the same. Default 11.",
-          "dhw_window_end": "This hour still counts. Default 17."
+          "dhw_window_end": "This hour still counts. Default 17.",
+          "grid_entity": "Power currently drawn from the grid. Positive = import, negative = export. The part of the heat pump power that does not come from the grid counts as PV or battery power.",
+          "electricity_price": "For the cost of the hot water charges. With a grid import sensor only power from the grid counts."
         }
       }
     },

@@ -4,7 +4,7 @@
 
 HeishaMon を介して Panasonic Aquarea ヒートポンプを Home Assistant に統合します。MQTT を使わず、HTTP インターフェースを直接利用します。
 
-バージョン 1.6.0
+バージョン 1.7.0
 
 ## この統合の機能
 
@@ -187,6 +187,20 @@ HeishaMon でオプション基板のエミュレーションが有効な場合�
 | SetPoolTemp、SetBufferTemp、SetZ1RoomTemp、SetZ1WaterTemp、SetZ2RoomTemp、SetZ2WaterTemp、SetSolarTemp | 温度 -78〜120 °C |
 
 基板はこれらの値を返しません。最後に設定した値が表示され、再起動後も保持されます。`SetOptPCBByte9` は、ドキュメントに意味の記載がないため組み込んでいません。
+
+## ファームウェア 4.3.0 以降の値
+
+HeishaMon 4.3.0 で、施工者メニューと実際の状態の55個の値 (TOP144〜TOP198) と5つのコマンドが追加されました。新しいセンサーは、ボードが値を送ってくる場合のみ作成されます。古いファームウェアはすべてのコマンドに HTTP 200 で応答しますが、知らないコマンドは無視します。そのため新しいコマンドは、ファームウェア 4.3.0 以降の場合のみ表示されます。
+
+| コマンド | エンティティ | 範囲（HeishaMon commands.h より） |
+|---|---|---|
+| SetRoomOperationMaxTime | TOP158 暖房運転の最大時間 | 30〜7620 分、30 分単位 |
+| SetDHWHeatupMaxTime | TOP159 給湯加熱の最大時間 | 1〜254 分 |
+| SetHeatToCoolTemp | TOP79 | -127〜127 °C |
+| SetCoolToHeatTemp | TOP80 | -127〜127 °C |
+| SetQuietModeSchedule | スイッチ「静音モードのスケジュール」、状態 TOP3 | オン、オフ |
+
+主な新しい値：TOP158 と TOP159（暖房と給湯の切り替え）、SG Ready 設定 (TOP149、TOP154〜TOP157、TOP184〜TOP192)、センサー補正 (TOP177、TOP178、TOP193、TOP195、TOP196)、定格能力と T-CAP (TOP197、TOP198)。HeishaMon でトピックグループを無効にすると、対応するエンティティはありません。
 
 ## 運転分析
 

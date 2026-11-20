@@ -4,7 +4,7 @@
 
 Intégration Home Assistant pour les pompes à chaleur Panasonic Aquarea via HeishaMon, sans MQTT, directement par l'interface HTTP.
 
-Version 1.6.0
+Version 1.7.0
 
 ## Ce que fait l'intégration
 
@@ -187,6 +187,20 @@ Seulement si l'émulation de la carte optionnelle est activée dans HeishaMon. S
 | SetPoolTemp, SetBufferTemp, SetZ1RoomTemp, SetZ1WaterTemp, SetZ2RoomTemp, SetZ2WaterTemp, SetSolarTemp | Température -78 à 120 °C |
 
 La carte ne renvoie pas ces valeurs. La dernière valeur réglée est affichée et conservée après un redémarrage. `SetOptPCBByte9` n'est pas intégré, la documentation ne décrit pas sa signification.
+
+## Valeurs à partir du micrologiciel 4.3.0
+
+HeishaMon 4.3.0 a ajouté 55 valeurs du menu installateur et des états réels (TOP144 à TOP198) ainsi que cinq commandes. L'intégration ne crée les nouveaux capteurs que si la carte les fournit. Les nouvelles commandes n'apparaissent qu'avec le micrologiciel 4.3.0 ou plus récent, car un micrologiciel plus ancien répond à toute commande par HTTP 200 mais ignore celles qu'il ne connaît pas.
+
+| Commande | Entité | Plage (selon HeishaMon commands.h) |
+|---|---|---|
+| SetRoomOperationMaxTime | TOP158 Durée max. chauffage | 30 à 7620 minutes, par pas de 30 |
+| SetDHWHeatupMaxTime | TOP159 Durée max. chauffe eau chaude | 1 à 254 minutes |
+| SetHeatToCoolTemp | TOP79 | -127 à 127 °C |
+| SetCoolToHeatTemp | TOP80 | -127 à 127 °C |
+| SetQuietModeSchedule | interrupteur « Mode silencieux programmé », état TOP3 | marche, arrêt |
+
+Nouvelles valeurs importantes : TOP158 et TOP159 (alternance chauffage et eau chaude), réglages SG Ready (TOP149, TOP154 à TOP157, TOP184 à TOP192), corrections de sondes (TOP177, TOP178, TOP193, TOP195, TOP196), puissance nominale et T-CAP (TOP197, TOP198). Si des groupes de topics sont désactivés dans HeishaMon, les entités correspondantes manquent.
 
 ## Analyse de fonctionnement
 

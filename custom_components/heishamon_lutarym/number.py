@@ -17,6 +17,7 @@ from .const import (
     ZONE_DIREKT,
     ZONE_MODUS_TOPIC,
     ZONE_VERSCHIEBUNG,
+    firmware_ab_4_3,
 )
 from .entity import Geraet, HeishamonBefehlEntity
 
@@ -32,9 +33,11 @@ async def async_setup_entry(
     coordinator = data["coordinator"]
     api = data["api"]
 
+    neu = firmware_ab_4_3(coordinator.data)
     entities: list[NumberEntity] = [
         HeishamonNumber(coordinator, geraet, api, topic_id, info)
         for topic_id, info in NUMBER_COMMANDS.items()
+        if not info.get("ab_firmware") or neu
     ]
     if data["optional_pcb"]:
         entities.extend(

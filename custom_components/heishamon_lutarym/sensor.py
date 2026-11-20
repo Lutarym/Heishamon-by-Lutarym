@@ -68,6 +68,8 @@ async def async_setup_entry(
     entities: list[SensorEntity] = [
         HeishamonSensor(coordinator, geraet, topic_id, info)
         for topic_id, info in HEISHAMON_TOPICS.items()
+        # Werte neuerer Firmware nur, wenn die Platine sie liefert
+        if not info.get("ab_firmware") or topic_id in werte
     ]
     entities.extend(
         HeishamonSensor(coordinator, geraet, topic_id, {**info, "numeric": True})

@@ -4,7 +4,7 @@
 
 Home Assistant integration for Panasonic Aquarea heat pumps through HeishaMon, without MQTT, straight over the HTTP interface.
 
-Version 1.6.0
+Version 1.7.0
 
 ## What the integration does
 
@@ -187,6 +187,20 @@ Only if optional PCB emulation is enabled in HeishaMon. According to the HeishaM
 | SetPoolTemp, SetBufferTemp, SetZ1RoomTemp, SetZ1WaterTemp, SetZ2RoomTemp, SetZ2WaterTemp, SetSolarTemp | Temperature -78 to 120 °C |
 
 The board does not report these values back. The last value set is shown and kept after a restart. `SetOptPCBByte9` is not included, the documentation does not describe its meaning.
+
+## Values of firmware 4.3.0 and newer
+
+HeishaMon 4.3.0 added 55 values from the installer menu and the actual states (TOP144 to TOP198) and five commands. The integration creates the new sensors only if the board delivers them. The new commands only appear if the board runs 4.3.0 or newer, because older firmware answers every command with HTTP 200 but ignores unknown ones.
+
+| Command | Entity | Range (from HeishaMon commands.h) |
+|---|---|---|
+| SetRoomOperationMaxTime | TOP158 Room operation max time | 30 to 7620 minutes, steps of 30 |
+| SetDHWHeatupMaxTime | TOP159 DHW heat-up max time | 1 to 254 minutes |
+| SetHeatToCoolTemp | TOP79 | -127 to 127 °C |
+| SetCoolToHeatTemp | TOP80 | -127 to 127 °C |
+| SetQuietModeSchedule | switch "Quiet mode schedule", state TOP3 | on, off |
+
+Important new values: TOP158 and TOP159 (switching between heating and hot water), SG Ready settings (TOP149, TOP154 to TOP157, TOP184 to TOP192), sensor offsets (TOP177, TOP178, TOP193, TOP195, TOP196), rated capacity and T-CAP (TOP197, TOP198). If topic groups are switched off in HeishaMon, the matching entities are missing.
 
 ## Operating analysis
 

@@ -189,6 +189,63 @@ HEISHAMON_TOPICS = {
     "TOP141": {"name": "Quiet_Mode_Priority", "type": "sensor", "unit": None, "icon": "mdi:volume-mute", "device_class": None, "numeric": True},
     "TOP142": {"name": "Expansion_Valve", "type": "sensor", "unit": "steps", "icon": "mdi:valve", "device_class": None, "numeric": True},
     "TOP143": {"name": "DHW_Sensor_Selection", "type": "sensor", "unit": None, "icon": "mdi:cog", "device_class": None, "numeric": True},
+    # Ab Firmware 4.3.0 (Installateurmenue und Zustaende). Werden nur angelegt,
+    # wenn die Platine sie liefert.
+    "TOP144": {"name": "Dry_Concrete_State", "type": "sensor", "unit": None, "icon": "mdi:wall", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP145": {"name": "DHW_Capacity_Mode", "type": "sensor", "unit": None, "icon": "mdi:water-boiler", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP146": {"name": "Zone_Configuration", "type": "sensor", "unit": None, "icon": "mdi:home-group", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP147": {"name": "Internal_Heater_Capacity", "type": "sensor", "unit": 'kW', "icon": "mdi:heating-coil", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP148": {"name": "DHW_Heater_Type", "type": "sensor", "unit": None, "icon": "mdi:heating-coil", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP149": {"name": "SG_Ready_Control", "type": "sensor", "unit": None, "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP150": {"name": "Demand_Control", "type": "sensor", "unit": None, "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP151": {"name": "DHW_Defrost", "type": "sensor", "unit": None, "icon": "mdi:snowflake-melt", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP152": {"name": "Dry_Concrete_Target_Temp", "type": "sensor", "unit": '°C', "icon": "mdi:thermometer", "device_class": 'temperature', "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP153": {"name": "Pool_Delta", "type": "sensor", "unit": 'K', "icon": "mdi:pool", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP154": {"name": "SG_Ready_1_Heat_Capacity", "type": "sensor", "unit": '%', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP155": {"name": "SG_Ready_1_DHW_Capacity", "type": "sensor", "unit": '%', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP156": {"name": "SG_Ready_2_Heat_Capacity", "type": "sensor", "unit": '%', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP157": {"name": "SG_Ready_2_DHW_Capacity", "type": "sensor", "unit": '%', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP158": {"name": "Room_Operation_Max_Time", "type": "sensor", "unit": 'min', "icon": "mdi:timer-cog-outline", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP159": {"name": "DHW_Heatup_Max_Time", "type": "sensor", "unit": 'min', "icon": "mdi:timer-cog-outline", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP160": {"name": "Quiet_Mode_Actual_State", "type": "sensor", "unit": None, "icon": "mdi:volume-mute", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP161": {"name": "Powerful_Mode_Actual_State", "type": "sensor", "unit": None, "icon": "mdi:flash", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP162": {"name": "Heat_Cool_Switch_State", "type": "sensor", "unit": None, "icon": "mdi:sun-snowflake", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP163": {"name": "External_Switch_State", "type": "sensor", "unit": None, "icon": "mdi:electric-switch", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP164": {"name": "Bivalent_Boiler_Contact_State", "type": "sensor", "unit": None, "icon": "mdi:fire", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP165": {"name": "Z2_Active", "type": "sensor", "unit": None, "icon": "mdi:home-thermometer", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP166": {"name": "Z1_Active", "type": "sensor", "unit": None, "icon": "mdi:home-thermometer", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP167": {"name": "Backup_Heater_Enable", "type": "sensor", "unit": None, "icon": "mdi:heating-coil", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP168": {"name": "Cooling_Enable", "type": "sensor", "unit": None, "icon": "mdi:snowflake", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP169": {"name": "Heat_Request_Temp_With_Buffer", "type": "sensor", "unit": '°C', "icon": "mdi:thermometer", "device_class": 'temperature', "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP170": {"name": "Static_Pressure", "type": "sensor", "unit": None, "icon": "mdi:fan", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP171": {"name": "Heating_On_Outdoor_Temp", "type": "sensor", "unit": '°C', "icon": "mdi:thermometer", "device_class": 'temperature', "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP172": {"name": "Heating_On_Delay", "type": "sensor", "unit": 'min', "icon": "mdi:timer", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP173": {"name": "DHW_Booster_Delay", "type": "sensor", "unit": 'min', "icon": "mdi:timer", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP174": {"name": "Efficiency_Stage1_Time", "type": "sensor", "unit": 'min', "icon": "mdi:timer", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP175": {"name": "Efficiency_Stage2_Time", "type": "sensor", "unit": 'min', "icon": "mdi:timer", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP176": {"name": "Efficiency_Stage3_Time", "type": "sensor", "unit": 'min', "icon": "mdi:timer", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP177": {"name": "Sensor_Offset_Remote_Th1", "type": "sensor", "unit": 'K', "icon": "mdi:tune", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP178": {"name": "Sensor_Offset_Outdoor", "type": "sensor", "unit": 'K', "icon": "mdi:tune", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP179": {"name": "Anti_Stick_Mode", "type": "sensor", "unit": None, "icon": "mdi:valve", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP180": {"name": "Bivalent_Operating_Mode", "type": "sensor", "unit": None, "icon": "mdi:cog", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP181": {"name": "Bivalent_External_Pump", "type": "sensor", "unit": None, "icon": "mdi:pump", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP182": {"name": "Extra_Pump_Use", "type": "sensor", "unit": None, "icon": "mdi:pump", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP183": {"name": "Extra_Pump_Mode", "type": "sensor", "unit": None, "icon": "mdi:pump", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP184": {"name": "SG_Ready_1_DHW_Power", "type": "sensor", "unit": 'kW', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP185": {"name": "SG_Ready_1_Heat_Power", "type": "sensor", "unit": 'kW', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP186": {"name": "SG_Ready_1_Cool_Power", "type": "sensor", "unit": 'kW', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP187": {"name": "SG_Ready_2_DHW_Power", "type": "sensor", "unit": 'kW', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP188": {"name": "SG_Ready_2_Heat_Power", "type": "sensor", "unit": 'kW', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP189": {"name": "SG_Ready_2_Cool_Power", "type": "sensor", "unit": 'kW', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP190": {"name": "SG_Ready_Stop_Power", "type": "sensor", "unit": 'kW', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP191": {"name": "SG_Ready_1_Cool_Capacity", "type": "sensor", "unit": '°C', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP192": {"name": "SG_Ready_2_Cool_Capacity", "type": "sensor", "unit": '°C', "icon": "mdi:transmission-tower", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP193": {"name": "Sensor_Offset_Return", "type": "sensor", "unit": 'K', "icon": "mdi:tune", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP194": {"name": "Defrost_Signal", "type": "sensor", "unit": None, "icon": "mdi:snowflake-alert", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP195": {"name": "Sensor_Offset_DHW_Tank", "type": "sensor", "unit": 'K', "icon": "mdi:tune", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP196": {"name": "Sensor_Offset_Flow", "type": "sensor", "unit": 'K', "icon": "mdi:tune", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP197": {"name": "Heat_Pump_Capacity", "type": "sensor", "unit": 'kW', "icon": "mdi:information-outline", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
+    "TOP198": {"name": "Heat_Pump_Type", "type": "sensor", "unit": None, "icon": "mdi:information-outline", "device_class": None, "numeric": True, "ab_firmware": "4.3.0"},
 }
 
 # Steuerbefehle, verifiziert aus HeishaMon commands.h, commands.cpp und
@@ -215,6 +272,8 @@ SWITCH_COMMANDS = {
     "SetBivalentControl": {"icon": "mdi:cog"},
     "SetDHWHeaterState": {"icon": "mdi:water-boiler"},
     "SetRoomHeaterState": {"icon": "mdi:radiator"},
+    # Ab Firmware 4.3.0
+    "SetQuietModeSchedule": {"icon": "mdi:volume-mute", "ab_firmware": "4.3.0"},
 }
 
 # Schalter-Kommando -> Topic, das den Zustand zurueckmeldet.
@@ -237,6 +296,7 @@ STATE_TOPICS = {
     "SetBivalentControl": "TOP129",
     "SetDHWHeaterState": "TOP58",
     "SetRoomHeaterState": "TOP59",
+    "SetQuietModeSchedule": "TOP3",
 }
 
 # Auswahllisten. Optionen sind mode_0, mode_1, ... in der Reihenfolge der
@@ -290,6 +350,12 @@ NUMBER_COMMANDS = {
     "TOP135": {"command": "SetBivalentAPStopTemp", "min": -15, "max": 35, "unit": "°C"},
     "TOP70": {"command": "SetSterilizationTemp", "min": 55, "max": 75, "unit": "°C"},
     "TOP71": {"command": "SetSterilizationMaxTime", "min": 5, "max": 60, "step": 5, "unit": "min"},
+    # Ab Firmware 4.3.0, Bereiche laut commands.h (CMD_CHECKED). Die Firmware
+    # verwirft Werte ausserhalb, ohne einen Befehl zu senden.
+    "TOP79": {"command": "SetHeatToCoolTemp", "min": -127, "max": 127, "unit": "°C", "box": True, "ab_firmware": "4.3.0"},
+    "TOP80": {"command": "SetCoolToHeatTemp", "min": -127, "max": 127, "unit": "°C", "box": True, "ab_firmware": "4.3.0"},
+    "TOP158": {"command": "SetRoomOperationMaxTime", "min": 30, "max": 7620, "step": 30, "unit": "min", "box": True, "ab_firmware": "4.3.0"},
+    "TOP159": {"command": "SetDHWHeatupMaxTime", "min": 1, "max": 254, "unit": "min", "box": True, "ab_firmware": "4.3.0"},
 }
 
 # Heiz- und Kuehlkurven. Gesendet wird je Wert ein eigenes SetCurves mit
@@ -389,3 +455,19 @@ def slug_host(host: str) -> str:
     """
     return re.sub(r"[^a-z0-9]+", "_", str(host).lower()).strip("_")
 
+
+
+# Topics, die es erst ab Firmware 4.3.0 gibt. Liefert die Platine eines
+# davon, gilt die Firmware als 4.3.0 oder neuer.
+NEUE_FIRMWARE_TOPICS = tuple(
+    topic for topic, info in HEISHAMON_TOPICS.items() if info.get("ab_firmware") == "4.3.0"
+)
+
+
+def firmware_ab_4_3(data: dict | None) -> bool:
+    """True, wenn die Platine Werte von Firmware 4.3.0 oder neuer liefert.
+
+    Aeltere Firmware kennt die neuen Befehle nicht. Sie antwortet trotzdem
+    mit HTTP 200, der Befehl wuerde unbemerkt ins Leere gehen.
+    """
+    return bool(data) and any(topic in data for topic in NEUE_FIRMWARE_TOPICS)

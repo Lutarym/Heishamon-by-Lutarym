@@ -7,7 +7,13 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
 
-from .const import DOMAIN, OPTIONAL_SWITCHES, STATE_TOPICS, SWITCH_COMMANDS
+from .const import (
+    DOMAIN,
+    OPTIONAL_SWITCHES,
+    STATE_TOPICS,
+    SWITCH_COMMANDS,
+    firmware_ab_4_3,
+)
 from .entity import Geraet, HeishamonBefehlEntity, HeishamonEntity
 
 
@@ -19,9 +25,11 @@ async def async_setup_entry(
     if data["listening_only"]:
         return
     geraet: Geraet = data["geraet"]
+    neu = firmware_ab_4_3(data["coordinator"].data)
     entities: list[SwitchEntity] = [
         HeishamonSwitch(data["coordinator"], geraet, data["api"], cmd, info)
         for cmd, info in SWITCH_COMMANDS.items()
+        if not info.get("ab_firmware") or neu
     ]
     if data["optional_pcb"]:
         entities.extend(

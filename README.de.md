@@ -4,7 +4,7 @@
 
 Home Assistant Integration für Panasonic Aquarea Wärmepumpen über HeishaMon, ohne MQTT, direkt über die HTTP-Schnittstelle.
 
-Version 1.6.0
+Version 1.7.0
 
 ## Was die Integration macht
 
@@ -187,6 +187,20 @@ Nur wenn in HeishaMon die Emulation der Optional-Platine aktiv ist. Laut HeishaM
 | SetPoolTemp, SetBufferTemp, SetZ1RoomTemp, SetZ1WaterTemp, SetZ2RoomTemp, SetZ2WaterTemp, SetSolarTemp | Temperatur -78 bis 120 °C |
 
 Die Platine meldet diese Werte nicht zurück. Angezeigt wird der zuletzt gesetzte Wert, er bleibt nach einem Neustart erhalten. `SetOptPCBByte9` ist nicht eingebaut, die Doku beschreibt seine Bedeutung nicht.
+
+## Werte ab Firmware 4.3.0
+
+HeishaMon 4.3.0 hat 55 Werte aus dem Installateurmenü und Ist-Zustände (TOP144 bis TOP198) sowie fünf Befehle hinzugefügt. Die Integration legt die neuen Sensoren nur an, wenn die Platine sie liefert. Die neuen Befehle erscheinen nur bei Firmware 4.3.0 oder neuer, weil ältere Firmware jeden Befehl mit HTTP 200 beantwortet, unbekannte aber ignoriert.
+
+| Befehl | Entity | Bereich (aus HeishaMon commands.h) |
+|---|---|---|
+| SetRoomOperationMaxTime | TOP158 Heizbetrieb maximale Zeit | 30 bis 7620 Minuten, in 30er-Schritten |
+| SetDHWHeatupMaxTime | TOP159 Warmwasser maximale Ladezeit | 1 bis 254 Minuten |
+| SetHeatToCoolTemp | TOP79 | -127 bis 127 °C |
+| SetCoolToHeatTemp | TOP80 | -127 bis 127 °C |
+| SetQuietModeSchedule | Schalter „Leisebetrieb per Zeitplan“, Zustand TOP3 | ein, aus |
+
+Wichtige neue Werte: TOP158 und TOP159 (Umschaltung zwischen Heizen und Warmwasser), SG-Ready-Einstellungen (TOP149, TOP154 bis TOP157, TOP184 bis TOP192), Fühlerkorrekturen (TOP177, TOP178, TOP193, TOP195, TOP196), Nennleistung und T-CAP (TOP197, TOP198). Sind in HeishaMon Topic-Gruppen abgeschaltet, fehlen die passenden Entities.
 
 ## Betriebsanalyse
 

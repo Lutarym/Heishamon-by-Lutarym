@@ -607,6 +607,171 @@
       },
       "heater_runtime_today": {
         "name": "Durée résistance d'appoint aujourd'hui"
+      },
+      "top144": {
+        "name": "TOP144 Séchage de chape"
+      },
+      "top145": {
+        "name": "TOP145 Mode puissance eau chaude"
+      },
+      "top146": {
+        "name": "TOP146 Configuration des zones"
+      },
+      "top147": {
+        "name": "TOP147 Puissance résistance interne"
+      },
+      "top148": {
+        "name": "TOP148 Type de résistance eau chaude"
+      },
+      "top149": {
+        "name": "TOP149 Commande SG Ready"
+      },
+      "top150": {
+        "name": "TOP150 Contrôle de la demande"
+      },
+      "top151": {
+        "name": "TOP151 Dégivrage par eau chaude"
+      },
+      "top152": {
+        "name": "TOP152 Consigne séchage de chape"
+      },
+      "top153": {
+        "name": "TOP153 Écart piscine"
+      },
+      "top154": {
+        "name": "TOP154 SG Ready 1 puissance chauffage"
+      },
+      "top155": {
+        "name": "TOP155 SG Ready 1 puissance eau chaude"
+      },
+      "top156": {
+        "name": "TOP156 SG Ready 2 puissance chauffage"
+      },
+      "top157": {
+        "name": "TOP157 SG Ready 2 puissance eau chaude"
+      },
+      "top158": {
+        "name": "TOP158 Durée max. chauffage"
+      },
+      "top159": {
+        "name": "TOP159 Durée max. chauffe eau chaude"
+      },
+      "top160": {
+        "name": "TOP160 Mode silencieux actif"
+      },
+      "top161": {
+        "name": "TOP161 Mode puissant actif"
+      },
+      "top162": {
+        "name": "TOP162 Commutateur chaud froid"
+      },
+      "top163": {
+        "name": "TOP163 Interrupteur externe"
+      },
+      "top164": {
+        "name": "TOP164 Contact chaudière bivalente"
+      },
+      "top165": {
+        "name": "TOP165 Zone 2 active"
+      },
+      "top166": {
+        "name": "TOP166 Zone 1 active"
+      },
+      "top167": {
+        "name": "TOP167 Résistance d'appoint menu personnalisé"
+      },
+      "top168": {
+        "name": "TOP168 Refroidissement menu personnalisé"
+      },
+      "top169": {
+        "name": "TOP169 Consigne chauffage avec écart tampon"
+      },
+      "top170": {
+        "name": "TOP170 Pression statique"
+      },
+      "top171": {
+        "name": "TOP171 Chauffage en marche selon temp. ext."
+      },
+      "top172": {
+        "name": "TOP172 Délai mise en marche chauffage"
+      },
+      "top173": {
+        "name": "TOP173 Délai appoint eau chaude"
+      },
+      "top174": {
+        "name": "TOP174 Durée palier efficacité 1"
+      },
+      "top175": {
+        "name": "TOP175 Durée palier efficacité 2"
+      },
+      "top176": {
+        "name": "TOP176 Durée palier efficacité 3"
+      },
+      "top177": {
+        "name": "TOP177 Correction sonde télécommande"
+      },
+      "top178": {
+        "name": "TOP178 Correction sonde extérieure"
+      },
+      "top179": {
+        "name": "TOP179 Mode anti grippage"
+      },
+      "top180": {
+        "name": "TOP180 Mode bivalent (cloud)"
+      },
+      "top181": {
+        "name": "TOP181 Pompe externe bivalente"
+      },
+      "top182": {
+        "name": "TOP182 Utilisation pompe additionnelle"
+      },
+      "top183": {
+        "name": "TOP183 Mode pompe additionnelle"
+      },
+      "top184": {
+        "name": "TOP184 SG Ready 1 puissance eau chaude"
+      },
+      "top185": {
+        "name": "TOP185 SG Ready 1 puissance chauffage"
+      },
+      "top186": {
+        "name": "TOP186 SG Ready 1 puissance refroidissement"
+      },
+      "top187": {
+        "name": "TOP187 SG Ready 2 puissance eau chaude"
+      },
+      "top188": {
+        "name": "TOP188 SG Ready 2 puissance chauffage"
+      },
+      "top189": {
+        "name": "TOP189 SG Ready 2 puissance refroidissement"
+      },
+      "top190": {
+        "name": "TOP190 SG Ready puissance à l'arrêt"
+      },
+      "top191": {
+        "name": "TOP191 SG Ready 1 décalage refroidissement"
+      },
+      "top192": {
+        "name": "TOP192 SG Ready 2 décalage refroidissement"
+      },
+      "top193": {
+        "name": "TOP193 Correction sonde retour"
+      },
+      "top194": {
+        "name": "TOP194 Signal de dégivrage"
+      },
+      "top195": {
+        "name": "TOP195 Correction sonde ballon"
+      },
+      "top196": {
+        "name": "TOP196 Correction sonde départ"
+      },
+      "top197": {
+        "name": "TOP197 Puissance nominale"
+      },
+      "top198": {
+        "name": "TOP198 Type d'appareil (standard, T-CAP)"
       }
     },
     "number": {
@@ -741,6 +906,18 @@
       },
       "setsolartemp": {
         "name": "Carte optionnelle température solaire"
+      },
+      "top79": {
+        "name": "TOP79 Bascule chauffage vers froid"
+      },
+      "top80": {
+        "name": "TOP80 Bascule froid vers chauffage"
+      },
+      "top158": {
+        "name": "TOP158 Durée max. chauffage"
+      },
+      "top159": {
+        "name": "TOP159 Durée max. chauffe eau chaude"
       }
     },
     "switch": {
@@ -803,6 +980,9 @@
       },
       "dhw_warmest_time": {
         "name": "Eau chaude à l'heure la plus chaude"
+      },
+      "setquietmodeschedule": {
+        "name": "Mode silencieux programmé"
       }
     },
     "select": {

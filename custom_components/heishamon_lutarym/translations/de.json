@@ -607,6 +607,171 @@
       },
       "heater_runtime_today": {
         "name": "Heizstab Laufzeit heute"
+      },
+      "top144": {
+        "name": "TOP144 Estrichtrocknung"
+      },
+      "top145": {
+        "name": "TOP145 Warmwasserleistung Modus"
+      },
+      "top146": {
+        "name": "TOP146 Zonenkonfiguration"
+      },
+      "top147": {
+        "name": "TOP147 Leistung interner Heizstab"
+      },
+      "top148": {
+        "name": "TOP148 Art Heizstab Warmwasser"
+      },
+      "top149": {
+        "name": "TOP149 SG-Ready-Steuerung"
+      },
+      "top150": {
+        "name": "TOP150 Leistungsbegrenzung (Demand Control)"
+      },
+      "top151": {
+        "name": "TOP151 Abtauen über Warmwasser"
+      },
+      "top152": {
+        "name": "TOP152 Estrichtrocknung Solltemperatur"
+      },
+      "top153": {
+        "name": "TOP153 Pool Temperaturdifferenz"
+      },
+      "top154": {
+        "name": "TOP154 SG-Ready 1 Heizleistung"
+      },
+      "top155": {
+        "name": "TOP155 SG-Ready 1 Warmwasserleistung"
+      },
+      "top156": {
+        "name": "TOP156 SG-Ready 2 Heizleistung"
+      },
+      "top157": {
+        "name": "TOP157 SG-Ready 2 Warmwasserleistung"
+      },
+      "top158": {
+        "name": "TOP158 Heizbetrieb maximale Zeit"
+      },
+      "top159": {
+        "name": "TOP159 Warmwasser maximale Ladezeit"
+      },
+      "top160": {
+        "name": "TOP160 Leisebetrieb aktiv"
+      },
+      "top161": {
+        "name": "TOP161 Powerbetrieb aktiv"
+      },
+      "top162": {
+        "name": "TOP162 Schalter Heizen Kühlen"
+      },
+      "top163": {
+        "name": "TOP163 Externer Schalter"
+      },
+      "top164": {
+        "name": "TOP164 Bivalent Kesselkontakt"
+      },
+      "top165": {
+        "name": "TOP165 Zone 2 aktiv"
+      },
+      "top166": {
+        "name": "TOP166 Zone 1 aktiv"
+      },
+      "top167": {
+        "name": "TOP167 Heizstab im Benutzermenü"
+      },
+      "top168": {
+        "name": "TOP168 Kühlen im Benutzermenü"
+      },
+      "top169": {
+        "name": "TOP169 Heizsoll inkl. Pufferdifferenz"
+      },
+      "top170": {
+        "name": "TOP170 Statischer Druck"
+      },
+      "top171": {
+        "name": "TOP171 Heizen ein ab Außentemperatur"
+      },
+      "top172": {
+        "name": "TOP172 Heizen ein Verzögerung"
+      },
+      "top173": {
+        "name": "TOP173 Verzögerung externer WW-Heizstab"
+      },
+      "top174": {
+        "name": "TOP174 Effizienz Stufe 1 Dauer"
+      },
+      "top175": {
+        "name": "TOP175 Effizienz Stufe 2 Dauer"
+      },
+      "top176": {
+        "name": "TOP176 Effizienz Stufe 3 Dauer"
+      },
+      "top177": {
+        "name": "TOP177 Korrektur Fernbedienungsfühler"
+      },
+      "top178": {
+        "name": "TOP178 Korrektur Außenfühler"
+      },
+      "top179": {
+        "name": "TOP179 Festsitzschutz"
+      },
+      "top180": {
+        "name": "TOP180 Bivalent Betriebsart (Cloud)"
+      },
+      "top181": {
+        "name": "TOP181 Bivalent externe Pumpe"
+      },
+      "top182": {
+        "name": "TOP182 Zusatzpumpe Verwendung"
+      },
+      "top183": {
+        "name": "TOP183 Zusatzpumpe Modus"
+      },
+      "top184": {
+        "name": "TOP184 SG-Ready 1 Leistung Warmwasser"
+      },
+      "top185": {
+        "name": "TOP185 SG-Ready 1 Leistung Heizen"
+      },
+      "top186": {
+        "name": "TOP186 SG-Ready 1 Leistung Kühlen"
+      },
+      "top187": {
+        "name": "TOP187 SG-Ready 2 Leistung Warmwasser"
+      },
+      "top188": {
+        "name": "TOP188 SG-Ready 2 Leistung Heizen"
+      },
+      "top189": {
+        "name": "TOP189 SG-Ready 2 Leistung Kühlen"
+      },
+      "top190": {
+        "name": "TOP190 SG-Ready Leistungsgrenze bei Stopp"
+      },
+      "top191": {
+        "name": "TOP191 SG-Ready 1 Kühlen Verschiebung"
+      },
+      "top192": {
+        "name": "TOP192 SG-Ready 2 Kühlen Verschiebung"
+      },
+      "top193": {
+        "name": "TOP193 Korrektur Rücklauffühler"
+      },
+      "top194": {
+        "name": "TOP194 Abtausignal"
+      },
+      "top195": {
+        "name": "TOP195 Korrektur Speicherfühler"
+      },
+      "top196": {
+        "name": "TOP196 Korrektur Vorlauffühler"
+      },
+      "top197": {
+        "name": "TOP197 Nennleistung"
+      },
+      "top198": {
+        "name": "TOP198 Gerätetyp (Standard, T-CAP)"
       }
     },
     "number": {
@@ -741,6 +906,18 @@
       },
       "setsolartemp": {
         "name": "Optional-Platine Solartemperatur"
+      },
+      "top79": {
+        "name": "TOP79 Umschaltpunkt Heizen zu Kühlen"
+      },
+      "top80": {
+        "name": "TOP80 Umschaltpunkt Kühlen zu Heizen"
+      },
+      "top158": {
+        "name": "TOP158 Heizbetrieb maximale Zeit"
+      },
+      "top159": {
+        "name": "TOP159 Warmwasser maximale Ladezeit"
       }
     },
     "switch": {
@@ -803,6 +980,9 @@
       },
       "dhw_warmest_time": {
         "name": "Warmwasser zur wärmsten Tageszeit"
+      },
+      "setquietmodeschedule": {
+        "name": "Leisebetrieb per Zeitplan"
       }
     },
     "select": {

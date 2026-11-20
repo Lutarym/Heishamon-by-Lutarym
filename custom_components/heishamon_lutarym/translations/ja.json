@@ -607,6 +607,171 @@
       },
       "heater_runtime_today": {
         "name": "今日のヒーター運転時間"
+      },
+      "top144": {
+        "name": "TOP144 コンクリート乾燥"
+      },
+      "top145": {
+        "name": "TOP145 給湯能力モード"
+      },
+      "top146": {
+        "name": "TOP146 ゾーン構成"
+      },
+      "top147": {
+        "name": "TOP147 内蔵ヒーター容量"
+      },
+      "top148": {
+        "name": "TOP148 給湯ヒーターの種類"
+      },
+      "top149": {
+        "name": "TOP149 SG Ready 制御"
+      },
+      "top150": {
+        "name": "TOP150 デマンド制御"
+      },
+      "top151": {
+        "name": "TOP151 給湯による除霜"
+      },
+      "top152": {
+        "name": "TOP152 コンクリート乾燥の目標温度"
+      },
+      "top153": {
+        "name": "TOP153 プール温度差"
+      },
+      "top154": {
+        "name": "TOP154 SG Ready 1 暖房能力"
+      },
+      "top155": {
+        "name": "TOP155 SG Ready 1 給湯能力"
+      },
+      "top156": {
+        "name": "TOP156 SG Ready 2 暖房能力"
+      },
+      "top157": {
+        "name": "TOP157 SG Ready 2 給湯能力"
+      },
+      "top158": {
+        "name": "TOP158 暖房運転の最大時間"
+      },
+      "top159": {
+        "name": "TOP159 給湯加熱の最大時間"
+      },
+      "top160": {
+        "name": "TOP160 静音モード作動中"
+      },
+      "top161": {
+        "name": "TOP161 パワフルモード作動中"
+      },
+      "top162": {
+        "name": "TOP162 冷暖切替スイッチ"
+      },
+      "top163": {
+        "name": "TOP163 外部スイッチ"
+      },
+      "top164": {
+        "name": "TOP164 バイバレントボイラー接点"
+      },
+      "top165": {
+        "name": "TOP165 ゾーン2 作動中"
+      },
+      "top166": {
+        "name": "TOP166 ゾーン1 作動中"
+      },
+      "top167": {
+        "name": "TOP167 カスタムメニューのヒーター"
+      },
+      "top168": {
+        "name": "TOP168 カスタムメニューの冷房"
+      },
+      "top169": {
+        "name": "TOP169 バッファー差込みの暖房目標"
+      },
+      "top170": {
+        "name": "TOP170 静圧"
+      },
+      "top171": {
+        "name": "TOP171 暖房開始外気温"
+      },
+      "top172": {
+        "name": "TOP172 暖房開始の遅延"
+      },
+      "top173": {
+        "name": "TOP173 給湯ブースター遅延"
+      },
+      "top174": {
+        "name": "TOP174 効率ステージ1の時間"
+      },
+      "top175": {
+        "name": "TOP175 効率ステージ2の時間"
+      },
+      "top176": {
+        "name": "TOP176 効率ステージ3の時間"
+      },
+      "top177": {
+        "name": "TOP177 リモコンセンサー補正"
+      },
+      "top178": {
+        "name": "TOP178 外気センサー補正"
+      },
+      "top179": {
+        "name": "TOP179 固着防止モード"
+      },
+      "top180": {
+        "name": "TOP180 バイバレント運転モード（クラウド）"
+      },
+      "top181": {
+        "name": "TOP181 バイバレント外部ポンプ"
+      },
+      "top182": {
+        "name": "TOP182 追加ポンプの用途"
+      },
+      "top183": {
+        "name": "TOP183 追加ポンプのモード"
+      },
+      "top184": {
+        "name": "TOP184 SG Ready 1 給湯電力"
+      },
+      "top185": {
+        "name": "TOP185 SG Ready 1 暖房電力"
+      },
+      "top186": {
+        "name": "TOP186 SG Ready 1 冷房電力"
+      },
+      "top187": {
+        "name": "TOP187 SG Ready 2 給湯電力"
+      },
+      "top188": {
+        "name": "TOP188 SG Ready 2 暖房電力"
+      },
+      "top189": {
+        "name": "TOP189 SG Ready 2 冷房電力"
+      },
+      "top190": {
+        "name": "TOP190 SG Ready 停止時の電力上限"
+      },
+      "top191": {
+        "name": "TOP191 SG Ready 1 冷房オフセット"
+      },
+      "top192": {
+        "name": "TOP192 SG Ready 2 冷房オフセット"
+      },
+      "top193": {
+        "name": "TOP193 戻り温度センサー補正"
+      },
+      "top194": {
+        "name": "TOP194 除霜信号"
+      },
+      "top195": {
+        "name": "TOP195 タンクセンサー補正"
+      },
+      "top196": {
+        "name": "TOP196 往き温度センサー補正"
+      },
+      "top197": {
+        "name": "TOP197 定格能力"
+      },
+      "top198": {
+        "name": "TOP198 機種タイプ（標準、T-CAP）"
       }
     },
     "number": {
@@ -741,6 +906,18 @@
       },
       "setsolartemp": {
         "name": "オプション基板 ソーラー温度"
+      },
+      "top79": {
+        "name": "TOP79 暖房から冷房への切替温度"
+      },
+      "top80": {
+        "name": "TOP80 冷房から暖房への切替温度"
+      },
+      "top158": {
+        "name": "TOP158 暖房運転の最大時間"
+      },
+      "top159": {
+        "name": "TOP159 給湯加熱の最大時間"
       }
     },
     "switch": {
@@ -803,6 +980,9 @@
       },
       "dhw_warmest_time": {
         "name": "最も暖かい時間帯に給湯"
+      },
+      "setquietmodeschedule": {
+        "name": "静音モードのスケジュール"
       }
     },
     "select": {
